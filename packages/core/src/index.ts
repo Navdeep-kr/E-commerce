@@ -25,3 +25,4 @@ export * from './communication-service.ts';
 export * from './pagination-service.ts';
 export * from './cache-service.ts';
 export * from './load-simulator.ts';
+export * from './tenant-fuzzer-service.ts';
