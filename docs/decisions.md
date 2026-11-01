@@ -34,3 +34,10 @@
   - Every table includes `organization_id` enforced by PostgreSQL RLS.
   - All currency calculations strictly use integer minor units (e.g. cents) with ISO currency codes.
 - **Consequences**: Zero floating point drift ($0.10 + $0.20 = $0.30 exact); cross-tenant data leakage is prevented at the database layer.
+
+## ADR-005: Native Zero-Dependency Test Execution in packages/core
+- **Date**: 2026-11-01
+- **Status**: Accepted
+- **Context**: `packages/core` must remain 100% pure and independent of heavy bundlers, running lightning-fast unit tests for domain invariants.
+- **Decision**: Utilize Node.js native test runner (`node --test`) with type stripping (`--experimental-strip-types`).
+- **Consequences**: Zero test runner startup overhead (< 250ms for the full suite), zero external testing dependencies in `packages/core`.
