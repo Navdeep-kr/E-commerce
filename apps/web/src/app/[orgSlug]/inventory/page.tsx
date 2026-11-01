@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   Boxes,
-  PlusMinus,
+  SlidersHorizontal,
   Barcode,
   AlertTriangle,
   RotateCcw,
@@ -235,7 +235,7 @@ export default function InventoryPage() {
           }}
           className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-1 text-xs font-medium hover:bg-muted hover:border-primary/50 transition-colors"
         >
-          <PlusMinus className="h-3 w-3 text-primary" />
+          <SlidersHorizontal className="h-3 w-3 text-primary" />
           <span>Adjust</span>
         </button>
       ),

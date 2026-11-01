@@ -45,11 +45,11 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 const VARIANT_STYLES: Record<StatusVariant, string> = {
-  success: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-  warning: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
-  danger: 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20',
-  info: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-  neutral: 'bg-muted text-muted-foreground border-border',
+  success: 'bg-emerald-50 text-emerald-700 border-emerald-300 font-semibold', // Green
+  warning: 'bg-orange-50 text-orange-700 border-orange-300 font-semibold',   // Orange
+  danger: 'bg-rose-50 text-rose-700 border-rose-300 font-semibold',          // Red
+  info: 'bg-orange-50 text-orange-700 border-orange-300 font-semibold',       // Orange / in-progress
+  neutral: 'bg-zinc-50 text-black border-zinc-300 font-medium',              // Black
 };
 
 export function StatusPill({ status, type = 'order', className = '' }: StatusPillProps) {

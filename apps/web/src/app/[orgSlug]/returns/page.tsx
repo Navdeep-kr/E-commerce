@@ -21,7 +21,7 @@ import {
   Building2,
   ShieldCheck,
 } from 'lucide-react';
-import { KpiCard } from '@/components/ui/kpi-card';
+import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 import { type ReturnConditionGrade } from '@storefront-ops/core';
 

@@ -24,12 +24,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const currentSession: UserSession = DEMO_USERS.admin;
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-background text-foreground antialiased">
+    <div className="flex h-screen w-screen overflow-hidden bg-white text-black antialiased">
       {/* Collapsible Left Sidebar */}
       <Sidebar orgSlug={orgSlug} role={currentSession.role} orgName={currentSession.organizationName} />
 
       {/* Main Workspace Column */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden bg-white">
         {/* Top Header Bar */}
         <Topbar
           session={currentSession}
@@ -39,7 +39,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
         />
 
         {/* Scrollable Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-background/50">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-white">
           {children}
         </main>
       </div>

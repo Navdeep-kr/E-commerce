@@ -21,7 +21,7 @@ import {
   X,
   AlertOctagon,
 } from 'lucide-react';
-import { KpiCard } from '@/components/ui/kpi-card';
+import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 import { TaskService, type OpsTask, type TaskStatus, type TaskPriority } from '@storefront-ops/core';
 

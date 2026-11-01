@@ -20,7 +20,7 @@ import {
   Filter,
   Flame,
 } from 'lucide-react';
-import { KpiCard } from '@/components/ui/kpi-card';
+import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 import { DataTable, type Column } from '@/components/ui/data-table';
 import { FulfillmentService, type PickItem, type BackorderRecord } from '@storefront-ops/core';

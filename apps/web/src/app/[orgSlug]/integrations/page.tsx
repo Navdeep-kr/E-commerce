@@ -20,7 +20,7 @@ import {
   Activity,
   X,
 } from 'lucide-react';
-import { KpiCard } from '@/components/ui/kpi-card';
+import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 
 export default function IntegrationsPage() {

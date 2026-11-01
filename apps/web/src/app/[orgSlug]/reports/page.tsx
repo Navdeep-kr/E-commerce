@@ -20,7 +20,7 @@ import {
   Percent,
   Check,
 } from 'lucide-react';
-import { KpiCard } from '@/components/ui/kpi-card';
+import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 import {
   METRIC_DICTIONARY,
