@@ -6,6 +6,7 @@ import {
   Activity,
   ArrowRight,
   Barcode,
+  BookOpen,
   Check,
   CheckCircle2,
   Clock,

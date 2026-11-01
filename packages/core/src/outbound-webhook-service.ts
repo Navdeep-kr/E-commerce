@@ -3,7 +3,7 @@
  * Playbook Step 15 (Spec Part 4): Outbound webhook delivery and cryptographic signature generation
  */
 
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 
 export interface OutboundWebhookSubscription {
   id: string;

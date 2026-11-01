@@ -3,7 +3,7 @@
  * Playbook Step 15 (Spec Part 4): Scoped API keys, SHA-256 key hashing, and sliding rate limiter
  */
 
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'crypto';
 
 export type ApiScope =
   | 'orders:read'
