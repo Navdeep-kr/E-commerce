@@ -1,0 +1,11 @@
+# Storefront Ops Codeowners
+* @team-lead
+
+# Core Business Logic & Invariants
+/packages/core/ @team-lead @domain-architect
+
+# Integrations & Adapters
+/packages/integrations/ @integrations-engineer
+
+# Database & Migrations
+/packages/db/ @database-admin
