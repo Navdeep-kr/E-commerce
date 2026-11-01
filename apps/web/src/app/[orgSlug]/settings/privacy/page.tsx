@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Shield,
   FileText,
@@ -15,8 +16,9 @@ import {
   FileCheck,
 } from 'lucide-react';
 
-export default function PrivacySettingsPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function PrivacySettingsPage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
 
   const [exportCustomerId, setExportCustomerId] = useState('cust-1');
   const [isExporting, setIsExporting] = useState(false);

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   CheckCircle2,
   ShieldCheck,
@@ -18,8 +19,9 @@ import {
   FileCheck,
 } from 'lucide-react';
 
-export default function QaAcceptancePage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function QaAcceptancePage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
   const [isRunning, setIsRunning] = useState(false);
   const [lastRunTimestamp, setLastRunTimestamp] = useState('Just now');
 

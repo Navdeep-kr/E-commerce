@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Gauge,
   Zap,
@@ -16,8 +17,9 @@ import {
   Sliders,
 } from 'lucide-react';
 
-export default function PerformancePage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function PerformancePage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
 
   const [totalOrders, setTotalOrders] = useState(250);
   const [concurrency, setConcurrency] = useState(10);

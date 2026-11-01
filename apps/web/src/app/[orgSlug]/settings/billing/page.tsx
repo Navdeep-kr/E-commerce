@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   CreditCard,
   CheckCircle2,
@@ -16,8 +17,9 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-export default function BillingPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function BillingPage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
 
   const [currentPlanId, setCurrentPlanId] = useState<'starter' | 'growth' | 'scale'>('growth');
   const [billingCadence, setBillingCadence] = useState<'monthly' | 'annual'>('monthly');

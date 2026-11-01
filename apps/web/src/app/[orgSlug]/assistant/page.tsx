@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Sparkles,
   ShieldAlert,
@@ -26,8 +27,9 @@ interface ChatMessage {
   timestamp: string;
 }
 
-export default function AssistantPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function AssistantPage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
   const [activeTab, setActiveTab] = useState<'chat' | 'forecast' | 'anomalies' | 'support'>('chat');
   const [inputQuery, setInputQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);

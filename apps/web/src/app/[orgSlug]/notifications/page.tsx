@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Bell,
   CheckCheck,
@@ -26,8 +27,9 @@ interface NotificationItem {
   actionUrl?: string;
 }
 
-export default function NotificationsPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params.orgSlug || 'acme-corp';
+export default function NotificationsPage() {
+  const routeParams = useParams();
+  const orgSlug = (routeParams?.orgSlug as string) || 'acme-commerce';
   const [filter, setFilter] = useState<'all' | 'fulfillment' | 'inventory' | 'orders' | 'system'>('all');
 
   const [notifications, setNotifications] = useState<NotificationItem[]>([
