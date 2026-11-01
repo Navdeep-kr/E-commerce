@@ -31,3 +31,4 @@ export * from './telemetry-service.ts';
 export * from './migration-engine.ts';
 export * from './deployment-engine.ts';
 export * from './onboarding-service.ts';
+export * from './public-demo-service.ts';
