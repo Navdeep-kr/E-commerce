@@ -1,0 +1,53 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: storefront-ops:latest
+    container_name: storefront-ops-web
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_APP_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://storefront:storefront_secret_pass@postgres:5432/storefront_db
+      - SESSION_SECRET=storefront-ops-secure-jwt-signing-key-32-chars-min-prod
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-sk_test_placeholder}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET:-whsec_placeholder}
+      - SHOPIFY_API_KEY=${SHOPIFY_API_KEY:-shpa_placeholder}
+      - SHOPIFY_API_SECRET=${SHOPIFY_API_SECRET:-shps_placeholder}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - storefront-data:/app/.data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: storefront-ops-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=storefront
+      - POSTGRES_PASSWORD=storefront_secret_pass
+      - POSTGRES_DB=storefront_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./packages/db/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U storefront -d storefront_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  storefront-data:
+  postgres-data:

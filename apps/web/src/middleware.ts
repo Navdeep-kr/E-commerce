@@ -11,6 +11,7 @@ export function middleware(request: NextRequest) {
     pathname === '/terms' ||
     pathname === '/privacy' ||
     pathname === '/dpa' ||
+    pathname === '/api/health' ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/webhooks') ||
     pathname.startsWith('/api/integrations/shopify') ||
