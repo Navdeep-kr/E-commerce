@@ -166,22 +166,22 @@ export default function CustomersPage() {
 
       {/* Duplicate Detection Alert Banner */}
       {secondaryCust && (
-        <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <AlertTriangle className="h-5 w-5 text-amber-400 flex-shrink-0" />
-            <div>
-              <p className="text-sm font-bold text-amber-300">Duplicate Customer Profile Detected (95% Confidence)</p>
-              <p className="text-xs text-zinc-300 mt-0.5">
-                <span className="font-semibold text-white">{primaryCust?.firstName} {primaryCust?.lastName}</span> ({primaryCust?.email}) matches{' '}
-                <span className="font-semibold text-white">{secondaryCust.firstName} {secondaryCust.lastName}</span> ({secondaryCust.email}) by phone number and physical address.
+        <div className="rounded-xl border-2 border-orange-400 bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+          <div className="flex items-center gap-3 bg-white">
+            <AlertTriangle className="h-5 w-5 text-orange-600 flex-shrink-0" />
+            <div className="bg-white">
+              <p className="text-sm font-bold text-orange-600">Duplicate Customer Profile Detected (95% Confidence)</p>
+              <p className="text-xs text-black mt-0.5">
+                <span className="font-bold text-black">{primaryCust?.firstName} {primaryCust?.lastName}</span> ({primaryCust?.email}) matches{' '}
+                <span className="font-bold text-black">{secondaryCust.firstName} {secondaryCust.lastName}</span> ({secondaryCust.email}) by phone number and physical address.
               </p>
             </div>
           </div>
           <button
             onClick={() => setMergeModalOpen(true)}
-            className="flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-xs font-bold text-white hover:bg-amber-500 transition-colors shadow-sm"
+            className="flex items-center gap-2 rounded-lg bg-white border-2 border-orange-500 px-4 py-2 text-xs font-bold text-orange-600 hover:bg-orange-50 transition-colors shadow-xs whitespace-nowrap"
           >
-            <GitMerge className="h-4 w-4" />
+            <GitMerge className="h-4 w-4 text-orange-600" />
             <span>Review & Merge Profiles</span>
           </button>
         </div>
