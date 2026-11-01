@@ -7,3 +7,4 @@ export * from './webhook-pipeline.ts';
 export * from './shopify-adapter.ts';
 export * from './woocommerce-adapter.ts';
 export * from './stripe-adapter.ts';
+export * from './messaging-adapter.ts';

@@ -21,3 +21,4 @@ export * from './support-copilot-service.ts';
 export * from './ai-assistant-service.ts';
 export * from './billing-service.ts';
 export * from './superadmin-service.ts';
+export * from './communication-service.ts';
