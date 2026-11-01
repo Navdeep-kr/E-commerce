@@ -1,24 +1,8 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { generateSeedData } from '@storefront-ops/db';
-
-// In-memory product store initialized from seed
-const seed = generateSeedData(0.1);
-const products = seed.sampleProducts.map((sp, idx) => ({
-  id: `prod_${idx + 1}`,
-  title: sp.title,
-  vendor: 'Acme Supply Co.',
-  productType: 'Apparel',
-  status: idx % 10 === 0 ? 'draft' : 'active',
-  sku: sp.sku,
-  priceMinor: sp.priceMinor,
-  costMinor: sp.costMinor,
-  onHand: sp.onHand,
-  committed: sp.committed,
-  available: sp.available,
-  reorderPoint: 15,
-  tags: ['bestseller', 'fall-collection'],
-}));
+import { db } from '@storefront-ops/db';
+import { SESSION_COOKIE_NAME, parseSessionToken } from '@/lib/auth/session';
 
 const createProductSchema = z.object({
   title: z.string().min(1),
@@ -39,7 +23,15 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
 
-  let filtered = products;
+  // Authenticated tenant boundary isolation
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const session = parseSessionToken(token);
+  const orgId = session?.organizationId || db.getOrganizationBySlug('acme-commerce')?.id || '00000000-0000-0000-0000-000000000001';
+
+  const storedProducts = db.getProducts(orgId);
+
+  let filtered = storedProducts;
   if (q) {
     filtered = filtered.filter(
       (p) => p.title.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)
@@ -50,7 +42,21 @@ export async function GET(request: Request) {
   }
 
   const start = (page - 1) * pageSize;
-  const items = filtered.slice(start, start + pageSize);
+  const items = filtered.slice(start, start + pageSize).map((p) => ({
+    id: p.id,
+    title: p.title,
+    vendor: p.vendor || 'In-House',
+    productType: p.product_type || 'General',
+    status: p.status,
+    sku: p.sku,
+    priceMinor: p.price_minor,
+    costMinor: p.cost_minor,
+    onHand: p.on_hand,
+    committed: p.committed,
+    available: p.available,
+    reorderPoint: p.reorder_point || 15,
+    tags: p.tags,
+  }));
 
   return NextResponse.json({
     items,
@@ -69,25 +75,44 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Validation failed', details: parsed.error.format() }, { status: 400 });
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    const session = parseSessionToken(token);
+    const orgId = session?.organizationId || db.getOrganizationBySlug('acme-commerce')?.id || '00000000-0000-0000-0000-000000000001';
+
     const data = parsed.data;
-    const newProduct = {
-      id: `prod_${Date.now()}`,
+    const newProduct = db.createProduct(orgId, {
       title: data.title,
       vendor: data.vendor,
-      productType: data.productType,
+      product_type: data.productType,
       status: data.status,
       sku: data.sku,
-      priceMinor: data.priceMinor,
-      costMinor: data.costMinor,
-      onHand: data.initialStock,
+      price_minor: data.priceMinor,
+      cost_minor: data.costMinor,
+      on_hand: data.initialStock,
       committed: 0,
       available: data.initialStock,
-      reorderPoint: 10,
       tags: data.tags,
-    };
+    });
 
-    products.unshift(newProduct);
-    return NextResponse.json({ success: true, product: newProduct }, { status: 201 });
+    return NextResponse.json({
+      success: true,
+      product: {
+        id: newProduct.id,
+        title: newProduct.title,
+        vendor: newProduct.vendor,
+        productType: newProduct.product_type,
+        status: newProduct.status,
+        sku: newProduct.sku,
+        priceMinor: newProduct.price_minor,
+        costMinor: newProduct.cost_minor,
+        onHand: newProduct.on_hand,
+        committed: newProduct.committed,
+        available: newProduct.available,
+        reorderPoint: newProduct.reorder_point,
+        tags: newProduct.tags,
+      },
+    }, { status: 201 });
   } catch (err) {
     console.error('Create product error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

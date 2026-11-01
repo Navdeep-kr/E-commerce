@@ -47,67 +47,20 @@ export default function InventoryPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    // Generate realistic multi-location stock records
-    const sampleStock: StockItem[] = [
-      {
-        id: 'st-1',
-        sku: 'HOODIE-BLK-M',
-        title: 'Heavyweight Fleece Hoodie (Black / M)',
-        locationName: 'East Coast DC',
-        binLocation: 'A-02-14',
-        onHand: 65,
-        committed: 15,
-        available: 50,
-        incoming: 100,
-        reorderPoint: 25,
-        daysOfStock: 28,
-        status: 'ok',
-      },
-      {
-        id: 'st-2',
-        sku: 'HOODIE-BLK-XL',
-        title: 'Heavyweight Fleece Hoodie (Black / XL)',
-        locationName: 'East Coast DC',
-        binLocation: 'A-02-16',
-        onHand: 4,
-        committed: 2,
-        available: 2,
-        incoming: 0,
-        reorderPoint: 15,
-        daysOfStock: 2,
-        status: 'low',
-      },
-      {
-        id: 'st-3',
-        sku: 'TEE-WHT-S',
-        title: 'Organic Vintage Tee (White / S)',
-        locationName: 'West Coast Hub',
-        binLocation: 'B-08-01',
-        onHand: 0,
-        committed: 0,
-        available: 0,
-        incoming: 50,
-        reorderPoint: 20,
-        daysOfStock: 0,
-        status: 'out',
-      },
-      {
-        id: 'st-4',
-        sku: 'CAP-NAVY-OS',
-        title: 'Structured Dad Cap (Navy)',
-        locationName: 'UK & EU 3PL',
-        binLocation: 'C-01-04',
-        onHand: 140,
-        committed: 10,
-        available: 130,
-        incoming: 0,
-        reorderPoint: 30,
-        daysOfStock: 95,
-        status: 'overstock',
-      },
-    ];
-    setItems(sampleStock);
+    fetchInventory();
   }, []);
+
+  async function fetchInventory() {
+    try {
+      const res = await fetch('/api/inventory');
+      const data = await res.json();
+      if (data.items) {
+        setItems(data.items);
+      }
+    } catch {
+      setItems([]);
+    }
+  }
 
   async function handleAdjustSubmit(e: React.FormEvent) {
     e.preventDefault();

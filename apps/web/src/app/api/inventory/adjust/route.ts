@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
+import { db } from '@storefront-ops/db';
+import { SESSION_COOKIE_NAME, parseSessionToken } from '@/lib/auth/session';
 
 const adjustSchema = z.object({
   sku: z.string().min(1),
@@ -19,7 +22,15 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Validation failed', details: parsed.error.format() }, { status: 400 });
     }
 
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    const session = parseSessionToken(token);
+    const orgId = session?.organizationId || db.getOrganizationBySlug('acme-commerce')?.id || '00000000-0000-0000-0000-000000000001';
+
     const { sku, quantityDelta, reason, referenceType, referenceId, notes } = parsed.data;
+
+    // Persist real stock change in DB
+    const updatedItem = db.adjustInventory(orgId, sku, quantityDelta, reason);
 
     // Record movement in append-only ledger structure
     const movement = {
@@ -36,6 +47,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       movement,
+      updatedItem,
       message: `Adjusted SKU "${sku}" by ${quantityDelta > 0 ? '+' : ''}${quantityDelta} units (${reason}).`,
     });
   } catch (err) {

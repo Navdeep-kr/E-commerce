@@ -78,14 +78,73 @@ export interface TenantSubscription {
   isReadOnly: boolean;
 }
 
+export interface StoredProduct {
+  id: string;
+  organization_id: string;
+  title: string;
+  sku: string;
+  vendor?: string;
+  product_type?: string;
+  status: 'active' | 'draft' | 'archived';
+  price_minor: number;
+  cost_minor: number;
+  on_hand: number;
+  committed: number;
+  available: number;
+  reorder_point?: number;
+  tags: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StoredInventoryItem {
+  id: string;
+  organization_id: string;
+  sku: string;
+  title: string;
+  location_name: string;
+  bin_location: string;
+  on_hand: number;
+  committed: number;
+  available: number;
+  incoming: number;
+  reorder_point: number;
+  days_of_stock: number;
+  status: 'ok' | 'low' | 'out' | 'overstock';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StoredCustomer {
+  id: string;
+  organization_id: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone?: string;
+  orders_count: number;
+  total_spent_minor: number;
+  tags: string[];
+  addresses: Array<{
+    street1: string;
+    city: string;
+    state?: string;
+    zip?: string;
+    country: string;
+    isDefault?: boolean;
+  }>;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface DatabaseState {
   organizations: Organization[];
   users: StoredUser[];
   memberships: Membership[];
   orders: Order[];
-  customers: Customer[];
-  products: Product[];
-  inventory: InventoryLevel[];
+  customers: StoredCustomer[];
+  products: StoredProduct[];
+  inventory: StoredInventoryItem[];
   tasks: Task[];
   tickets: Ticket[];
   stores?: StoreIntegration[];
@@ -95,18 +154,17 @@ export interface DatabaseState {
 class PersistenceEngine {
   private state: DatabaseState | null = null;
   private dbFilePath: string;
+  private lastLoadedMtime = 0;
 
   constructor() {
-    // Determine path relative to root directory
-    const dataDir = path.resolve(process.cwd(), '.data');
-    this.dbFilePath = path.join(dataDir, 'storefront-db.json');
+    // Determine path relative to root directory or apps/web
+    const webDataDir = path.resolve(process.cwd(), 'apps', 'web', '.data');
+    const localDataDir = path.resolve(process.cwd(), '.data');
+    const chosenDir = fs.existsSync(webDataDir) ? webDataDir : localDataDir;
+    this.dbFilePath = path.join(chosenDir, 'storefront-db.json');
   }
 
   private ensureLoaded(): DatabaseState {
-    if (this.state) {
-      return this.state;
-    }
-
     const dataDir = path.dirname(this.dbFilePath);
     if (!fs.existsSync(dataDir)) {
       try {
@@ -118,14 +176,36 @@ class PersistenceEngine {
 
     if (fs.existsSync(this.dbFilePath)) {
       try {
+        const stat = fs.statSync(this.dbFilePath);
+        if (this.state && stat.mtimeMs <= this.lastLoadedMtime) {
+          return this.state;
+        }
+
         const raw = fs.readFileSync(this.dbFilePath, 'utf8');
         this.state = JSON.parse(raw);
+        this.lastLoadedMtime = stat.mtimeMs;
+
         if (this.state && Array.isArray(this.state.organizations) && Array.isArray(this.state.users)) {
+          // Graceful schema evolution: populate seed items if products/inventory/customers are empty
+          const seedDefaults = this.buildInitialSeed();
+          if (!this.state.products || this.state.products.length === 0) {
+            this.state.products = seedDefaults.products;
+          }
+          if (!this.state.inventory || this.state.inventory.length === 0) {
+            this.state.inventory = seedDefaults.inventory;
+          }
+          if (!this.state.customers || this.state.customers.length === 0) {
+            this.state.customers = seedDefaults.customers;
+          }
           return this.state;
         }
       } catch (err) {
         console.warn('⚠️ [PersistenceEngine] Failed to parse existing DB file, re-initializing seed:', err);
       }
+    }
+
+    if (this.state) {
+      return this.state;
     }
 
     // Initialize initial seed state
@@ -143,6 +223,9 @@ class PersistenceEngine {
       }
       const serialized = JSON.stringify(this.state, null, 2);
       fs.writeFileSync(this.dbFilePath, serialized, 'utf8');
+      try {
+        this.lastLoadedMtime = fs.statSync(this.dbFilePath).mtimeMs;
+      } catch {}
     } catch (err) {
       console.error('❌ [PersistenceEngine] Error writing to DB file:', err);
     }
@@ -388,14 +471,122 @@ class PersistenceEngine {
       },
     };
 
+    // Products from seed for Acme Commerce Labs
+    const defaultProducts: StoredProduct[] = seed.sampleProducts.map((sp, idx) => ({
+      id: sp.id,
+      organization_id: defaultOrgId,
+      title: sp.title,
+      sku: sp.sku,
+      vendor: 'Acme Supply Co.',
+      product_type: 'Apparel',
+      status: idx % 10 === 0 ? 'draft' : 'active',
+      price_minor: sp.priceMinor,
+      cost_minor: sp.costMinor,
+      on_hand: sp.onHand,
+      committed: sp.committed,
+      available: sp.available,
+      reorder_point: 15,
+      tags: ['bestseller', 'core'],
+      created_at: nowIso,
+      updated_at: nowIso,
+    }));
+
+    const locations = ['East Coast DC', 'West Coast Hub', 'UK & EU 3PL'];
+    const defaultInventory: StoredInventoryItem[] = defaultProducts.map((p, idx) => {
+      const loc = locations[idx % locations.length];
+      const bin = `${String.fromCharCode(65 + (idx % 4))}-0${(idx % 9) + 1}-1${idx % 8}`;
+      const daysOfStock = p.available === 0 ? 0 : Math.round((p.available / 2) * 1.5);
+      let status: 'ok' | 'low' | 'out' | 'overstock' = 'ok';
+      if (p.available === 0) status = 'out';
+      else if (p.available < 15) status = 'low';
+      else if (p.available > 100) status = 'overstock';
+
+      return {
+        id: `inv-${p.id}`,
+        organization_id: defaultOrgId,
+        sku: p.sku,
+        title: p.title,
+        location_name: loc,
+        bin_location: bin,
+        on_hand: p.on_hand,
+        committed: p.committed,
+        available: p.available,
+        incoming: idx % 3 === 0 ? 50 : 0,
+        reorder_point: 15,
+        days_of_stock: daysOfStock,
+        status,
+        created_at: nowIso,
+        updated_at: nowIso,
+      };
+    });
+
+    const defaultCustomers: StoredCustomer[] = [
+      {
+        id: 'cust-101',
+        organization_id: defaultOrgId,
+        email: 'alex.mercer@example.com',
+        first_name: 'Alex',
+        last_name: 'Mercer',
+        phone: '+1 212-555-0143',
+        orders_count: 14,
+        total_spent_minor: 168000,
+        tags: ['vip', 'early-adopter'],
+        addresses: [{ street1: '142 Grand Street, Apt 4B', city: 'Brooklyn', state: 'NY', zip: '11249', country: 'US', isDefault: true }],
+        created_at: '2025-02-14T00:00:00Z',
+        updated_at: nowIso,
+      },
+      {
+        id: 'cust-102',
+        organization_id: defaultOrgId,
+        email: 'brianna.hayes@example.com',
+        first_name: 'Brianna',
+        last_name: 'Hayes',
+        phone: '+1 503-555-0182',
+        orders_count: 6,
+        total_spent_minor: 72000,
+        tags: ['apparel-preferred'],
+        addresses: [{ street1: '882 Sunset Blvd', city: 'Portland', state: 'OR', zip: '97201', country: 'US', isDefault: true }],
+        created_at: '2025-05-10T00:00:00Z',
+        updated_at: nowIso,
+      },
+      {
+        id: 'cust-103',
+        organization_id: defaultOrgId,
+        email: 'carlos.r@example.com',
+        first_name: 'Carlos',
+        last_name: 'Rivera',
+        phone: '+1 512-555-0199',
+        orders_count: 5,
+        total_spent_minor: 48000,
+        tags: ['at-risk-warning'],
+        addresses: [{ street1: '402 Congress Ave', city: 'Austin', state: 'TX', zip: '78701', country: 'US', isDefault: true }],
+        created_at: '2025-01-10T00:00:00Z',
+        updated_at: nowIso,
+      },
+      {
+        id: 'cust-104',
+        organization_id: defaultOrgId,
+        email: 'diana.prince@example.com',
+        first_name: 'Diana',
+        last_name: 'Prince',
+        phone: '+1 312-555-0128',
+        orders_count: 9,
+        total_spent_minor: 112000,
+        tags: ['vip'],
+        addresses: [{ street1: '200 E Randolph St', city: 'Chicago', state: 'IL', zip: '60601', country: 'US', isDefault: true }],
+        created_at: '2025-03-22T00:00:00Z',
+        updated_at: nowIso,
+      },
+    ];
+
     return {
       organizations: [defaultOrg, secondaryOrg],
       users: demoUsers,
       memberships,
       orders,
-      customers: [],
-      products: [],
-      inventory: [],
+      customers: defaultCustomers,
+      products: defaultProducts,
+      inventory: defaultInventory,
       tasks,
       tickets: [],
       subscriptions,
@@ -635,6 +826,48 @@ class PersistenceEngine {
     };
 
     state.orders.unshift(newOrder);
+
+    // Auto-upsert customer profile if email present in address
+    const bAddr = (orderData.billing_address || {}) as any;
+    const sAddr = (orderData.shipping_address || {}) as any;
+    const custEmail = bAddr.email || sAddr.email;
+    if (custEmail) {
+      const existingCust = state.customers.find(
+        (c) => c.organization_id === organizationId && c.email.toLowerCase() === custEmail.toLowerCase()
+      );
+      if (existingCust) {
+        existingCust.orders_count += 1;
+        existingCust.total_spent_minor += newOrder.total_minor;
+        existingCust.updated_at = nowIso;
+      } else {
+        const nameParts = (bAddr.name || sAddr.name || 'Customer').split(' ');
+        state.customers.unshift({
+          id: `cust-${id.slice(0, 10)}`,
+          organization_id: organizationId,
+          email: custEmail.toLowerCase(),
+          first_name: nameParts[0] || 'Customer',
+          last_name: nameParts.slice(1).join(' ') || '',
+          orders_count: 1,
+          total_spent_minor: newOrder.total_minor,
+          tags: ['new-buyer'],
+          addresses: [
+            sAddr.address1
+              ? {
+                  street1: sAddr.address1,
+                  city: sAddr.city || '',
+                  state: sAddr.province || '',
+                  zip: sAddr.zip || sAddr.postalCode || '',
+                  country: sAddr.country || 'US',
+                  isDefault: true,
+                }
+              : { street1: 'Main St', city: 'City', country: 'US', isDefault: true },
+          ],
+          created_at: nowIso,
+          updated_at: nowIso,
+        });
+      }
+    }
+
     this.save();
     return newOrder;
   }
@@ -742,6 +975,163 @@ class PersistenceEngine {
     state.subscriptions[organizationId] = updated;
     this.save();
     return updated;
+  }
+
+  // -------------------------------------------------------------
+  // Catalog & Products Operations
+  // -------------------------------------------------------------
+  public getProducts(organizationId: string): StoredProduct[] {
+    const state = this.ensureLoaded();
+    return state.products.filter((p) => p.organization_id === organizationId);
+  }
+
+  public createProduct(organizationId: string, data: Partial<StoredProduct>): StoredProduct {
+    const state = this.ensureLoaded();
+    const nowIso = new Date().toISOString();
+    const id = data.id || `prod_${Date.now()}_${randomBytes(4).toString('hex')}`;
+    const onHand = data.on_hand ?? data.available ?? 0;
+    const committed = data.committed ?? 0;
+    const available = Math.max(0, onHand - committed);
+
+    const product: StoredProduct = {
+      id,
+      organization_id: organizationId,
+      title: data.title || 'Untitled Product',
+      sku: (data.sku || `SKU-${Date.now()}`).toUpperCase(),
+      vendor: data.vendor || 'In-House',
+      product_type: data.product_type || 'General',
+      status: data.status || 'active',
+      price_minor: data.price_minor ?? 0,
+      cost_minor: data.cost_minor ?? 0,
+      on_hand: onHand,
+      committed,
+      available,
+      reorder_point: data.reorder_point ?? 15,
+      tags: data.tags || [],
+      created_at: nowIso,
+      updated_at: nowIso,
+    };
+
+    state.products.unshift(product);
+
+    // Sync inventory record automatically
+    const existingInv = state.inventory.find(
+      (inv) => inv.organization_id === organizationId && inv.sku === product.sku
+    );
+    if (!existingInv) {
+      state.inventory.unshift({
+        id: `inv-${product.id}`,
+        organization_id: organizationId,
+        sku: product.sku,
+        title: product.title,
+        location_name: 'East Coast DC',
+        bin_location: 'A-01-01',
+        on_hand: onHand,
+        committed,
+        available,
+        incoming: 0,
+        reorder_point: product.reorder_point ?? 15,
+        days_of_stock: available > 0 ? 30 : 0,
+        status: available === 0 ? 'out' : available < 15 ? 'low' : 'ok',
+        created_at: nowIso,
+        updated_at: nowIso,
+      });
+    }
+
+    this.save();
+    return product;
+  }
+
+  // -------------------------------------------------------------
+  // Inventory Operations
+  // -------------------------------------------------------------
+  public getInventory(organizationId: string): StoredInventoryItem[] {
+    const state = this.ensureLoaded();
+    return state.inventory.filter((i) => i.organization_id === organizationId);
+  }
+
+  public adjustInventory(
+    organizationId: string,
+    sku: string,
+    quantityDelta: number,
+    reason: string
+  ): StoredInventoryItem | null {
+    const state = this.ensureLoaded();
+    const item = state.inventory.find(
+      (i) => i.organization_id === organizationId && i.sku === sku
+    );
+    if (!item) return null;
+
+    item.on_hand = Math.max(0, item.on_hand + quantityDelta);
+    item.available = Math.max(0, item.on_hand - item.committed);
+    item.days_of_stock = item.available > 0 ? Math.round(item.available * 0.75) : 0;
+    if (item.available === 0) item.status = 'out';
+    else if (item.available < item.reorder_point) item.status = 'low';
+    else if (item.available > 100) item.status = 'overstock';
+    else item.status = 'ok';
+    item.updated_at = new Date().toISOString();
+
+    // Also update product on_hand & available
+    const prod = state.products.find(
+      (p) => p.organization_id === organizationId && p.sku === sku
+    );
+    if (prod) {
+      prod.on_hand = item.on_hand;
+      prod.available = item.available;
+      prod.updated_at = item.updated_at;
+    }
+
+    this.save();
+    return item;
+  }
+
+  // -------------------------------------------------------------
+  // Customer CRM Operations
+  // -------------------------------------------------------------
+  public getCustomers(organizationId: string): StoredCustomer[] {
+    const state = this.ensureLoaded();
+    return state.customers.filter((c) => c.organization_id === organizationId);
+  }
+
+  public upsertCustomer(
+    organizationId: string,
+    data: Partial<StoredCustomer> & { email: string }
+  ): StoredCustomer {
+    const state = this.ensureLoaded();
+    const cleanEmail = data.email.toLowerCase().trim();
+    let cust = state.customers.find(
+      (c) => c.organization_id === organizationId && c.email.toLowerCase() === cleanEmail
+    );
+    const nowIso = new Date().toISOString();
+
+    if (!cust) {
+      cust = {
+        id: `cust-${Date.now()}_${randomBytes(4).toString('hex')}`,
+        organization_id: organizationId,
+        email: cleanEmail,
+        first_name: data.first_name || '',
+        last_name: data.last_name || '',
+        phone: data.phone,
+        orders_count: data.orders_count || 1,
+        total_spent_minor: data.total_spent_minor || 0,
+        tags: data.tags || [],
+        addresses: data.addresses || [],
+        created_at: nowIso,
+        updated_at: nowIso,
+      };
+      state.customers.unshift(cust);
+    } else {
+      if (data.first_name) cust.first_name = data.first_name;
+      if (data.last_name) cust.last_name = data.last_name;
+      if (data.phone) cust.phone = data.phone;
+      if (data.orders_count !== undefined) cust.orders_count = data.orders_count;
+      if (data.total_spent_minor !== undefined) cust.total_spent_minor = data.total_spent_minor;
+      if (data.tags) cust.tags = Array.from(new Set([...cust.tags, ...data.tags]));
+      cust.updated_at = nowIso;
+    }
+
+    this.save();
+    return cust;
   }
 
   public getUsageMetrics(organizationId: string): {

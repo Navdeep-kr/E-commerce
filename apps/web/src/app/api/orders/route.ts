@@ -1,45 +1,25 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { z } from 'zod';
-import { OrderEngine, IdempotencyGuard } from '@storefront-ops/core';
-import { generateSeedData } from '@storefront-ops/db';
-
-// Initialize in-memory realistic order repository from seed
-const seed = generateSeedData(0.05);
-const ordersStore = seed.sampleOrders.map((so, idx) => ({
-  id: so.id,
-  orderNumber: so.orderNumber,
-  customerName: `Customer ${idx + 1}`,
-  customerEmail: so.customerEmail,
-  channel: idx % 3 === 0 ? 'WooCommerce UK' : 'Shopify US',
-  status: so.status,
-  paymentStatus: so.status === 'pending_payment' ? 'unpaid' : so.status === 'cancelled' ? 'voided' : 'paid',
-  fulfillmentStatus: ['packed', 'shipped', 'delivered'].includes(so.status)
-    ? 'fulfilled'
-    : so.status === 'partially_fulfilled'
-    ? 'partially_fulfilled'
-    : 'unfulfilled',
-  totalMinor: so.totalMinor,
-  currency: 'USD',
-  itemsCount: (idx % 3) + 1,
-  riskLevel: so.riskLevel,
-  shippingMethod: idx % 2 === 0 ? 'USPS Priority Mail' : 'UPS Ground',
-  placedAt: so.placedAt,
-  tags: so.riskLevel === 'high' ? ['fraud-review'] : ['standard'],
-}));
+import { OrderEngine, IdempotencyGuard, type OrderStatus } from '@storefront-ops/core';
+import { db } from '@storefront-ops/db';
+import { SESSION_COOKIE_NAME, parseSessionToken } from '@/lib/auth/session';
 
 const createOrderSchema = z.object({
   idempotencyKey: z.string().min(1),
   customerEmail: z.string().email(),
   customerName: z.string().min(1),
   channel: z.string().default('Manual / Phone Order'),
-  lines: z.array(
-    z.object({
-      sku: z.string().min(1),
-      variantTitle: z.string().optional(),
-      quantity: z.number().int().positive(),
-      unitPriceMinor: z.number().int().nonnegative(),
-    })
-  ).min(1),
+  lines: z
+    .array(
+      z.object({
+        sku: z.string().min(1),
+        variantTitle: z.string().optional(),
+        quantity: z.number().int().positive(),
+        unitPriceMinor: z.number().int().nonnegative(),
+      })
+    )
+    .min(1),
   discountMinor: z.number().int().nonnegative().default(0),
   shippingMinor: z.number().int().nonnegative().default(0),
   taxBasisPoints: z.number().int().nonnegative().default(0),
@@ -65,7 +45,42 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);
 
-  let filtered = ordersStore;
+  // Authenticated tenant boundary isolation
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const session = parseSessionToken(token);
+  const orgId = session?.organizationId || 'org-acme-prod';
+
+  const dbOrders = db.getOrders(orgId, 250);
+
+  let filtered = dbOrders.map((o, idx) => {
+    const sAddr = (o.shipping_address || {}) as any;
+    const bAddr = (o.billing_address || {}) as any;
+    const custName =
+      sAddr.name ||
+      `${sAddr.first_name || ''} ${sAddr.last_name || ''}`.trim() ||
+      bAddr.name ||
+      `Customer ${idx + 1}`;
+    const custEmail = bAddr.email || sAddr.email || 'customer@example.com';
+
+    return {
+      id: o.id,
+      orderNumber: o.order_number,
+      customerName: custName,
+      customerEmail: custEmail,
+      channel: (o as any).channel || (idx % 3 === 0 ? 'WooCommerce UK' : 'Shopify US'),
+      status: o.status,
+      paymentStatus: o.payment_status,
+      fulfillmentStatus: o.fulfillment_status,
+      totalMinor: o.total_minor,
+      currency: o.currency || 'USD',
+      itemsCount: 1,
+      riskLevel: o.risk_level,
+      shippingMethod: idx % 2 === 0 ? 'USPS Priority Mail' : 'UPS Ground',
+      placedAt: o.placed_at || o.created_at,
+      tags: o.tags || [],
+    };
+  });
 
   if (q) {
     filtered = filtered.filter(
@@ -98,6 +113,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    const session = parseSessionToken(token);
+    const orgId = session?.organizationId || 'org-acme-prod';
+
     const body = await request.json();
     const parsed = createOrderSchema.safeParse(body);
 
@@ -110,12 +130,15 @@ export async function POST(request: Request) {
     // Idempotency check: prevent duplicate creations from retry storms
     const reservation = IdempotencyGuard.checkAndReserve(data.idempotencyKey, `ord_${Date.now()}`);
     if (reservation.isDuplicate) {
-      const existing = ordersStore.find((o) => o.id === reservation.existingOrderId);
-      return NextResponse.json({
-        success: true,
-        message: 'Order already exists (idempotent replay)',
-        order: existing,
-      }, { status: 200 });
+      const existing = db.getOrders(orgId).find((o) => o.id === reservation.existingOrderId);
+      return NextResponse.json(
+        {
+          success: true,
+          message: 'Order already exists (idempotent replay)',
+          order: existing,
+        },
+        { status: 200 }
+      );
     }
 
     // Exact totals calculation
@@ -136,31 +159,35 @@ export async function POST(request: Request) {
       email: data.customerEmail,
     });
 
-    const newOrder = {
+    const statusValue: OrderStatus = risk.recommendation === 'auto_hold' ? 'on_hold' : 'paid';
+
+    const newOrder = db.createOrder(orgId, {
       id: reservation.existingOrderId || `ord_${Date.now()}`,
-      orderNumber: `ORD-${10000 + ordersStore.length + 1}`,
-      customerName: data.customerName,
-      customerEmail: data.customerEmail,
-      channel: data.channel,
-      status: (risk.recommendation === 'auto_hold' ? 'on_hold' : 'paid') as any,
-      paymentStatus: 'paid',
-      fulfillmentStatus: 'unfulfilled',
-      totalMinor: totals.totalMinor,
+      order_number: `ORD-${Math.floor(10000 + Math.random() * 90000)}`,
+      status: statusValue,
       currency: totals.currency,
-      itemsCount: data.lines.reduce((acc, l) => acc + l.quantity, 0),
-      riskLevel: risk.riskLevel,
-      shippingMethod: 'Standard Courier',
-      placedAt: new Date().toISOString(),
+      subtotal_minor: totals.subtotalMinor,
+      discount_minor: totals.discountMinor,
+      shipping_minor: totals.shippingMinor,
+      tax_minor: totals.taxMinor,
+      total_minor: totals.totalMinor,
+      payment_status: 'paid',
+      fulfillment_status: 'unfulfilled',
+      risk_level: risk.riskLevel as any,
+      shipping_address: data.shippingAddress as any,
+      billing_address: data.billingAddress as any,
+      placed_at: new Date().toISOString(),
       tags: risk.flags.length > 0 ? ['risk-review'] : ['manual-order'],
-    };
+    });
 
-    ordersStore.unshift(newOrder);
-
-    return NextResponse.json({
-      success: true,
-      order: newOrder,
-      riskAssessment: risk,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        order: newOrder,
+        riskAssessment: risk,
+      },
+      { status: 201 }
+    );
   } catch (err) {
     console.error('Order creation error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
