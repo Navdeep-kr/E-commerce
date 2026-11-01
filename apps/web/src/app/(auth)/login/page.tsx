@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ShieldCheck, UserCheck, Lock, AlertCircle, Loader2 } from 'lucide-react';
 
 const QUICK_ROLES = [
@@ -16,8 +16,10 @@ const QUICK_ROLES = [
   { id: 'viewer', label: 'Read-Only Viewer', email: 'viewer@acmecommerce.com', role: 'viewer' },
 ];
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get('callbackUrl');
   const [email, setEmail] = useState('admin@acmecommerce.com');
   const [password, setPassword] = useState('password123');
   const [selectedRole, setSelectedRole] = useState('admin');
@@ -41,7 +43,7 @@ export default function LoginPage() {
         throw new Error(data.error || 'Failed to authenticate');
       }
 
-      router.push(data.redirectUrl || '/acme-commerce/today');
+      router.push(callbackUrl || data.redirectUrl || '/acme-commerce/today');
     } catch (err: unknown) {
       const e = err as Error;
       setError(e.message);
@@ -148,5 +150,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-white text-black">
+          <Loader2 className="h-6 w-6 animate-spin text-black" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

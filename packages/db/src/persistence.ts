@@ -367,6 +367,17 @@ class PersistenceEngine {
     return state.organizations.find((o) => o.id === id) || null;
   }
 
+  public getOrganizationByStoreDomain(domain?: string): Organization | null {
+    if (!domain) return null;
+    const state = this.ensureLoaded();
+    const clean = domain.toLowerCase().trim();
+    const store = state.stores?.find(
+      (s) => s.shop_domain?.toLowerCase() === clean || s.store_url?.toLowerCase().includes(clean)
+    );
+    if (!store) return null;
+    return state.organizations.find((o) => o.id === store.organization_id) || null;
+  }
+
   public createOrganization(data: {
     name: string;
     slug?: string;
