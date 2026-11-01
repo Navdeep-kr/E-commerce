@@ -4,3 +4,6 @@ export * from './order-machine.ts';
 export * from './inventory-service.ts';
 export * from './order-engine.ts';
 export * from './fulfillment-service.ts';
+export * from './returns-service.ts';
+export * from './customer-service.ts';
+export * from './support-service.ts';
