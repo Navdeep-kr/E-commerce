@@ -11,3 +11,5 @@ export * from './purchasing-service.ts';
 export * from './finance-service.ts';
 export * from './marketing-service.ts';
 export * from './analytics-service.ts';
+export * from './task-service.ts';
+export * from './automation-engine.ts';
