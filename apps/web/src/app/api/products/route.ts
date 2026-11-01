@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { generateSeedData } from '@storefront-ops/db/seed';
+import { generateSeedData } from '@storefront-ops/db';
 
 // In-memory product store initialized from seed
 const seed = generateSeedData(0.1);

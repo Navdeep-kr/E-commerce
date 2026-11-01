@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { OrderEngine, IdempotencyGuard } from '@storefront-ops/core';
-import { generateSeedData } from '@storefront-ops/db/seed';
+import { generateSeedData } from '@storefront-ops/db';
 
 // Initialize in-memory realistic order repository from seed
 const seed = generateSeedData(0.05);

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { generateSeedData } from '@storefront-ops/db/seed';
+import { generateSeedData } from '@storefront-ops/db';
 
 export async function POST(request: Request) {
   try {
