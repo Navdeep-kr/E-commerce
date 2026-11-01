@@ -7,3 +7,5 @@ export * from './fulfillment-service.ts';
 export * from './returns-service.ts';
 export * from './customer-service.ts';
 export * from './support-service.ts';
+export * from './purchasing-service.ts';
+export * from './finance-service.ts';
