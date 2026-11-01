@@ -13,3 +13,5 @@ export * from './marketing-service.ts';
 export * from './analytics-service.ts';
 export * from './task-service.ts';
 export * from './automation-engine.ts';
+export * from './api-key-service.ts';
+export * from './outbound-webhook-service.ts';
