@@ -56,8 +56,17 @@ async function runMigrations() {
     console.log(`⚡ [db:migrate] Applying: ${file} (${sql.length} bytes)...`);
 
     // Basic SQL sanity checks
-    if (!sql.includes('CREATE TABLE') && !sql.includes('ALTER TABLE') && !sql.includes('INSERT INTO')) {
-      console.warn(`⚠️ [db:migrate] Warning: ${file} contains no DDL/DML statements.`);
+    const hasDdl =
+      sql.includes('CREATE TABLE') ||
+      sql.includes('ALTER TABLE') ||
+      sql.includes('INSERT INTO') ||
+      sql.includes('CREATE POLICY') ||
+      sql.includes('CREATE INDEX') ||
+      sql.includes('CREATE FUNCTION') ||
+      sql.includes('CREATE OR REPLACE FUNCTION');
+
+    if (!hasDdl) {
+      console.warn(`⚠️ [db:migrate] Warning: ${file} contains no recognized DDL/DML statements.`);
     }
 
     appliedMigrations.push(version);

@@ -1,3 +1,7 @@
 [
-  "00001_initial_schema"
+  "00001_initial_schema",
+  "00002_catalog_and_inventory",
+  "00003_orders_and_fulfillment",
+  "00004_returns_purchasing_support_tasks",
+  "00005_rls_policies_and_functions"
 ]
