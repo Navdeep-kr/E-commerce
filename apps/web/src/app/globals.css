@@ -66,18 +66,23 @@ html, body {
 }
 
 /* 1. Force EVERY single container, card, panel, table, row, column to be 100% white */
-div, section, main, aside, header, nav, footer,
+section, main, aside, header, nav, footer,
 table, thead, tbody, tr, th, td,
-[class*="bg-zinc-"],
-[class*="bg-slate-"],
-[class*="bg-gray-"],
-[class*="bg-neutral-"],
-[class*="bg-stone-"],
+[class*="bg-zinc-9"],
+[class*="bg-zinc-8"],
+[class*="bg-slate-9"],
+[class*="bg-slate-8"],
+[class*="bg-gray-9"],
+[class*="bg-gray-8"],
 .bg-background,
 .bg-card,
-.bg-muted,
 .bg-white {
   background-color: #ffffff !important;
+}
+
+/* Ensure inner elements of buttons and navigation links are transparent */
+a *, button * {
+  background-color: transparent !important;
 }
 
 /* Subtle clean hover for table rows */

@@ -110,26 +110,26 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
       }`}
     >
       {/* Brand Header */}
-      <div className="flex h-14 items-center justify-between border-b border-border px-4">
+      <div className="flex h-14 items-center justify-between border-b border-zinc-200 px-4 bg-white">
         {!collapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
               SO
             </div>
-            <span className="truncate text-xs font-semibold text-foreground tracking-tight">
+            <span className="truncate text-xs font-bold text-black tracking-tight">
               {orgName}
             </span>
           </div>
         )}
         {collapsed && (
-          <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-xs">
+          <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
             SO
           </div>
         )}
 
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="rounded p-1 text-zinc-500 hover:bg-zinc-100 hover:text-black transition-colors"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
@@ -138,7 +138,7 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
       </div>
 
       {/* Navigation List */}
-      <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-3">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-2 py-3 bg-white">
         {visibleItems.map((item) => {
           const isActive = pathname.startsWith(item.href);
           const IconComponent = item.icon;
@@ -147,28 +147,28 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
             <Link
               key={item.name}
               href={item.href}
-              className={`group flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
+              className={`group flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-all border ${
                 isActive
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  ? 'bg-zinc-100 text-black border-zinc-900 shadow-xs ring-1 ring-zinc-900'
+                  : 'text-zinc-600 hover:bg-zinc-100 hover:text-black border-transparent'
               }`}
               title={collapsed ? item.name : undefined}
             >
               <div className="flex items-center gap-2.5 overflow-hidden">
-                <IconComponent className={`h-4 w-4 shrink-0 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'}`} />
-                {!collapsed && <span className="truncate">{item.name}</span>}
+                <IconComponent className={`h-4 w-4 shrink-0 ${isActive ? 'text-black font-black' : 'text-zinc-500 group-hover:text-black'}`} />
+                {!collapsed && <span className={`truncate ${isActive ? 'text-black font-extrabold' : 'text-zinc-700'}`}>{item.name}</span>}
               </div>
 
               {!collapsed && item.badge !== undefined && (
                 <span
                   className={`ml-auto rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
                     isActive
-                      ? 'bg-primary-foreground/20 text-primary-foreground'
+                      ? 'bg-black text-white'
                       : item.badgeVariant === 'danger'
-                      ? 'bg-rose-500/10 text-rose-500'
+                      ? 'bg-rose-50 text-rose-600 border border-rose-200'
                       : item.badgeVariant === 'warning'
-                      ? 'bg-amber-500/10 text-amber-500'
-                      : 'bg-blue-500/10 text-blue-500'
+                      ? 'bg-orange-50 text-orange-600 border border-orange-200'
+                      : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
                   }`}
                 >
                   {item.badge}
@@ -181,14 +181,14 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
 
       {/* User Role Footer */}
       {!collapsed && (
-        <div className="border-t border-border p-3">
-          <div className="flex items-center gap-2 rounded-lg bg-muted/50 p-2 text-xs">
-            <Shield className="h-4 w-4 text-primary shrink-0" />
+        <div className="border-t border-zinc-200 p-3 bg-white">
+          <div className="flex items-center gap-2 rounded-lg bg-zinc-50 border border-zinc-200 p-2 text-xs">
+            <Shield className="h-4 w-4 text-black shrink-0" />
             <div className="overflow-hidden">
-              <span className="block truncate font-medium text-foreground capitalize">
+              <span className="block truncate font-bold text-black capitalize">
                 {role.replace('_', ' ')}
               </span>
-              <span className="block text-[10px] text-muted-foreground">Active Policy</span>
+              <span className="block text-[10px] text-zinc-500 font-medium">Active Policy</span>
             </div>
           </div>
         </div>

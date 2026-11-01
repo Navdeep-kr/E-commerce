@@ -99,7 +99,7 @@ export function Topbar({
         {/* Quick Create Menu */}
         <button
           onClick={onOpenQuickCreate}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-2.5 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+          className="inline-flex items-center gap-1.5 rounded-md bg-black px-2.5 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
         >
           <Plus className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">New</span>
@@ -108,7 +108,7 @@ export function Topbar({
         {/* Notifications Bell */}
         <button
           onClick={onOpenNotifications}
-          className="relative rounded-md border border-border bg-background p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          className="relative rounded-md border border-zinc-200 bg-white p-1.5 text-black hover:bg-zinc-100 transition-colors"
           aria-label="Open notifications"
         >
           <Bell className="h-4 w-4" />
@@ -121,12 +121,12 @@ export function Topbar({
         <div className="relative">
           <button
             onClick={() => setUserMenuOpen(!userMenuOpen)}
-            className="flex items-center gap-2 rounded-full border border-border p-1 pr-2 hover:bg-muted transition-colors"
+            className="flex items-center gap-2 rounded-full border border-zinc-200 p-1 pr-2 hover:bg-zinc-100 transition-colors"
           >
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary font-semibold text-xs">
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white font-bold text-xs">
               {session.fullName.charAt(0)}
             </div>
-            <span className="hidden md:inline text-xs font-medium text-foreground">
+            <span className="hidden md:inline text-xs font-bold text-black">
               {session.fullName}
             </span>
             <ChevronDown className="h-3 w-3 text-muted-foreground" />
