@@ -143,23 +143,23 @@ export default function CustomersPage() {
     <div className="space-y-6">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-zinc-900 border border-emerald-500/50 px-4 py-3 text-sm text-emerald-400 shadow-xl shadow-black/40">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-white border-2 border-emerald-500 px-4 py-3 text-sm font-bold text-emerald-700 shadow-xl">
+          <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-600" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-400">CRM & Audiences</span>
-            <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[10px] font-medium text-indigo-400 border border-indigo-500/20">
+            <span className="text-xs font-semibold uppercase tracking-wider text-black">CRM & Audiences</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-black border border-zinc-300">
               RFM Segmentation
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">Customer 360 Profiles</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Customer 360 Profiles</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
             Unified omnichannel customer profiles, RFM analytics, lifetime value, and duplicate deduplication.
           </p>
         </div>
@@ -194,26 +194,26 @@ export default function CustomersPage() {
           title="Total Customers"
           value={String(customers.length)}
           description="Active customer accounts"
-          icon={<Users className="h-5 w-5 text-indigo-400" />}
+          icon={<Users className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Champions Segment"
           value={String(championsCount)}
           description="High recency, frequency & LTV"
-          icon={<Sparkles className="h-5 w-5 text-emerald-400" />}
+          icon={<Sparkles className="h-5 w-5 text-emerald-600" />}
         />
         <KpiCard
           title="Average Customer LTV"
           value={`$${(avgLtvMinor / 100).toFixed(0)}`}
           trend={{ value: 14, isPositive: true }}
           description="Trailing 12-month net spend"
-          icon={<DollarSign className="h-5 w-5 text-amber-400" />}
+          icon={<DollarSign className="h-5 w-5 text-orange-600" />}
         />
         <KpiCard
           title="At-Risk Accounts"
           value={String(atRiskCount)}
           description="High historical spend, low recency"
-          icon={<AlertTriangle className="h-5 w-5 text-rose-400" />}
+          icon={<AlertTriangle className="h-5 w-5 text-red-600" />}
         />
       </div>
 
