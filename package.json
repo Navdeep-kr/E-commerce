@@ -11,8 +11,8 @@
     "dev": "npm run --workspace=apps/web dev",
     "build": "npm run --workspace=apps/web build",
     "start": "npm run --workspace=apps/web start",
-    "test": "node --experimental-strip-types --test packages/core/tests/money.test.ts packages/core/tests/inventory.test.ts packages/core/tests/order-machine.test.ts packages/db/tests/schema-rls.test.ts apps/web/src/lib/auth/auth-guards.test.ts packages/ui/tests/ui-components.test.ts",
-    "test:watch": "node --experimental-strip-types --test --watch packages/core/tests/money.test.ts packages/core/tests/inventory.test.ts packages/core/tests/order-machine.test.ts packages/db/tests/schema-rls.test.ts apps/web/src/lib/auth/auth-guards.test.ts packages/ui/tests/ui-components.test.ts",
+    "test": "node --experimental-strip-types --test packages/core/tests/money.test.ts packages/core/tests/inventory.test.ts packages/core/tests/order-machine.test.ts packages/db/tests/schema-rls.test.ts apps/web/src/lib/auth/auth-guards.test.ts packages/ui/tests/ui-components.test.ts packages/db/tests/seed-generator.test.ts",
+    "test:watch": "node --experimental-strip-types --test --watch packages/core/tests/money.test.ts packages/core/tests/inventory.test.ts packages/core/tests/order-machine.test.ts packages/db/tests/schema-rls.test.ts apps/web/src/lib/auth/auth-guards.test.ts packages/ui/tests/ui-components.test.ts packages/db/tests/seed-generator.test.ts",
     "lint": "npm run --workspace=apps/web lint",
     "typecheck": "npm run typecheck:core && npm run typecheck:web",
     "typecheck:core": "tsc --project packages/core/tsconfig.json --noEmit",
@@ -20,8 +20,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "db:migrate": "node packages/db/scripts/migrate.js",
-    "db:seed": "node packages/db/scripts/seed.js",
-    "db:reset": "node packages/db/scripts/reset.js",
+    "db:seed": "node --experimental-strip-types packages/db/scripts/seed.js",
+    "db:reset": "node --experimental-strip-types packages/db/scripts/reset.js",
     "db:types": "node packages/db/scripts/types.js"
   },
   "devDependencies": {

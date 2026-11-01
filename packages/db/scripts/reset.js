@@ -32,7 +32,7 @@ async function runReset() {
   execSync('node ' + path.resolve(__dirname, 'migrate.js'), { stdio: 'inherit' });
 
   console.log('🌱 [db:reset] Re-running seed...');
-  execSync('node ' + path.resolve(__dirname, 'seed.js'), { stdio: 'inherit' });
+  execSync('node --experimental-strip-types ' + path.resolve(__dirname, 'seed.js'), { stdio: 'inherit' });
 
   console.log('✨ [db:reset] Database cleanly reset and re-seeded successfully.');
 }

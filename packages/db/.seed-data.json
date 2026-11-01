@@ -7,65 +7,538 @@
     "reporting_currency": "USD",
     "timezone": "America/New_York"
   },
+  "users": [
+    {
+      "id": "30000000-0000-0000-0000-000000000001",
+      "email": "admin@acmecommerce.com",
+      "full_name": "Alex Mercer",
+      "role": "owner_admin"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000002",
+      "email": "manager@acmecommerce.com",
+      "full_name": "Morgan Blake",
+      "role": "manager"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000003",
+      "email": "warehouse@acmecommerce.com",
+      "full_name": "Sam Rivera",
+      "role": "fulfillment"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000004",
+      "email": "purchasing@acmecommerce.com",
+      "full_name": "Dana Vance",
+      "role": "purchasing"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000005",
+      "email": "marketing@acmecommerce.com",
+      "full_name": "Riley Hayes",
+      "role": "marketing"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000006",
+      "email": "support@acmecommerce.com",
+      "full_name": "Taylor Chen",
+      "role": "support"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000007",
+      "email": "finance@acmecommerce.com",
+      "full_name": "Jordan Bell",
+      "role": "finance"
+    },
+    {
+      "id": "30000000-0000-0000-0000-000000000008",
+      "email": "viewer@acmecommerce.com",
+      "full_name": "Chris Evans",
+      "role": "viewer"
+    }
+  ],
   "stores": [
     {
       "id": "10000000-0000-0000-0000-000000000001",
       "name": "Acme Official Store (Shopify)",
       "platform": "shopify",
-      "currency": "USD",
-      "is_active": true
+      "currency": "USD"
     },
     {
       "id": "10000000-0000-0000-0000-000000000002",
       "name": "Acme UK Direct (WooCommerce)",
       "platform": "woocommerce",
-      "currency": "GBP",
-      "is_active": true
+      "currency": "GBP"
     }
   ],
   "locations": [
     {
       "id": "20000000-0000-0000-0000-000000000001",
-      "name": "Main Distribution Center",
-      "code": "W1-EAST",
+      "name": "East Coast Distribution Center",
+      "code": "DC-EAST",
       "is_warehouse": true,
       "city": "Philadelphia",
       "country": "US"
     },
     {
       "id": "20000000-0000-0000-0000-000000000002",
-      "name": "West Coast Hub",
-      "code": "W2-WEST",
+      "name": "West Coast Logistics Hub",
+      "code": "DC-WEST",
       "is_warehouse": true,
       "city": "Reno",
       "country": "US"
+    },
+    {
+      "id": "20000000-0000-0000-0000-000000000003",
+      "name": "UK & EU 3PL Center",
+      "code": "UK-3PL",
+      "is_warehouse": true,
+      "city": "Northampton",
+      "country": "GB"
     }
   ],
-  "users": [
+  "productsCount": 400,
+  "variantsCount": 1582,
+  "inventoryLevelsCount": 4746,
+  "customersCount": 8000,
+  "ordersCount": 25000,
+  "purchaseOrdersCount": 60,
+  "ticketsCount": 450,
+  "edgeCases": {
+    "backordersCount": 396,
+    "partialShipmentsCount": 1219,
+    "fraudHoldsCount": 1221,
+    "chargebacksCount": 187,
+    "negativeMarginProductsCount": 5,
+    "returnsCount": 1271
+  },
+  "sampleProducts": [
     {
-      "id": "30000000-0000-0000-0000-000000000001",
-      "email": "admin@acmecommerce.com",
-      "full_name": "Alex Mercer (Admin)",
-      "role": "owner_admin"
+      "id": "prod_1",
+      "title": "Outdoor Model-1 Pro",
+      "sku": "OUT-1001",
+      "priceMinor": 11086,
+      "costMinor": 3576,
+      "onHand": 66,
+      "committed": 5,
+      "available": 61
     },
     {
-      "id": "30000000-0000-0000-0000-000000000002",
-      "email": "warehouse@acmecommerce.com",
-      "full_name": "Sam Rivera (Fulfillment Lead)",
-      "role": "fulfillment"
+      "id": "prod_2",
+      "title": "Outdoor Model-2 Pro",
+      "sku": "OUT-1002",
+      "priceMinor": 14468,
+      "costMinor": 5787,
+      "onHand": 91,
+      "committed": 6,
+      "available": 85
     },
     {
-      "id": "30000000-0000-0000-0000-000000000003",
-      "email": "support@acmecommerce.com",
-      "full_name": "Taylor Chen (Support Lead)",
-      "role": "support"
+      "id": "prod_3",
+      "title": "Footwear Model-3 Pro",
+      "sku": "FOO-1003",
+      "priceMinor": 11562,
+      "costMinor": 3854,
+      "onHand": 59,
+      "committed": 17,
+      "available": 42
     },
     {
-      "id": "30000000-0000-0000-0000-000000000004",
-      "email": "finance@acmecommerce.com",
-      "full_name": "Jordan Bell (Finance Controller)",
-      "role": "finance"
+      "id": "prod_4",
+      "title": "Apparel Model-4 Pro",
+      "sku": "APP-1004",
+      "priceMinor": 10848,
+      "costMinor": 4339,
+      "onHand": 26,
+      "committed": 16,
+      "available": 10
+    },
+    {
+      "id": "prod_5",
+      "title": "Outdoor Model-5 Pro",
+      "sku": "OUT-1005",
+      "priceMinor": 4432,
+      "costMinor": 1343,
+      "onHand": 98,
+      "committed": 6,
+      "available": 92
+    },
+    {
+      "id": "prod_6",
+      "title": "Accessories Model-6 Pro",
+      "sku": "ACC-1006",
+      "priceMinor": 4054,
+      "costMinor": 1398,
+      "onHand": 33,
+      "committed": 13,
+      "available": 20
+    },
+    {
+      "id": "prod_7",
+      "title": "Footwear Model-7 Pro",
+      "sku": "FOO-1007",
+      "priceMinor": 9551,
+      "costMinor": 2809,
+      "onHand": 28,
+      "committed": 5,
+      "available": 23
+    },
+    {
+      "id": "prod_8",
+      "title": "Footwear Model-8 Pro",
+      "sku": "FOO-1008",
+      "priceMinor": 4945,
+      "costMinor": 1595,
+      "onHand": 112,
+      "committed": 1,
+      "available": 111
+    },
+    {
+      "id": "prod_9",
+      "title": "Electronics Model-9 Pro",
+      "sku": "ELE-1009",
+      "priceMinor": 8016,
+      "costMinor": 3485,
+      "onHand": 6,
+      "committed": 2,
+      "available": 4
+    },
+    {
+      "id": "prod_10",
+      "title": "Accessories Model-10 Pro",
+      "sku": "ACC-1010",
+      "priceMinor": 10219,
+      "costMinor": 4443,
+      "onHand": 113,
+      "committed": 5,
+      "available": 108
+    },
+    {
+      "id": "prod_11",
+      "title": "Home & Living Model-11 Pro",
+      "sku": "HOM-1011",
+      "priceMinor": 7102,
+      "costMinor": 2152,
+      "onHand": 120,
+      "committed": 11,
+      "available": 109
+    },
+    {
+      "id": "prod_12",
+      "title": "Electronics Model-12 Pro",
+      "sku": "ELE-1012",
+      "priceMinor": 9100,
+      "costMinor": 3500,
+      "onHand": 42,
+      "committed": 15,
+      "available": 27
+    },
+    {
+      "id": "prod_13",
+      "title": "Footwear Model-13 Pro",
+      "sku": "FOO-1013",
+      "priceMinor": 11110,
+      "costMinor": 3584,
+      "onHand": 108,
+      "committed": 9,
+      "available": 99
+    },
+    {
+      "id": "prod_14",
+      "title": "Outdoor Model-14 Pro",
+      "sku": "OUT-1014",
+      "priceMinor": 8581,
+      "costMinor": 2768,
+      "onHand": 96,
+      "committed": 19,
+      "available": 77
+    },
+    {
+      "id": "prod_15",
+      "title": "Apparel Model-15 Pro",
+      "sku": "APP-1015",
+      "priceMinor": 8556,
+      "costMinor": 3720,
+      "onHand": 25,
+      "committed": 14,
+      "available": 11
+    },
+    {
+      "id": "prod_16",
+      "title": "Home & Living Model-16 Pro",
+      "sku": "HOM-1016",
+      "priceMinor": 5719,
+      "costMinor": 2383,
+      "onHand": 43,
+      "committed": 4,
+      "available": 39
+    },
+    {
+      "id": "prod_17",
+      "title": "Outdoor Model-17 Pro",
+      "sku": "OUT-1017",
+      "priceMinor": 19473,
+      "costMinor": 5901,
+      "onHand": 20,
+      "committed": 18,
+      "available": 2
+    },
+    {
+      "id": "prod_18",
+      "title": "Accessories Model-18 Pro",
+      "sku": "ACC-1018",
+      "priceMinor": 3750,
+      "costMinor": 1250,
+      "onHand": 110,
+      "committed": 4,
+      "available": 106
+    },
+    {
+      "id": "prod_19",
+      "title": "Outdoor Model-19 Pro",
+      "sku": "OUT-1019",
+      "priceMinor": 8345,
+      "costMinor": 3793,
+      "onHand": 87,
+      "committed": 6,
+      "available": 81
+    },
+    {
+      "id": "prod_20",
+      "title": "Footwear Model-20 Pro",
+      "sku": "FOO-1020",
+      "priceMinor": 7460,
+      "costMinor": 2984,
+      "onHand": 71,
+      "committed": 20,
+      "available": 51
     }
   ],
-  "seeded_at": "2026-11-01T07:29:07.682Z"
+  "sampleOrders": [
+    {
+      "id": "ord_1",
+      "orderNumber": "ORD-10001",
+      "totalMinor": 10898,
+      "status": "delivered",
+      "customerEmail": "customer445@example.com",
+      "placedAt": "2026-10-30T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_2",
+      "orderNumber": "ORD-10002",
+      "totalMinor": 5862,
+      "status": "delivered",
+      "customerEmail": "customer299@example.com",
+      "placedAt": "2026-10-29T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_3",
+      "orderNumber": "ORD-10003",
+      "totalMinor": 11361,
+      "status": "delivered",
+      "customerEmail": "customer7@example.com",
+      "placedAt": "2025-12-25T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_4",
+      "orderNumber": "ORD-10004",
+      "totalMinor": 10440,
+      "status": "delivered",
+      "customerEmail": "customer288@example.com",
+      "placedAt": "2025-12-28T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_5",
+      "orderNumber": "ORD-10005",
+      "totalMinor": 17950,
+      "status": "shipped",
+      "customerEmail": "customer103@example.com",
+      "placedAt": "2026-10-19T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_6",
+      "orderNumber": "ORD-10006",
+      "totalMinor": 30312,
+      "status": "cancelled",
+      "customerEmail": "customer446@example.com",
+      "placedAt": "2026-10-19T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_7",
+      "orderNumber": "ORD-10007",
+      "totalMinor": 10538,
+      "status": "packed",
+      "customerEmail": "customer178@example.com",
+      "placedAt": "2026-02-10T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_8",
+      "orderNumber": "ORD-10008",
+      "totalMinor": 43480,
+      "status": "delivered",
+      "customerEmail": "customer284@example.com",
+      "placedAt": "2026-02-18T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_9",
+      "orderNumber": "ORD-10009",
+      "totalMinor": 27384,
+      "status": "delivered",
+      "customerEmail": "customer482@example.com",
+      "placedAt": "2026-04-02T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_10",
+      "orderNumber": "ORD-10010",
+      "totalMinor": 10323,
+      "status": "delivered",
+      "customerEmail": "customer397@example.com",
+      "placedAt": "2025-12-28T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_11",
+      "orderNumber": "ORD-10011",
+      "totalMinor": 34242,
+      "status": "returned",
+      "customerEmail": "customer429@example.com",
+      "placedAt": "2026-08-18T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_12",
+      "orderNumber": "ORD-10012",
+      "totalMinor": 33771,
+      "status": "delivered",
+      "customerEmail": "customer50@example.com",
+      "placedAt": "2026-01-24T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_13",
+      "orderNumber": "ORD-10013",
+      "totalMinor": 16156,
+      "status": "delivered",
+      "customerEmail": "customer181@example.com",
+      "placedAt": "2026-08-30T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_14",
+      "orderNumber": "ORD-10014",
+      "totalMinor": 32088,
+      "status": "ready_to_pack",
+      "customerEmail": "customer176@example.com",
+      "placedAt": "2026-05-09T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_15",
+      "orderNumber": "ORD-10015",
+      "totalMinor": 44504,
+      "status": "delivered",
+      "customerEmail": "customer338@example.com",
+      "placedAt": "2026-07-24T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_16",
+      "orderNumber": "ORD-10016",
+      "totalMinor": 26512,
+      "status": "delivered",
+      "customerEmail": "customer241@example.com",
+      "placedAt": "2026-09-12T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_17",
+      "orderNumber": "ORD-10017",
+      "totalMinor": 20625,
+      "status": "ready_to_pack",
+      "customerEmail": "customer8@example.com",
+      "placedAt": "2026-08-30T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_18",
+      "orderNumber": "ORD-10018",
+      "totalMinor": 12564,
+      "status": "delivered",
+      "customerEmail": "customer91@example.com",
+      "placedAt": "2026-01-14T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_19",
+      "orderNumber": "ORD-10019",
+      "totalMinor": 6454,
+      "status": "packing",
+      "customerEmail": "customer43@example.com",
+      "placedAt": "2026-03-15T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_20",
+      "orderNumber": "ORD-10020",
+      "totalMinor": 11545,
+      "status": "ready_to_pack",
+      "customerEmail": "customer445@example.com",
+      "placedAt": "2026-06-22T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_21",
+      "orderNumber": "ORD-10021",
+      "totalMinor": 25677,
+      "status": "on_hold",
+      "customerEmail": "customer162@example.com",
+      "placedAt": "2026-07-11T00:00:00.000Z",
+      "riskLevel": "high"
+    },
+    {
+      "id": "ord_22",
+      "orderNumber": "ORD-10022",
+      "totalMinor": 18480,
+      "status": "delivered",
+      "customerEmail": "customer494@example.com",
+      "placedAt": "2026-01-18T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_23",
+      "orderNumber": "ORD-10023",
+      "totalMinor": 8706,
+      "status": "delivered",
+      "customerEmail": "customer482@example.com",
+      "placedAt": "2025-11-27T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_24",
+      "orderNumber": "ORD-10024",
+      "totalMinor": 12052,
+      "status": "packing",
+      "customerEmail": "customer336@example.com",
+      "placedAt": "2026-09-08T00:00:00.000Z",
+      "riskLevel": "low"
+    },
+    {
+      "id": "ord_25",
+      "orderNumber": "ORD-10025",
+      "totalMinor": 20500,
+      "status": "delivered",
+      "customerEmail": "customer252@example.com",
+      "placedAt": "2026-03-22T00:00:00.000Z",
+      "riskLevel": "low"
+    }
+  ]
 }
