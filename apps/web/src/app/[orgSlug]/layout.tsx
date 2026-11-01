@@ -24,7 +24,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const currentSession: UserSession = DEMO_USERS.admin;
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-white text-black antialiased">
+    <div className="flex h-screen w-full overflow-hidden bg-white text-black antialiased">
       {/* Collapsible Left Sidebar */}
       <Sidebar orgSlug={orgSlug} role={currentSession.role} orgName={currentSession.organizationName} />
 
