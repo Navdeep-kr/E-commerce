@@ -9,3 +9,5 @@ export * from './customer-service.ts';
 export * from './support-service.ts';
 export * from './purchasing-service.ts';
 export * from './finance-service.ts';
+export * from './marketing-service.ts';
+export * from './analytics-service.ts';
