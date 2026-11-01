@@ -28,3 +28,5 @@ export * from './load-simulator.ts';
 export * from './tenant-fuzzer-service.ts';
 export * from './privacy-service.ts';
 export * from './telemetry-service.ts';
+export * from './migration-engine.ts';
+export * from './deployment-engine.ts';

@@ -1,0 +1,38 @@
+name: Database Migration Safety Check
+
+on:
+  pull_request:
+    paths:
+      - 'packages/db/migrations/**'
+      - 'packages/db/src/**'
+      - 'packages/core/src/migration-engine.ts'
+
+jobs:
+  migration-lint:
+    name: Expand-Contract Compatibility Linter
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit Migration Files for Breaking DDL
+        run: |
+          node --experimental-strip-types -e "
+            import { MigrationEngine } from './packages/core/src/migration-engine.ts';
+            const engine = new MigrationEngine();
+            const audit = engine.auditMigrationsDirectory('./packages/db/migrations');
+            if (!audit.safe) {
+              console.error('Breaking migration detected:');
+              audit.violations.forEach(v => console.error(' - ' + v.file + ': ' + v.reason));
+              process.exit(1);
+            }
+            console.log('Expand-contract compatibility check passed: ' + audit.checkedFiles + ' files inspected.');
+          "

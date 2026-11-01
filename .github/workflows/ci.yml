@@ -6,28 +6,44 @@ on:
   pull_request:
     branches: [main, master]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  validate:
-    name: Lint, Typecheck & Test
-    runs-on: ubuntu-latest
+  matrix-validate:
+    name: Validate Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+        os: [ubuntu-latest]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Core Unit Tests
-        run: npm run test
+      - name: Code Formatting Check
+        run: npm run format:check
 
-      - name: Run Type Check
+      - name: TypeScript Typecheck
         run: npm run typecheck
 
-      - name: Check Formatting
-        run: npm run format:check
+      - name: Run Test Pyramid (Unit, Integration, E2E, QA, Observability)
+        run: npm run test
+
+      - name: Web App Next.js Production Build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: 1
+          NODE_ENV: production
