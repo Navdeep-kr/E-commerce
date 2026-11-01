@@ -15,3 +15,7 @@ export * from './task-service.ts';
 export * from './automation-engine.ts';
 export * from './api-key-service.ts';
 export * from './outbound-webhook-service.ts';
+export * from './forecasting-service.ts';
+export * from './anomaly-detection-service.ts';
+export * from './support-copilot-service.ts';
+export * from './ai-assistant-service.ts';
