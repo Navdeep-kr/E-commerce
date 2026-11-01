@@ -224,10 +224,10 @@ export default function CustomersPage() {
               <button
                 key={seg}
                 onClick={() => setActiveSegment(seg)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-colors ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-bold whitespace-nowrap transition-colors border ${
                   activeSegment === seg
-                    ? 'bg-zinc-800 text-white border border-zinc-700'
-                    : 'text-zinc-400 hover:bg-zinc-800/40 hover:text-zinc-200'
+                    ? 'bg-white text-black border-black shadow-sm ring-1 ring-black'
+                    : 'bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-black'
                 }`}
               >
                 {seg === 'all' ? 'All Customers' : seg}
@@ -242,15 +242,15 @@ export default function CustomersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, email, phone..."
-              className="w-full rounded-lg bg-zinc-900 border border-zinc-800 pl-9 pr-3 py-1.5 text-xs text-white placeholder-zinc-500 focus:border-indigo-500 focus:outline-none"
+              className="w-full rounded-lg bg-white border border-zinc-300 pl-9 pr-3 py-1.5 text-xs text-black placeholder-zinc-400 focus:border-black focus:outline-none"
             />
           </div>
         </div>
 
         {/* Customer Directory Table */}
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-          <table className="w-full text-left text-sm">
-            <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+        <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+          <table className="w-full text-left text-sm bg-white">
+            <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4">Customer</th>
                 <th className="py-3 px-4">Contact</th>
@@ -261,13 +261,13 @@ export default function CustomersPage() {
                 <th className="py-3 px-4 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-800 font-medium">
+            <tbody className="divide-y divide-zinc-200 font-medium bg-white">
               {filteredCustomers.map((c) => (
-                <tr key={c.id} className="hover:bg-zinc-800/30 transition-colors">
-                  <td className="py-3.5 px-4 font-semibold text-zinc-100">
+                <tr key={c.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                  <td className="py-3.5 px-4 font-bold text-black">
                     <Link
                       href={`/${orgSlug}/customers/${c.id}`}
-                      className="hover:text-indigo-400 transition-colors"
+                      className="hover:underline text-black"
                     >
                       {c.firstName} {c.lastName}
                     </Link>
@@ -275,56 +275,56 @@ export default function CustomersPage() {
                       {c.tags.map((t) => (
                         <span
                           key={t}
-                          className="rounded bg-zinc-800 text-[10px] font-mono text-zinc-400 px-1.5 py-0.5"
+                          className="rounded bg-white text-[10px] font-mono text-black font-semibold px-1.5 py-0.5 border border-zinc-300"
                         >
                           {t}
                         </span>
                       ))}
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 text-xs text-zinc-300">
+                  <td className="py-3.5 px-4 text-xs text-black">
                     <div className="flex items-center gap-1.5">
-                      <Mail className="h-3 w-3 text-zinc-500" />
-                      <span>{c.email}</span>
+                      <Mail className="h-3 w-3 text-zinc-600" />
+                      <span className="text-black font-medium">{c.email}</span>
                     </div>
                     {c.phone && (
-                      <div className="flex items-center gap-1.5 text-zinc-400 mt-0.5">
-                        <Phone className="h-3 w-3 text-zinc-500" />
+                      <div className="flex items-center gap-1.5 text-zinc-700 mt-0.5">
+                        <Phone className="h-3 w-3 text-zinc-600" />
                         <span>{c.phone}</span>
                       </div>
                     )}
                   </td>
                   <td className="py-3.5 px-4">
                     <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                      className={`rounded-full px-2.5 py-0.5 text-xs font-bold border ${
                         c.rfm.segment === 'Champions'
-                          ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                          ? 'bg-white text-emerald-600 border-emerald-500'
                           : c.rfm.segment === 'At Risk'
-                          ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          ? 'bg-white text-rose-600 border-rose-500'
                           : c.rfm.segment === 'Loyal Customers'
-                          ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                          : 'bg-zinc-800 text-zinc-300 border border-zinc-700'
+                          ? 'bg-white text-emerald-700 border-emerald-400'
+                          : 'bg-white text-orange-600 border-orange-400'
                       }`}
                     >
                       {c.rfm.segment}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 font-mono text-xs text-zinc-400">
-                    R<span className="font-bold text-zinc-200">{c.rfm.recencyScore}</span> &bull; F
-                    <span className="font-bold text-zinc-200">{c.rfm.frequencyScore}</span> &bull; M
-                    <span className="font-bold text-zinc-200">{c.rfm.monetaryScore}</span>
+                  <td className="py-3.5 px-4 font-mono text-xs text-zinc-700">
+                    R<span className="font-bold text-black">{c.rfm.recencyScore}</span> &bull; F
+                    <span className="font-bold text-black">{c.rfm.frequencyScore}</span> &bull; M
+                    <span className="font-bold text-black">{c.rfm.monetaryScore}</span>
                   </td>
-                  <td className="py-3.5 px-4 text-zinc-300">{c.ordersCount} orders</td>
-                  <td className="py-3.5 px-4 font-mono font-bold text-zinc-200">
+                  <td className="py-3.5 px-4 text-black font-semibold">{c.ordersCount} orders</td>
+                  <td className="py-3.5 px-4 font-mono font-bold text-black">
                     ${(c.totalSpentMinor / 100).toFixed(2)}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <Link
                       href={`/${orgSlug}/customers/${c.id}`}
-                      className="inline-flex items-center gap-1 rounded-md bg-zinc-800 px-2.5 py-1 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white transition-colors"
+                      className="inline-flex items-center gap-1 rounded-md bg-white border border-zinc-300 px-2.5 py-1 text-xs font-bold text-black hover:bg-zinc-100 hover:border-black transition-colors shadow-sm"
                     >
                       <span>Profile 360</span>
-                      <ArrowRight className="h-3 w-3" />
+                      <ArrowRight className="h-3 w-3 text-black" />
                     </Link>
                   </td>
                 </tr>
@@ -336,67 +336,67 @@ export default function CustomersPage() {
 
       {/* Customer Profile Merge Modal */}
       {mergeModalOpen && primaryCust && secondaryCust && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl space-y-6">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl space-y-6 text-black">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div className="flex items-center gap-2">
-                <GitMerge className="h-5 w-5 text-amber-400" />
-                <h3 className="text-lg font-bold text-zinc-100">Merge Duplicate Customer Profiles</h3>
+                <GitMerge className="h-5 w-5 text-orange-500" />
+                <h3 className="text-lg font-bold text-black">Merge Duplicate Customer Profiles</h3>
               </div>
               <button
                 onClick={() => setMergeModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                className="rounded-lg p-1 text-zinc-500 hover:bg-zinc-100 hover:text-black"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <p className="text-xs text-zinc-300">
+            <p className="text-xs text-zinc-600">
               Merging combines lifetime orders, lifetime spend, and address cards into the Primary profile. The Secondary profile will be archived and redirected to the primary ID.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
               {/* Primary Profile Card */}
-              <div className="rounded-xl border border-emerald-500/40 bg-zinc-950 p-4 space-y-3">
+              <div className="rounded-xl border border-emerald-300 bg-white p-4 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600">
                     Primary Profile (Kept)
                   </span>
-                  <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] text-emerald-400 font-mono">
+                  <span className="rounded bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 text-[10px] text-emerald-700 font-mono font-bold">
                     {primaryCust.id}
                   </span>
                 </div>
                 <div>
-                  <p className="font-bold text-sm text-white">{primaryCust.firstName} {primaryCust.lastName}</p>
-                  <p className="text-xs text-zinc-400">{primaryCust.email}</p>
-                  <p className="text-xs text-zinc-400">{primaryCust.phone}</p>
+                  <p className="font-bold text-sm text-black">{primaryCust.firstName} {primaryCust.lastName}</p>
+                  <p className="text-xs text-zinc-600">{primaryCust.email}</p>
+                  <p className="text-xs text-zinc-600">{primaryCust.phone}</p>
                 </div>
-                <div className="pt-2 border-t border-zinc-800 text-xs flex justify-between">
-                  <span className="text-zinc-500">Orders: {primaryCust.ordersCount}</span>
-                  <span className="font-mono font-bold text-zinc-200">
+                <div className="pt-2 border-t border-zinc-200 text-xs flex justify-between">
+                  <span className="text-zinc-600">Orders: {primaryCust.ordersCount}</span>
+                  <span className="font-mono font-bold text-black">
                     ${(primaryCust.totalSpentMinor / 100).toFixed(2)}
                   </span>
                 </div>
               </div>
 
               {/* Secondary Profile Card */}
-              <div className="rounded-xl border border-rose-500/40 bg-zinc-950 p-4 space-y-3">
+              <div className="rounded-xl border border-rose-300 bg-white p-4 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600">
                     Secondary (Archived)
                   </span>
-                  <span className="rounded bg-rose-500/10 px-1.5 py-0.5 text-[10px] text-rose-400 font-mono">
+                  <span className="rounded bg-rose-50 border border-rose-200 px-1.5 py-0.5 text-[10px] text-rose-700 font-mono font-bold">
                     {secondaryCust.id}
                   </span>
                 </div>
                 <div>
-                  <p className="font-bold text-sm text-white">{secondaryCust.firstName} {secondaryCust.lastName}</p>
-                  <p className="text-xs text-zinc-400">{secondaryCust.email}</p>
-                  <p className="text-xs text-zinc-400">{secondaryCust.phone}</p>
+                  <p className="font-bold text-sm text-black">{secondaryCust.firstName} {secondaryCust.lastName}</p>
+                  <p className="text-xs text-zinc-600">{secondaryCust.email}</p>
+                  <p className="text-xs text-zinc-600">{secondaryCust.phone}</p>
                 </div>
-                <div className="pt-2 border-t border-zinc-800 text-xs flex justify-between">
-                  <span className="text-zinc-500">Orders: {secondaryCust.ordersCount}</span>
-                  <span className="font-mono font-bold text-zinc-200">
+                <div className="pt-2 border-t border-zinc-200 text-xs flex justify-between">
+                  <span className="text-zinc-600">Orders: {secondaryCust.ordersCount}</span>
+                  <span className="font-mono font-bold text-black">
                     ${(secondaryCust.totalSpentMinor / 100).toFixed(2)}
                   </span>
                 </div>
@@ -404,17 +404,17 @@ export default function CustomersPage() {
             </div>
 
             {/* Post Merge Preview */}
-            <div className="rounded-lg bg-zinc-950/80 p-3.5 border border-zinc-800 text-xs space-y-1.5">
-              <span className="font-semibold text-zinc-200">Post-Merge Combined Result:</span>
-              <div className="flex justify-between text-zinc-400">
+            <div className="rounded-lg bg-zinc-50 p-3.5 border border-zinc-200 text-xs space-y-1.5">
+              <span className="font-bold text-black">Post-Merge Combined Result:</span>
+              <div className="flex justify-between text-zinc-600">
                 <span>Total Lifetime Orders:</span>
-                <span className="font-mono font-bold text-zinc-100">
+                <span className="font-mono font-bold text-black">
                   {primaryCust.ordersCount + secondaryCust.ordersCount} orders
                 </span>
               </div>
-              <div className="flex justify-between text-zinc-400">
+              <div className="flex justify-between text-zinc-600">
                 <span>Total Combined Spend:</span>
-                <span className="font-mono font-bold text-emerald-400">
+                <span className="font-mono font-bold text-emerald-600">
                   ${((primaryCust.totalSpentMinor + secondaryCust.totalSpentMinor) / 100).toFixed(2)}
                 </span>
               </div>
@@ -424,7 +424,7 @@ export default function CustomersPage() {
               <button
                 type="button"
                 onClick={() => setMergeModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-zinc-200"
+                className="px-4 py-2 text-xs font-semibold text-zinc-600 hover:text-black"
               >
                 Cancel
               </button>
@@ -432,7 +432,7 @@ export default function CustomersPage() {
                 type="button"
                 disabled={isMerging}
                 onClick={handleExecuteMerge}
-                className="rounded-lg bg-amber-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-amber-500 transition-colors flex items-center gap-1.5 shadow-lg shadow-amber-950/40"
+                className="rounded-lg bg-orange-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-orange-500 transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 {isMerging ? 'Merging Profiles...' : 'Confirm & Merge Profiles'}
               </button>

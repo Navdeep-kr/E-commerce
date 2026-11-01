@@ -12,14 +12,14 @@
     --popover-foreground: 0 0% 0%;
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 100%;
-    --muted: 0 0% 97%;
+    --muted: 0 0% 100%;
     --muted-foreground: 0 0% 20%;
-    --accent: 0 0% 96%;
+    --accent: 0 0% 100%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
     --ring: 0 0% 0%;
     --radius: 0.5rem;
   }
@@ -33,37 +33,141 @@
     --popover-foreground: 0 0% 0%;
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 100%;
-    --muted: 0 0% 97%;
+    --muted: 0 0% 100%;
     --muted-foreground: 0 0% 20%;
-    --accent: 0 0% 96%;
+    --accent: 0 0% 100%;
     --accent-foreground: 0 0% 0%;
     --destructive: 0 84.2% 55%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 88%;
-    --input: 0 0% 88%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
     --ring: 0 0% 0%;
   }
 }
 
+/* ============================================================ */
+/* ABSOLUTE 100% PURE WHITE BACKGROUND REQUIREMENT               */
+/* ============================================================ */
+
 html, body {
-  color: #000000;
+  color: #000000 !important;
   background-color: #ffffff !important;
+  background: #ffffff !important;
   font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
 }
 
-/* Red, Black, Green, Orange color palette enhancements */
-.text-danger, .badge-danger, .status-danger {
-  color: #dc2626 !important; /* Red */
+/* 1. Force EVERY single container, card, panel, table, row, column to be 100% white */
+div, section, main, aside, header, nav, footer,
+table, thead, tbody, tr, th, td,
+[class*="bg-zinc-"],
+[class*="bg-slate-"],
+[class*="bg-gray-"],
+[class*="bg-neutral-"],
+[class*="bg-stone-"],
+.bg-background,
+.bg-card,
+.bg-muted,
+.bg-white {
+  background-color: #ffffff !important;
 }
 
-.text-success, .badge-success, .status-success {
-  color: #16a34a !important; /* Green */
+/* Subtle clean hover for table rows */
+tr:hover,
+tr[class*="hover:bg-"]:hover {
+  background-color: #fbfbfb !important;
 }
 
-.text-warning, .badge-warning, .status-warning {
-  color: #ea580c !important; /* Orange */
+/* 2. Crisp, elegant borders */
+[class*="border-zinc-"],
+[class*="border-slate-"],
+[class*="border-gray-"],
+[class*="border-neutral-"],
+[class*="divide-zinc-"] > :not([hidden]) ~ :not([hidden]),
+.border-border,
+.divide-border > :not([hidden]) ~ :not([hidden]) {
+  border-color: #e4e4e7 !important; /* zinc-200 */
 }
 
-.text-primary-dark {
-  color: #000000 !important; /* Black */
+/* ============================================================ */
+/* COLOR PALETTE: BLACK, RED, GREEN, ORANGE                    */
+/* ============================================================ */
+
+/* 1. BLACK: Headers, values, customer names, main text, tags */
+h1, h2, h3, h4, h5, h6,
+.text-foreground,
+.text-black,
+[class*="text-zinc-100"],
+[class*="text-zinc-200"],
+[class*="text-zinc-300"],
+[class*="text-slate-100"],
+[class*="text-slate-200"],
+[class*="text-slate-300"],
+[class*="text-gray-100"],
+[class*="text-gray-200"],
+[class*="text-gray-300"],
+.text-white:not(.bg-primary):not(.bg-emerald-600):not(.bg-rose-600):not(.bg-orange-600):not(.bg-blue-600) {
+  color: #000000 !important;
+}
+
+/* Secondary descriptions and labels in high-contrast dark zinc */
+[class*="text-zinc-400"],
+[class*="text-zinc-500"],
+[class*="text-slate-400"],
+[class*="text-slate-500"],
+[class*="text-gray-400"],
+[class*="text-gray-500"],
+.text-muted-foreground {
+  color: #27272a !important;
+}
+
+/* 2. RED: Danger, errors, cancellations, returns, refunds, breached SLA, at-risk */
+[class*="text-rose-"],
+[class*="text-red-"],
+.text-destructive,
+.text-danger,
+.badge-danger {
+  color: #dc2626 !important;
+}
+
+/* 3. GREEN: Success, delivered, paid, champions, active revenue, in-stock */
+[class*="text-emerald-"],
+[class*="text-green-"],
+.text-success,
+.badge-success {
+  color: #16a34a !important;
+}
+
+/* 4. ORANGE: Warnings, promising, on-hold, packing, pending, low stock, SLA warnings */
+[class*="text-amber-"],
+[class*="text-orange-"],
+.text-warning,
+.badge-warning {
+  color: #ea580c !important;
+}
+
+/* ============================================================ */
+/* FORM CONTROLS & INTERACTIVE ELEMENTS                         */
+/* ============================================================ */
+
+/* Inputs & Form Controls: pure white background and crisp black text */
+input, select, textarea {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #d4d4d8 !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: #71717a !important;
+}
+
+/* Buttons and tag chips: pure white background */
+button[class*="bg-zinc-"],
+button[class*="bg-slate-"],
+button[class*="bg-gray-"],
+span[class*="bg-zinc-"],
+span[class*="bg-slate-"],
+span[class*="bg-gray-"] {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid #e4e4e7 !important;
 }
