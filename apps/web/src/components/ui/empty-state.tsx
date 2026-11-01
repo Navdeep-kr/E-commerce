@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Inbox, Plus } from 'lucide-react';
 
@@ -41,3 +43,6 @@ export function EmptyState({
     </div>
   );
 }
+
+export default EmptyState;
+

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 interface SkeletonProps {
@@ -31,3 +33,6 @@ export function TableSkeleton({ rows = 5, cols = 4 }: { rows?: number; cols?: nu
     </div>
   );
 }
+
+export default Skeleton;
+

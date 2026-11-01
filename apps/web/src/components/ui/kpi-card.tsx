@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
@@ -85,6 +87,9 @@ export function KPICard({
   );
 }
 
-// Export aliases for backwards compatibility with all screens
-export const KpiCard = KPICard;
+// Export explicit function component alias for backwards compatibility
+export function KpiCard(props: KPICardProps) {
+  return <KPICard {...props} />;
+}
+
 export default KPICard;

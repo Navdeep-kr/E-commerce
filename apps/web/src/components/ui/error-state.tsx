@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 
@@ -36,3 +38,6 @@ export function ErrorState({
     </div>
   );
 }
+
+export default ErrorState;
+

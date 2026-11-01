@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {
   Clock,
@@ -72,3 +74,6 @@ export function StatusPill({ status, type = 'order', className = '' }: StatusPil
     </span>
   );
 }
+
+export default StatusPill;
+
