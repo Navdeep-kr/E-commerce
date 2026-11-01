@@ -19,3 +19,5 @@ export * from './forecasting-service.ts';
 export * from './anomaly-detection-service.ts';
 export * from './support-copilot-service.ts';
 export * from './ai-assistant-service.ts';
+export * from './billing-service.ts';
+export * from './superadmin-service.ts';
