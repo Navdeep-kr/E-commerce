@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
@@ -111,26 +111,26 @@ export default function ApiKeysSettingsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white min-h-screen text-black">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-zinc-900 border border-emerald-500/50 px-4 py-3 text-sm text-emerald-400 shadow-xl shadow-black/40">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
-          <span>{toastMessage}</span>
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-white border-2 border-green-500 px-4 py-3 text-sm text-green-700 shadow-xl">
+          <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-green-600" />
+          <span className="font-semibold text-black">{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Developer Platform</span>
-            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Developer Platform</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-black border border-zinc-200">
               OpenAPI 3.1 & REST v1
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">API Keys & Outbound Webhooks</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">API Keys & Outbound Webhooks</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
             Scoped developer credentials, rate-limiting headers, HMAC-signed outbound webhooks, and OpenAPI schema.
           </p>
         </div>
@@ -141,9 +141,9 @@ export default function ApiKeysSettingsPage() {
               setGenerateModalOpen(true);
               setRevealedRawKey(null);
             }}
-            className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-950/40 hover:bg-emerald-500 transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-zinc-800 transition-colors"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-3.5 w-3.5" />
             <span>Generate New API Key</span>
           </button>
         </div>
@@ -155,36 +155,36 @@ export default function ApiKeysSettingsPage() {
           title="Active API Keys"
           value={String(apiKeys.length)}
           description="Live & Test developer keys"
-          icon={<Key className="h-5 w-5 text-emerald-400" />}
+          icon={<Key className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Rate Limit Default"
           value="120 req/min"
           description="Sliding window per credential"
-          icon={<Shield className="h-5 w-5 text-indigo-400" />}
+          icon={<Shield className="h-5 w-5 text-orange-600" />}
         />
         <KpiCard
           title="Outbound Webhooks"
           value={String(webhooks.length)}
           description="HMAC-SHA256 signed delivery"
-          icon={<Send className="h-5 w-5 text-amber-400" />}
+          icon={<Send className="h-5 w-5 text-green-600" />}
         />
         <KpiCard
           title="OpenAPI Spec"
           value="3.1.0 Ready"
           description="Swagger & Postman compatible"
-          icon={<FileCode className="h-5 w-5 text-emerald-400" />}
+          icon={<FileCode className="h-5 w-5 text-black" />}
         />
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-200">
         <button
           onClick={() => setActiveTab('keys')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors ${
             activeTab === 'keys'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-500 hover:text-black'
           }`}
         >
           <Key className="h-4 w-4" />
@@ -193,10 +193,10 @@ export default function ApiKeysSettingsPage() {
 
         <button
           onClick={() => setActiveTab('webhooks')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors ${
             activeTab === 'webhooks'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-500 hover:text-black'
           }`}
         >
           <Send className="h-4 w-4" />
@@ -205,10 +205,10 @@ export default function ApiKeysSettingsPage() {
 
         <button
           onClick={() => setActiveTab('docs')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-bold transition-colors ${
             activeTab === 'docs'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-500 hover:text-black'
           }`}
         >
           <Terminal className="h-4 w-4" />
@@ -219,9 +219,9 @@ export default function ApiKeysSettingsPage() {
       {/* Tab 1: API Keys Management */}
       {activeTab === 'keys' && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Key Name</th>
                   <th className="py-3 px-4">Environment</th>
@@ -231,42 +231,42 @@ export default function ApiKeysSettingsPage() {
                   <th className="py-3 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium text-xs">
+              <tbody className="divide-y divide-zinc-200 font-medium text-xs">
                 {apiKeys.map((k) => (
-                  <tr key={k.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-zinc-100">{k.name}</td>
+                  <tr key={k.id} className="hover:bg-zinc-50 transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-black">{k.name}</td>
                     <td className="py-3.5 px-4">
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-mono font-bold uppercase ${
                           k.keyPrefix === 'sf_live_'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                            : 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
+                            ? 'bg-white text-green-700 border border-green-300'
+                            : 'bg-white text-orange-600 border border-orange-300'
                         }`}
                       >
                         {k.keyPrefix.replace('sf_', '').replace('_', '')}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-300">{k.preview}</td>
+                    <td className="py-3.5 px-4 font-mono text-zinc-700 font-semibold">{k.preview}</td>
                     <td className="py-3.5 px-4">
                       <div className="flex flex-wrap gap-1">
                         {k.scopes.map((s) => (
                           <span
                             key={s}
-                            className="rounded bg-zinc-800 text-[10px] font-mono text-zinc-300 px-1.5 py-0.5"
+                            className="rounded bg-white border border-zinc-300 text-[10px] font-mono text-black font-semibold px-1.5 py-0.5"
                           >
                             {s}
                           </span>
                         ))}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-400">{k.rateLimitPerMin} req/min</td>
+                    <td className="py-3.5 px-4 font-mono text-zinc-600 font-medium">{k.rateLimitPerMin} req/min</td>
                     <td className="py-3.5 px-4 text-right">
                       <button
                         onClick={() => {
                           setApiKeys((prev) => prev.filter((item) => item.id !== k.id));
                           showToast(`Revoked key ${k.name}.`);
                         }}
-                        className="text-rose-400 hover:text-rose-300 font-semibold"
+                        className="text-red-600 hover:underline font-bold"
                       >
                         Revoke
                       </button>
@@ -282,26 +282,26 @@ export default function ApiKeysSettingsPage() {
       {/* Tab 2: Outbound Webhooks */}
       {activeTab === 'webhooks' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900">
-            <h3 className="text-base font-bold text-zinc-100">Outbound Webhooks Dispatcher</h3>
-            <p className="text-xs text-zinc-400 mt-0.5">
+          <div className="p-4 rounded-xl border border-zinc-200 bg-white shadow-sm">
+            <h3 className="text-base font-bold text-black">Outbound Webhooks Dispatcher</h3>
+            <p className="text-xs text-zinc-600 mt-0.5">
               Storefront Ops automatically signs outbound events using timestamped HMAC-SHA256 (`X-Storefront-Signature`).
             </p>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 divide-y divide-zinc-800">
+          <div className="rounded-xl border border-zinc-200 bg-white divide-y divide-zinc-200 shadow-sm">
             {webhooks.map((wh) => (
-              <div key={wh.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div key={wh.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white">
                 <div className="space-y-1.5 text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-sm text-zinc-100">{wh.targetUrl}</span>
-                    <span className="rounded bg-emerald-500/10 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
+                    <span className="font-mono font-bold text-sm text-black">{wh.targetUrl}</span>
+                    <span className="rounded bg-white text-green-700 border border-green-300 px-2 py-0.5 text-[10px] font-bold">
                       Active
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1 pt-1">
                     {wh.subscribedEvents.map((evt: string) => (
-                      <span key={evt} className="rounded bg-zinc-800 text-[10px] font-mono text-indigo-300 px-2 py-0.5">
+                      <span key={evt} className="rounded bg-white border border-zinc-300 text-[10px] font-mono text-black font-semibold px-2 py-0.5">
                         {evt}
                       </span>
                     ))}
@@ -314,7 +314,7 @@ export default function ApiKeysSettingsPage() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleTestWebhookPing(wh.secret)}
-                    className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700"
+                    className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-bold text-black hover:bg-zinc-100 shadow-xs transition-colors"
                   >
                     <Send className="h-3 w-3" />
                     <span>Send Test Ping</span>
@@ -328,11 +328,11 @@ export default function ApiKeysSettingsPage() {
 
       {/* Tab 3: Interactive cURL Playground */}
       {activeTab === 'docs' && (
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-6 space-y-6">
+        <div className="rounded-xl border border-zinc-200 bg-white p-6 space-y-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-zinc-100">Developer Quickstart Playground</h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <h3 className="text-base font-bold text-black">Developer Quickstart Playground</h3>
+              <p className="text-xs text-zinc-600 mt-0.5">
                 Copy ready-to-run cURL commands authenticated with your API key to test order sync and stock queries in &lt; 15 minutes.
               </p>
             </div>
@@ -340,7 +340,7 @@ export default function ApiKeysSettingsPage() {
               href="/api/v1/openapi"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700"
+              className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-xs font-bold text-black hover:bg-zinc-100 shadow-xs transition-colors"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               <span>View OpenAPI 3.1 JSON</span>
@@ -350,8 +350,8 @@ export default function ApiKeysSettingsPage() {
           <div className="space-y-4">
             {/* Example 1: Fetch Orders */}
             <div className="space-y-1.5">
-              <span className="text-xs font-bold text-zinc-300">1. Query Orders (GET /api/v1/orders)</span>
-              <div className="rounded-lg bg-zinc-950 p-3 border border-zinc-800 font-mono text-xs text-emerald-400 flex items-center justify-between">
+              <span className="text-xs font-bold text-black">1. Query Orders (GET /api/v1/orders)</span>
+              <div className="rounded-lg bg-white p-3 border border-zinc-200 font-mono text-xs text-black flex items-center justify-between shadow-xs">
                 <span>
                   curl -X GET https://api.storefrontops.com/api/v1/orders -H &quot;Authorization: Bearer sf_live_demo1234567890abcdef12345678&quot;
                 </span>
@@ -362,7 +362,7 @@ export default function ApiKeysSettingsPage() {
                     );
                     showToast('cURL command copied!');
                   }}
-                  className="p-1 text-zinc-400 hover:text-white"
+                  className="p-1 text-zinc-500 hover:text-black transition-colors"
                 >
                   <Copy className="h-3.5 w-3.5" />
                 </button>
@@ -371,8 +371,8 @@ export default function ApiKeysSettingsPage() {
 
             {/* Example 2: Query Inventory */}
             <div className="space-y-1.5">
-              <span className="text-xs font-bold text-zinc-300">2. Query Stock Levels (GET /api/v1/inventory)</span>
-              <div className="rounded-lg bg-zinc-950 p-3 border border-zinc-800 font-mono text-xs text-emerald-400 flex items-center justify-between">
+              <span className="text-xs font-bold text-black">2. Query Stock Levels (GET /api/v1/inventory)</span>
+              <div className="rounded-lg bg-white p-3 border border-zinc-200 font-mono text-xs text-black flex items-center justify-between shadow-xs">
                 <span>
                   curl -X GET https://api.storefrontops.com/api/v1/inventory -H &quot;Authorization: Bearer sf_live_demo1234567890abcdef12345678&quot;
                 </span>
@@ -383,7 +383,7 @@ export default function ApiKeysSettingsPage() {
                     );
                     showToast('cURL command copied!');
                   }}
-                  className="p-1 text-zinc-400 hover:text-white"
+                  className="p-1 text-zinc-500 hover:text-black transition-colors"
                 >
                   <Copy className="h-3.5 w-3.5" />
                 </button>
@@ -395,13 +395,13 @@ export default function ApiKeysSettingsPage() {
 
       {/* Generate API Key Modal */}
       {generateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <h3 className="text-lg font-bold text-zinc-100">Generate New Scoped API Key</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl space-y-5 text-black">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
+              <h3 className="text-lg font-bold text-black">Generate New Scoped API Key</h3>
               <button
                 onClick={() => setGenerateModalOpen(false)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -409,19 +409,19 @@ export default function ApiKeysSettingsPage() {
 
             {revealedRawKey ? (
               <div className="space-y-4">
-                <div className="rounded-xl border border-emerald-500/50 bg-emerald-950/20 p-4 space-y-2">
-                  <p className="text-xs font-bold text-emerald-300 uppercase">Save Your API Key Now</p>
-                  <p className="text-xs text-zinc-300">
+                <div className="rounded-xl border border-green-400 bg-white p-4 space-y-2 shadow-xs">
+                  <p className="text-xs font-bold text-green-700 uppercase">Save Your API Key Now</p>
+                  <p className="text-xs text-zinc-600">
                     For security reasons, this raw key will only be displayed once. If you lose it, you will need to generate a new key.
                   </p>
-                  <div className="flex items-center justify-between bg-zinc-950 p-2.5 rounded border border-zinc-800 font-mono text-xs text-emerald-400 break-all">
+                  <div className="flex items-center justify-between bg-white p-2.5 rounded border border-zinc-300 font-mono text-xs text-black break-all shadow-xs">
                     <span>{revealedRawKey}</span>
                     <button
                       onClick={() => {
                         navigator.clipboard?.writeText(revealedRawKey);
                         showToast('Copied API key to clipboard!');
                       }}
-                      className="p-1 text-zinc-400 hover:text-white ml-2"
+                      className="p-1 text-zinc-500 hover:text-black ml-2 transition-colors"
                     >
                       <Copy className="h-4 w-4" />
                     </button>
@@ -431,7 +431,7 @@ export default function ApiKeysSettingsPage() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => setGenerateModalOpen(false)}
-                    className="rounded-lg bg-emerald-600 px-5 py-2 text-xs font-bold text-white hover:bg-emerald-500"
+                    className="rounded-lg bg-black px-5 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
                   >
                     Done & Close
                   </button>
@@ -440,27 +440,27 @@ export default function ApiKeysSettingsPage() {
             ) : (
               <form onSubmit={handleCreateKey} className="space-y-4 text-xs">
                 <div>
-                  <label className="block font-semibold text-zinc-300 mb-1">Key Description / Client Name:</label>
+                  <label className="block font-bold text-black mb-1">Key Description / Client Name:</label>
                   <input
                     type="text"
                     required
                     value={newKeyName}
                     onChange={(e) => setNewKeyName(e.target.value)}
                     placeholder="e.g. NetSuite ERP Sync"
-                    className="w-full rounded-lg bg-zinc-950 border border-zinc-800 p-2.5 text-white"
+                    className="w-full rounded-lg bg-white border border-zinc-300 p-2.5 text-black placeholder:text-zinc-400 focus:outline-none focus:border-black shadow-xs"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-zinc-300 mb-1">Environment:</label>
+                  <label className="block font-bold text-black mb-1">Environment:</label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setNewKeyEnv('live')}
                       className={`p-2.5 rounded-lg border text-center transition-all ${
                         newKeyEnv === 'live'
-                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold'
-                          : 'border-zinc-800 bg-zinc-950 text-zinc-400'
+                          ? 'border-2 border-black bg-white text-black font-bold shadow-xs'
+                          : 'border border-zinc-200 bg-white text-zinc-600'
                       }`}
                     >
                       Live (sf_live_...)
@@ -470,8 +470,8 @@ export default function ApiKeysSettingsPage() {
                       onClick={() => setNewKeyEnv('test')}
                       className={`p-2.5 rounded-lg border text-center transition-all ${
                         newKeyEnv === 'test'
-                          ? 'border-indigo-500 bg-indigo-500/10 text-indigo-400 font-bold'
-                          : 'border-zinc-800 bg-zinc-950 text-zinc-400'
+                          ? 'border-2 border-orange-600 bg-white text-orange-600 font-bold shadow-xs'
+                          : 'border border-zinc-200 bg-white text-zinc-600'
                       }`}
                     >
                       Test Sandbox (sf_test_...)
@@ -480,11 +480,11 @@ export default function ApiKeysSettingsPage() {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-zinc-300 mb-1.5">Select Scopes:</label>
+                  <label className="block font-bold text-black mb-1.5">Select Scopes:</label>
                   <div className="grid grid-cols-2 gap-2">
                     {(['orders:read', 'orders:write', 'inventory:read', 'inventory:write', 'webhooks:manage'] as ApiScope[]).map(
                       (scope) => (
-                        <label key={scope} className="flex items-center gap-2 rounded bg-zinc-950 p-2 border border-zinc-800 cursor-pointer">
+                        <label key={scope} className="flex items-center gap-2 rounded bg-white p-2 border border-zinc-200 cursor-pointer hover:border-zinc-300 transition-colors shadow-xs">
                           <input
                             type="checkbox"
                             checked={selectedScopes.includes(scope)}
@@ -493,26 +493,26 @@ export default function ApiKeysSettingsPage() {
                                 e.target.checked ? [...prev, scope] : prev.filter((s) => s !== scope)
                               )
                             }
-                            className="rounded border-zinc-700 bg-zinc-800 text-emerald-500 focus:ring-0"
+                            className="rounded border-zinc-300 text-black focus:ring-0"
                           />
-                          <span className="font-mono text-zinc-300">{scope}</span>
+                          <span className="font-mono text-black font-semibold text-xs">{scope}</span>
                         </label>
                       )
                     )}
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-3">
+                <div className="flex justify-end gap-3 pt-3 border-t border-zinc-100">
                   <button
                     type="button"
                     onClick={() => setGenerateModalOpen(false)}
-                    className="px-4 py-2 text-zinc-400 hover:text-zinc-200 font-semibold"
+                    className="px-4 py-2 text-zinc-600 hover:text-black font-bold transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    className="rounded-lg bg-emerald-600 px-5 py-2 font-bold text-white hover:bg-emerald-500 shadow-lg shadow-emerald-950/40"
+                    className="rounded-lg bg-black px-5 py-2 font-bold text-white hover:bg-zinc-800 shadow-sm transition-colors"
                   >
                     Generate Credentials
                   </button>

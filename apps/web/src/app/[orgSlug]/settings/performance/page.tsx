@@ -103,77 +103,77 @@ export default function PerformancePage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-white min-h-screen text-black">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow">
-              <Gauge className="h-5 w-5" />
+            <div className="h-8 w-8 rounded-lg bg-black flex items-center justify-center text-white shadow-xs">
+              <Gauge className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold tracking-tight text-black">
               Performance, Caching & Edge Scalability
             </h1>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-zinc-600 mt-1">
             Database indexing audit, keyset cursor pagination, stampede-protected caching, and peak-sale load testing.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5" /> High-Performance Mode Active
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-white text-green-700 border border-green-300 flex items-center gap-1.5 shadow-xs">
+            <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> High-Performance Mode Active
           </span>
         </div>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-4 shadow-sm">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Clock className="h-4 w-4 text-indigo-600" /> p95 Query Latency
+        <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
+          <div className="text-xs text-zinc-600 font-bold uppercase flex items-center gap-1.5">
+            <Clock className="h-4 w-4 text-black" /> p95 Query Latency
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600 mt-1">
+          <div className="text-2xl font-extrabold text-green-700 mt-1">
             {benchmarkResult ? `${benchmarkResult.latencies.p95Ms}ms` : '< 25ms'}
           </div>
-          <div className="text-[11px] text-gray-400 mt-1">Target: &lt; 300ms SLA</div>
+          <div className="text-[11px] text-zinc-500 font-medium mt-1">Target: &lt; 300ms SLA</div>
         </div>
 
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-4 shadow-sm">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Zap className="h-4 w-4 text-indigo-600" /> Peak Throughput
+        <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
+          <div className="text-xs text-zinc-600 font-bold uppercase flex items-center gap-1.5">
+            <Zap className="h-4 w-4 text-orange-600" /> Peak Throughput
           </div>
-          <div className="text-2xl font-extrabold text-indigo-600 mt-1">
+          <div className="text-2xl font-extrabold text-black mt-1">
             {benchmarkResult ? `${benchmarkResult.ordersPerSecond} ord/s` : '62.5 ord/s'}
           </div>
-          <div className="text-[11px] text-gray-400 mt-1">Target: 50 orders/sec</div>
+          <div className="text-[11px] text-zinc-500 font-medium mt-1">Target: 50 orders/sec</div>
         </div>
 
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-4 shadow-sm">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Layers className="h-4 w-4 text-indigo-600" /> Cache Hit Ratio
+        <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
+          <div className="text-xs text-zinc-600 font-bold uppercase flex items-center gap-1.5">
+            <Layers className="h-4 w-4 text-black" /> Cache Hit Ratio
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600 mt-1">94.8%</div>
-          <div className="text-[11px] text-gray-400 mt-1">Stampede-protected</div>
+          <div className="text-2xl font-extrabold text-green-700 mt-1">94.8%</div>
+          <div className="text-[11px] text-zinc-500 font-medium mt-1">Stampede-protected</div>
         </div>
 
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-4 shadow-sm">
-          <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-            <Server className="h-4 w-4 text-indigo-600" /> Dropped Orders
+        <div className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm">
+          <div className="text-xs text-zinc-600 font-bold uppercase flex items-center gap-1.5">
+            <Server className="h-4 w-4 text-black" /> Dropped Orders
           </div>
-          <div className="text-2xl font-extrabold text-emerald-600 mt-1">0</div>
-          <div className="text-[11px] text-emerald-600 font-semibold mt-1">Zero lost checkouts</div>
+          <div className="text-2xl font-extrabold text-green-700 mt-1">0</div>
+          <div className="text-[11px] text-green-700 font-bold mt-1">Zero lost checkouts</div>
         </div>
       </div>
 
       {/* Interactive Load Testing Harness */}
-      <div className="bg-white dark:bg-gray-900 border rounded-2xl p-6 shadow-sm space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
           <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <Zap className="h-5 w-5 text-indigo-600" /> Interactive Peak-Sale Flash Load Simulator
+            <h2 className="text-base font-bold text-black flex items-center gap-2">
+              <Zap className="h-5 w-5 text-orange-600" /> Interactive Peak-Sale Flash Load Simulator
             </h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-zinc-600 mt-0.5">
               Simulates concurrent high-velocity checkout orders against atomic inventory locks to verify latency under load.
             </p>
           </div>
@@ -181,7 +181,7 @@ export default function PerformancePage() {
           <button
             onClick={handleRunBenchmark}
             disabled={isRunning}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-2"
+            className="px-4 py-2 bg-black hover:bg-zinc-800 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2"
           >
             {isRunning ? (
               <>
@@ -189,18 +189,18 @@ export default function PerformancePage() {
               </>
             ) : (
               <>
-                <Play className="h-4 w-4" /> Run 50 ord/sec Simulation
+                <Play className="h-4 w-4 fill-white" /> Run 50 ord/sec Simulation
               </>
             )}
           </button>
         </div>
 
         {/* Sliders */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 dark:bg-gray-800/40 p-4 rounded-xl border">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-4 rounded-xl border border-zinc-200 shadow-xs">
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold">
-              <span className="text-gray-700 dark:text-gray-300">Simulated Order Volume:</span>
-              <span className="font-mono text-indigo-600 font-bold">{totalOrders} orders</span>
+            <div className="flex justify-between text-xs font-bold">
+              <span className="text-black">Simulated Order Volume:</span>
+              <span className="font-mono text-black font-extrabold">{totalOrders} orders</span>
             </div>
             <input
               type="range"
@@ -209,14 +209,14 @@ export default function PerformancePage() {
               step="50"
               value={totalOrders}
               onChange={(e) => setTotalOrders(Number(e.target.value))}
-              className="w-full accent-indigo-600"
+              className="w-full accent-black cursor-pointer"
             />
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-xs font-semibold">
-              <span className="text-gray-700 dark:text-gray-300">Concurrent Virtual Users:</span>
-              <span className="font-mono text-indigo-600 font-bold">{concurrency} workers</span>
+            <div className="flex justify-between text-xs font-bold">
+              <span className="text-black">Concurrent Virtual Users:</span>
+              <span className="font-mono text-black font-extrabold">{concurrency} workers</span>
             </div>
             <input
               type="range"
@@ -225,62 +225,62 @@ export default function PerformancePage() {
               step="1"
               value={concurrency}
               onChange={(e) => setConcurrency(Number(e.target.value))}
-              className="w-full accent-indigo-600"
+              className="w-full accent-black cursor-pointer"
             />
           </div>
         </div>
 
         {/* Benchmark Results */}
         {benchmarkResult && (
-          <div className="p-5 border border-emerald-200 dark:border-emerald-900 rounded-xl bg-emerald-50/20 dark:bg-emerald-950/20 space-y-4">
-            <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-900 pb-3">
-              <div className="flex items-center gap-2 text-sm font-bold text-emerald-800 dark:text-emerald-300">
-                <CheckCircle2 className="h-5 w-5 text-emerald-600" /> Peak-Sale Exit Check Passed (p95 &lt; 300ms, 0 Dropped Orders)
+          <div className="p-5 border-2 border-green-500 rounded-xl bg-white space-y-4 shadow-sm">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
+              <div className="flex items-center gap-2 text-sm font-bold text-black">
+                <CheckCircle2 className="h-5 w-5 text-green-600" /> Peak-Sale Exit Check Passed (p95 &lt; 300ms, 0 Dropped Orders)
               </div>
-              <span className="text-xs font-mono font-semibold text-emerald-700">
+              <span className="text-xs font-mono font-bold text-green-700">
                 Processed in {benchmarkResult.durationMs}ms
               </span>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-6 gap-3 text-center">
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">p50 Latency</div>
-                <div className="font-bold text-sm text-gray-900 dark:text-gray-100 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">p50 Latency</div>
+                <div className="font-bold text-sm text-black mt-0.5">
                   {benchmarkResult.latencies.p50Ms}ms
                 </div>
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">p90 Latency</div>
-                <div className="font-bold text-sm text-gray-900 dark:text-gray-100 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">p90 Latency</div>
+                <div className="font-bold text-sm text-black mt-0.5">
                   {benchmarkResult.latencies.p90Ms}ms
                 </div>
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">p95 Latency</div>
-                <div className="font-bold text-sm text-emerald-600 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">p95 Latency</div>
+                <div className="font-bold text-sm text-green-700 mt-0.5">
                   {benchmarkResult.latencies.p95Ms}ms
                 </div>
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">p99 Latency</div>
-                <div className="font-bold text-sm text-gray-900 dark:text-gray-100 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">p99 Latency</div>
+                <div className="font-bold text-sm text-black mt-0.5">
                   {benchmarkResult.latencies.p99Ms}ms
                 </div>
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">Throughput</div>
-                <div className="font-bold text-sm text-indigo-600 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">Throughput</div>
+                <div className="font-bold text-sm text-black mt-0.5">
                   {benchmarkResult.ordersPerSecond} ord/s
                 </div>
               </div>
 
-              <div className="p-2.5 bg-white dark:bg-gray-900 rounded-lg border text-xs">
-                <div className="text-gray-400">Dropped Orders</div>
-                <div className="font-bold text-sm text-emerald-600 mt-0.5">
+              <div className="p-2.5 bg-white rounded-lg border border-zinc-200 text-xs shadow-xs">
+                <div className="text-zinc-500 font-semibold">Dropped Orders</div>
+                <div className="font-bold text-sm text-green-700 mt-0.5">
                   {benchmarkResult.droppedOrders}
                 </div>
               </div>
@@ -290,19 +290,19 @@ export default function PerformancePage() {
       </div>
 
       {/* Database Index Audit Table */}
-      <div className="bg-white dark:bg-gray-900 border rounded-2xl shadow-sm p-6 space-y-4">
+      <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6 space-y-4">
         <div>
-          <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-            <Database className="h-4 w-4 text-indigo-600" /> Multi-Tenant Database Indexing Audit
+          <h2 className="text-base font-bold text-black flex items-center gap-2">
+            <Database className="h-4 w-4 text-black" /> Multi-Tenant Database Indexing Audit
           </h2>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-zinc-600 mt-0.5">
             Compound indexes ensure all queries enforce tenant isolation with B-Tree seek operations, avoiding full table scans.
           </p>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 uppercase font-semibold">
+            <thead className="bg-white border-b border-zinc-200 text-black uppercase font-bold">
               <tr>
                 <th className="py-2.5 px-4">Index Identifier</th>
                 <th className="py-2.5 px-4">Table</th>
@@ -311,17 +311,17 @@ export default function PerformancePage() {
                 <th className="py-2.5 px-4 text-right">Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+            <tbody className="divide-y divide-zinc-200">
               {dbIndexes.map((idx) => (
-                <tr key={idx.name} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/50">
-                  <td className="py-3 px-4 font-mono font-medium text-indigo-600 dark:text-indigo-400">
+                <tr key={idx.name} className="hover:bg-zinc-50">
+                  <td className="py-3 px-4 font-mono font-bold text-black">
                     {idx.name}
                   </td>
-                  <td className="py-3 px-4 font-mono">{idx.table}</td>
-                  <td className="py-3 px-4 font-mono text-gray-600 dark:text-gray-300">{idx.columns}</td>
-                  <td className="py-3 px-4 text-gray-500">{idx.purpose}</td>
+                  <td className="py-3 px-4 font-mono text-zinc-700">{idx.table}</td>
+                  <td className="py-3 px-4 font-mono text-zinc-600">{idx.columns}</td>
+                  <td className="py-3 px-4 text-zinc-600">{idx.purpose}</td>
                   <td className="py-3 px-4 text-right">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white text-green-700 border border-green-300">
                       {idx.status}
                     </span>
                   </td>

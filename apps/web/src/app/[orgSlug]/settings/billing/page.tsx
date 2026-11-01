@@ -96,35 +96,35 @@ export default function BillingPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-white min-h-screen text-black">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <CreditCard className="h-6 w-6 text-indigo-600" />
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <CreditCard className="h-6 w-6 text-black" />
+            <h1 className="text-2xl font-bold tracking-tight text-black">
               Subscription & Usage Metering
             </h1>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-zinc-600 mt-1">
             Manage your store plan, monitor real-time monthly usage quotas, and view invoice history.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1.5">
-            <CheckCircle2 className="h-3.5 w-3.5" /> Subscription Active (via Stripe)
+          <span className="px-3 py-1 rounded-full text-xs font-bold bg-white text-green-700 border border-green-300 flex items-center gap-1.5 shadow-xs">
+            <CheckCircle2 className="h-3.5 w-3.5 text-green-600" /> Subscription Active (via Stripe)
           </span>
         </div>
       </div>
 
       {successMessage && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-sm flex items-center justify-between dark:bg-emerald-950/40 dark:border-emerald-900 dark:text-emerald-200">
+        <div className="p-4 bg-white border-2 border-green-500 text-green-700 rounded-xl text-sm flex items-center justify-between shadow-md">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-            <span>{successMessage}</span>
+            <CheckCircle2 className="h-4 w-4 text-green-600" />
+            <span className="font-semibold text-black">{successMessage}</span>
           </div>
-          <button onClick={() => setSuccessMessage(null)} className="text-xs text-emerald-700 hover:underline">
+          <button onClick={() => setSuccessMessage(null)} className="text-xs text-black font-bold hover:underline">
             Dismiss
           </button>
         </div>
@@ -133,69 +133,69 @@ export default function BillingPage() {
       {/* Usage Metering Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Meter 1: Orders */}
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-5 shadow-sm space-y-3">
+        <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 flex items-center gap-1.5 font-medium">
-              <ShoppingCart className="h-4 w-4 text-indigo-600" /> Monthly Orders
+            <span className="text-zinc-600 flex items-center gap-1.5 font-semibold">
+              <ShoppingCart className="h-4 w-4 text-black" /> Monthly Orders
             </span>
-            <span className="font-bold text-gray-900 dark:text-gray-100">
+            <span className="font-bold text-black">
               1,420 / {currentPlanId === 'scale' ? '∞' : currentPlanId === 'growth' ? '2,500' : '500'}
             </span>
           </div>
-          <div className="w-full bg-gray-100 dark:bg-gray-800 h-2.5 rounded-full overflow-hidden">
+          <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                currentPlanId === 'starter' ? 'bg-rose-500 w-full' : 'bg-indigo-600 w-[56.8%]'
+                currentPlanId === 'starter' ? 'bg-red-600 w-full' : 'bg-black w-[56.8%]'
               }`}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs text-zinc-500 font-medium">
             <span>56.8% consumed</span>
             <span>Resets Dec 1, 2026</span>
           </div>
         </div>
 
         {/* Meter 2: Active SKUs */}
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-5 shadow-sm space-y-3">
+        <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 flex items-center gap-1.5 font-medium">
-              <Package className="h-4 w-4 text-indigo-600" /> Catalog SKUs
+            <span className="text-zinc-600 flex items-center gap-1.5 font-semibold">
+              <Package className="h-4 w-4 text-black" /> Catalog SKUs
             </span>
-            <span className="font-bold text-gray-900 dark:text-gray-100">
+            <span className="font-bold text-black">
               380 / {currentPlanId === 'scale' ? '∞' : currentPlanId === 'growth' ? '1,000' : '100'}
             </span>
           </div>
-          <div className="w-full bg-gray-100 dark:bg-gray-800 h-2.5 rounded-full overflow-hidden">
+          <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                currentPlanId === 'starter' ? 'bg-rose-500 w-full' : 'bg-emerald-500 w-[38.0%]'
+                currentPlanId === 'starter' ? 'bg-red-600 w-full' : 'bg-green-600 w-[38.0%]'
               }`}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs text-zinc-500 font-medium">
             <span>38.0% capacity</span>
             <span>All locations tracked</span>
           </div>
         </div>
 
         {/* Meter 3: Team Seats */}
-        <div className="bg-white dark:bg-gray-900 border rounded-xl p-5 shadow-sm space-y-3">
+        <div className="bg-white border border-zinc-200 rounded-xl p-5 shadow-sm space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500 flex items-center gap-1.5 font-medium">
-              <Users className="h-4 w-4 text-indigo-600" /> Team Seats
+            <span className="text-zinc-600 flex items-center gap-1.5 font-semibold">
+              <Users className="h-4 w-4 text-black" /> Team Seats
             </span>
-            <span className="font-bold text-gray-900 dark:text-gray-100">
+            <span className="font-bold text-black">
               4 / {currentPlanId === 'scale' ? '20' : currentPlanId === 'growth' ? '5' : '2'}
             </span>
           </div>
-          <div className="w-full bg-gray-100 dark:bg-gray-800 h-2.5 rounded-full overflow-hidden">
+          <div className="w-full bg-zinc-100 h-2.5 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                currentPlanId === 'starter' ? 'bg-rose-500 w-full' : 'bg-indigo-600 w-[80.0%]'
+                currentPlanId === 'starter' ? 'bg-red-600 w-full' : 'bg-orange-600 w-[80.0%]'
               }`}
             />
           </div>
-          <div className="flex justify-between text-xs text-gray-400">
+          <div className="flex justify-between text-xs text-zinc-500 font-medium">
             <span>1 seat remaining</span>
             <span>Role RBAC active</span>
           </div>
@@ -204,26 +204,26 @@ export default function BillingPage() {
 
       {/* Cadence Toggle */}
       <div className="flex flex-col items-center justify-center space-y-3">
-        <div className="inline-flex items-center p-1 bg-gray-100 dark:bg-gray-800 rounded-xl">
+        <div className="inline-flex items-center p-1 bg-white border border-zinc-200 rounded-xl shadow-xs">
           <button
             onClick={() => setBillingCadence('monthly')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition ${
               billingCadence === 'monthly'
-                ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm'
-                : 'text-gray-500 hover:text-gray-900'
+                ? 'bg-black text-white shadow-sm'
+                : 'text-zinc-600 hover:text-black'
             }`}
           >
             Monthly Billing
           </button>
           <button
             onClick={() => setBillingCadence('annual')}
-            className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
               billingCadence === 'annual'
-                ? 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm'
-                : 'text-gray-500 hover:text-gray-900'
+                ? 'bg-black text-white shadow-sm'
+                : 'text-zinc-600 hover:text-black'
             }`}
           >
-            Annual Billing <span className="text-[10px] bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded font-bold">2 Months Free</span>
+            Annual Billing <span className="text-[10px] bg-white text-green-700 border border-green-300 px-1.5 py-0.5 rounded font-bold">2 Months Free</span>
           </button>
         </div>
       </div>
@@ -237,65 +237,65 @@ export default function BillingPage() {
           return (
             <div
               key={p.id}
-              className={`relative rounded-2xl border p-6 flex flex-col justify-between transition shadow-sm ${
+              className={`relative rounded-2xl border p-6 flex flex-col justify-between transition shadow-sm bg-white ${
                 isCurrent
-                  ? 'border-indigo-600 ring-2 ring-indigo-600 bg-indigo-50/10 dark:bg-indigo-950/20'
-                  : 'border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-gray-300'
+                  ? 'border-2 border-green-600 ring-2 ring-green-600/20'
+                  : 'border-zinc-200 hover:border-black'
               }`}
             >
               {p.popular && !isCurrent && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-indigo-600 text-white rounded-full text-[10px] font-bold uppercase tracking-wider shadow">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-wider shadow">
                   Most Popular
                 </div>
               )}
 
               {isCurrent && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-emerald-600 text-white rounded-full text-[10px] font-bold uppercase tracking-wider shadow">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-green-600 text-white rounded-full text-[10px] font-bold uppercase tracking-wider shadow">
                   Current Plan
                 </div>
               )}
 
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">{p.name}</h3>
-                  <p className="text-xs text-gray-500 mt-1 min-h-[32px]">{p.description}</p>
+                  <h3 className="text-xl font-bold text-black">{p.name}</h3>
+                  <p className="text-xs text-zinc-600 mt-1 min-h-[32px]">{p.description}</p>
                 </div>
 
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-extrabold text-gray-900 dark:text-gray-100">${price}</span>
-                  <span className="text-xs text-gray-400">/ month</span>
+                  <span className="text-3xl font-extrabold text-black">${price}</span>
+                  <span className="text-xs text-zinc-500 font-semibold">/ month</span>
                 </div>
 
-                <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-300 pt-3 border-t">
+                <ul className="space-y-2 text-xs text-zinc-700 pt-3 border-t border-zinc-200">
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     <span>{p.limits.orders}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     <span>{p.limits.skus}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     <span>{p.limits.seats}</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     <span>AI Operations Copilot & Forecasting</span>
                   </li>
                   <li className="flex items-center gap-2">
                     {p.limits.apiKeys ? (
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     ) : (
-                      <span className="text-gray-400 line-through">Public REST API & Webhooks</span>
+                      <span className="text-zinc-400 line-through">Public REST API & Webhooks</span>
                     )}
                     {p.limits.apiKeys && <span>Public REST API & Webhooks</span>}
                   </li>
                   <li className="flex items-center gap-2">
                     {p.limits.customReports ? (
-                      <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-green-600 shrink-0" />
                     ) : (
-                      <span className="text-gray-400 line-through">Custom SQL Report Builder</span>
+                      <span className="text-zinc-400 line-through">Custom SQL Report Builder</span>
                     )}
                     {p.limits.customReports && <span>Custom SQL Report Builder</span>}
                   </li>
@@ -308,8 +308,8 @@ export default function BillingPage() {
                   disabled={isCurrent || isUpgrading}
                   className={`w-full py-2.5 rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5 ${
                     isCurrent
-                      ? 'bg-gray-100 dark:bg-gray-800 text-gray-400 cursor-not-allowed'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                      ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed border border-zinc-200'
+                      : 'bg-black hover:bg-zinc-800 text-white'
                   }`}
                 >
                   {isCurrent ? 'Current Plan' : `Upgrade to ${p.name}`}
@@ -322,17 +322,17 @@ export default function BillingPage() {
       </div>
 
       {/* Invoice History Section */}
-      <div className="bg-white dark:bg-gray-900 border rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-            <Receipt className="h-4 w-4 text-indigo-600" /> Recent Billing Invoices
+          <h2 className="text-base font-bold text-black flex items-center gap-2">
+            <Receipt className="h-4 w-4 text-black" /> Recent Billing Invoices
           </h2>
-          <span className="text-xs text-gray-400">Billed to Visa ending in 4242</span>
+          <span className="text-xs text-zinc-500 font-medium">Billed to Visa ending in 4242</span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-gray-50 dark:bg-gray-800 text-gray-600 uppercase font-semibold">
+            <thead className="bg-white border-b border-zinc-200 text-black uppercase font-bold">
               <tr>
                 <th className="py-2.5 px-4">Invoice #</th>
                 <th className="py-2.5 px-4">Date</th>
@@ -342,33 +342,33 @@ export default function BillingPage() {
                 <th className="py-2.5 px-4 text-right">PDF</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              <tr>
-                <td className="py-3 px-4 font-mono font-medium">INV-2026-11</td>
-                <td className="py-3 px-4 text-gray-500">Nov 1, 2026</td>
-                <td className="py-3 px-4">Growth Monthly Subscription</td>
-                <td className="py-3 px-4 font-semibold">$149.00</td>
+            <tbody className="divide-y divide-zinc-200">
+              <tr className="hover:bg-zinc-50">
+                <td className="py-3 px-4 font-mono font-bold text-black">INV-2026-11</td>
+                <td className="py-3 px-4 text-zinc-600">Nov 1, 2026</td>
+                <td className="py-3 px-4 text-black">Growth Monthly Subscription</td>
+                <td className="py-3 px-4 font-bold text-black">$149.00</td>
                 <td className="py-3 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white text-green-700 border border-green-300">
                     PAID
                   </span>
                 </td>
                 <td className="py-3 px-4 text-right">
-                  <a href="#" className="text-indigo-600 hover:underline">Download</a>
+                  <a href="#" className="text-black font-bold hover:underline">Download</a>
                 </td>
               </tr>
-              <tr>
-                <td className="py-3 px-4 font-mono font-medium">INV-2026-10</td>
-                <td className="py-3 px-4 text-gray-500">Oct 1, 2026</td>
-                <td className="py-3 px-4">Growth Monthly Subscription</td>
-                <td className="py-3 px-4 font-semibold">$149.00</td>
+              <tr className="hover:bg-zinc-50">
+                <td className="py-3 px-4 font-mono font-bold text-black">INV-2026-10</td>
+                <td className="py-3 px-4 text-zinc-600">Oct 1, 2026</td>
+                <td className="py-3 px-4 text-black">Growth Monthly Subscription</td>
+                <td className="py-3 px-4 font-bold text-black">$149.00</td>
                 <td className="py-3 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white text-green-700 border border-green-300">
                     PAID
                   </span>
                 </td>
                 <td className="py-3 px-4 text-right">
-                  <a href="#" className="text-indigo-600 hover:underline">Download</a>
+                  <a href="#" className="text-black font-bold hover:underline">Download</a>
                 </td>
               </tr>
             </tbody>

@@ -130,22 +130,22 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
+    <div className="p-8 max-w-7xl mx-auto space-y-8 bg-white min-h-screen text-black">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 pb-6">
         <div>
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 rounded-xl">
-              <BookOpen className="w-6 h-6" />
+            <div className="p-2.5 bg-white border border-zinc-200 text-black rounded-xl shadow-xs">
+              <BookOpen className="w-6 h-6 text-black" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                Documentation & Help Center
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 font-semibold border border-emerald-300 dark:border-emerald-800">
+              <h1 className="text-2xl font-bold text-black flex items-center gap-2">
+                Documentation &amp; Help Center
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-white text-green-700 font-bold border border-green-300">
                   SLA: &lt; 30 MIN ONBOARDING
                 </span>
               </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              <p className="text-sm text-zinc-600 mt-1">
                 Role-based operational guides, developer API references, and interactive onboarding checklist for {orgSlug}.
               </p>
             </div>
@@ -154,39 +154,39 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
 
         {/* Search Input */}
         <div className="relative w-full md:w-72">
-          <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search guides, APIs, workflows..."
-            className="w-full pl-9 pr-4 py-2 text-xs bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"
+            className="w-full pl-9 pr-4 py-2 text-xs bg-white border border-zinc-300 rounded-lg focus:outline-none focus:border-black text-black shadow-xs placeholder:text-zinc-400"
           />
         </div>
       </div>
 
       {/* Interactive Onboarding Checklist Card */}
-      <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 shadow-sm space-y-6">
+      <div className="bg-white border border-zinc-200 rounded-xl p-6 shadow-sm space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-indigo-600" />
-              <h2 className="text-base font-bold text-gray-900 dark:text-white">
+              <Sparkles className="w-5 h-5 text-black" />
+              <h2 className="text-base font-bold text-black">
                 Unassisted Tenant Onboarding Checklist
               </h2>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-zinc-600 mt-1">
               Complete these 6 foundational operational milestones to process your first order in &lt; 30 minutes.
             </p>
           </div>
 
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="text-xs font-semibold text-gray-900 dark:text-white">
+              <div className="text-xs font-bold text-black">
                 {completionPercent}% Completed ({completedSteps.length} of {onboardingSteps.length})
               </div>
-              <div className="text-[11px] text-gray-400 flex items-center justify-end gap-1 mt-0.5">
-                <Clock className="w-3 h-3 text-amber-500" />
+              <div className="text-[11px] text-zinc-500 font-medium flex items-center justify-end gap-1 mt-0.5">
+                <Clock className="w-3 h-3 text-orange-600" />
                 {remainingMinutes === 0 ? 'Onboarding Complete!' : `~${remainingMinutes} mins remaining`}
               </div>
             </div>
@@ -194,9 +194,9 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2.5 overflow-hidden">
+        <div className="w-full bg-zinc-100 rounded-full h-2.5 overflow-hidden border border-zinc-200">
           <div
-            className="bg-indigo-600 h-2.5 rounded-full transition-all duration-500"
+            className="bg-black h-2.5 rounded-full transition-all duration-500"
             style={{ width: `${completionPercent}%` }}
           />
         </div>
@@ -209,33 +209,33 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
               <div
                 key={step.id}
                 onClick={() => toggleStep(step.id)}
-                className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
+                className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-start gap-3 bg-white ${
                   isDone
-                    ? 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-800/60'
-                    : 'bg-gray-50/60 dark:bg-gray-800/40 border-gray-200 dark:border-gray-800 hover:border-gray-300'
+                    ? 'border-2 border-green-500'
+                    : 'border-zinc-200 hover:border-black'
                 }`}
               >
                 <div
                   className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                     isDone
-                      ? 'bg-emerald-600 text-white'
-                      : 'border border-gray-300 dark:border-gray-600 text-transparent'
+                      ? 'bg-green-600 text-white'
+                      : 'border border-zinc-300 text-transparent'
                   }`}
                 >
                   <Check className="w-3.5 h-3.5" />
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-gray-900 dark:text-white leading-tight">
+                    <span className="text-xs font-bold text-black leading-tight">
                       {idx + 1}. {step.title}
                     </span>
                   </div>
-                  <p className="text-[11px] text-gray-500 line-clamp-1">{step.desc}</p>
-                  <div className="flex items-center gap-2 text-[10px] text-gray-400">
-                    <span className="bg-gray-200 dark:bg-gray-800 px-1.5 py-0.2 rounded font-medium text-gray-600 dark:text-gray-300">
+                  <p className="text-[11px] text-zinc-600 line-clamp-1">{step.desc}</p>
+                  <div className="flex items-center gap-2 text-[10px] text-zinc-500">
+                    <span className="bg-white border border-zinc-200 px-1.5 py-0.2 rounded font-bold text-black">
                       {step.role}
                     </span>
-                    <span>~{step.minutes}m</span>
+                    <span className="font-medium">~{step.minutes}m</span>
                   </div>
                 </div>
               </div>
@@ -250,10 +250,10 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all shadow-xs ${
               activeCategory === cat
-                ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900 shadow-sm'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200'
+                ? 'bg-black text-white'
+                : 'bg-white text-zinc-600 border border-zinc-200 hover:text-black'
             }`}
           >
             {cat === 'all' ? 'All Guides' : cat}
@@ -268,31 +268,31 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
           return (
             <div
               key={guide.id}
-              className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-sm hover:border-gray-300 dark:hover:border-gray-700 transition-all flex flex-col justify-between space-y-4 group"
+              className="p-5 bg-white border border-zinc-200 rounded-xl shadow-sm hover:border-black transition-all flex flex-col justify-between space-y-4 group"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="p-2 bg-gray-100 dark:bg-gray-800 text-indigo-600 dark:text-indigo-400 rounded-lg">
-                    <IconComponent className="w-5 h-5" />
+                  <div className="p-2 bg-white border border-zinc-200 text-black rounded-lg shadow-xs">
+                    <IconComponent className="w-5 h-5 text-black" />
                   </div>
-                  <span className="text-[11px] font-mono text-gray-400">{guide.role}</span>
+                  <span className="text-[11px] font-mono font-semibold text-zinc-500">{guide.role}</span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-sm text-gray-900 dark:text-white group-hover:text-indigo-600 transition-colors">
+                  <h3 className="font-bold text-sm text-black">
                     {guide.title}
                   </h3>
-                  <p className="text-xs text-gray-500 mt-1 line-clamp-2">{guide.summary}</p>
+                  <p className="text-xs text-zinc-600 mt-1 line-clamp-2">{guide.summary}</p>
                 </div>
 
                 {/* Topics List */}
-                <div className="space-y-1 pt-2 border-t border-gray-100 dark:border-gray-800">
-                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Key Topics:</span>
+                <div className="space-y-1 pt-2 border-t border-zinc-100">
+                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Key Topics:</span>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {guide.topics.map((topic, i) => (
                       <span
                         key={i}
-                        className="text-[10px] bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded font-medium"
+                        className="text-[10px] bg-white border border-zinc-200 text-black px-2 py-0.5 rounded font-medium"
                       >
                         {topic}
                       </span>
@@ -301,9 +301,9 @@ export default function HelpCenterPage({ params }: { params: { orgSlug: string }
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-xs">
-                <span className="font-mono text-[10px] text-gray-400 truncate max-w-[170px]">{guide.docPath}</span>
-                <span className="text-indigo-600 dark:text-indigo-400 font-semibold flex items-center gap-1 group-hover:underline cursor-pointer">
+              <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs">
+                <span className="font-mono text-[10px] text-zinc-400 truncate max-w-[170px]">{guide.docPath}</span>
+                <span className="text-black font-bold flex items-center gap-1 hover:underline cursor-pointer">
                   Open Guide <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </div>

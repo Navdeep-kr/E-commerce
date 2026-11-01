@@ -65,7 +65,7 @@ export class WooCommerceAdapter implements OrdersProvider, InventoryProvider {
       customerName: `${shipping.first_name || ''} ${shipping.last_name || ''}`.trim() || 'Guest Customer',
       currency: raw.currency || 'USD',
       totalAmountMinor: totalMinor,
-      status: 'pending',
+      status: 'paid',
       lines,
       shippingAddress: {
         address1: shipping.address_1 || '100 Market St',

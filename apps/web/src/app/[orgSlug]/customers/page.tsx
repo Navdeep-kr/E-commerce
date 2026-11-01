@@ -283,7 +283,7 @@ export default function CustomersPage() {
                 </tr>
               ) : (
                 filteredCustomers.map((c) => (
-                <tr key={c.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                  <tr key={c.id} className="hover:bg-zinc-50 transition-colors bg-white">
                   <td className="py-3.5 px-4 font-bold text-black">
                     <Link
                       href={`/${orgSlug}/customers/${c.id}`}
@@ -348,7 +348,7 @@ export default function CustomersPage() {
                     </Link>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

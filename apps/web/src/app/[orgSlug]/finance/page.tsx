@@ -75,25 +75,25 @@ export default function FinancePage() {
     : [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white min-h-screen text-black">
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-emerald-400">Finance & Accounting</span>
-            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
+            <span className="text-xs font-semibold uppercase tracking-wider text-black">Finance & Accounting</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-black border border-zinc-300">
               Double-Entry Immutable Ledger
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">Financial Operations & P&L</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Financial Operations & P&L</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
             Real-time Profit & Loss statement with transaction drill-down, double-entry ledger, and payout reconciliation.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-1.5 text-xs text-zinc-300">
-            <Calendar className="h-3.5 w-3.5 text-zinc-500" />
+          <div className="flex items-center gap-1.5 rounded-lg bg-white border border-zinc-300 px-3 py-1.5 text-xs text-black font-semibold shadow-xs">
+            <Calendar className="h-3.5 w-3.5 text-black" />
             <span>October 2026 (Closed)</span>
           </div>
         </div>
@@ -106,38 +106,38 @@ export default function FinancePage() {
           value={pnlData ? `$${(pnlData.revenue.grossSalesMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '$173,500.00'}
           trend={{ value: 18.5, isPositive: true }}
           description="E-commerce + Wholesale"
-          icon={<DollarSign className="h-5 w-5 text-emerald-400" />}
+          icon={<DollarSign className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Cost of Goods Sold"
           value={pnlData ? `$${(pnlData.cogs.totalCogsMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '$62,500.00'}
           description="Weighted average inventory cost"
-          icon={<Receipt className="h-5 w-5 text-amber-400" />}
+          icon={<Receipt className="h-5 w-5 text-orange-600" />}
         />
         <KpiCard
           title="Gross Margin"
           value={pnlData ? `${(pnlData.grossMarginBps / 100).toFixed(1)}%` : '62.5%'}
           trend={{ value: 2.1, isPositive: true }}
           description="Target > 60.0% achieved"
-          icon={<Percent className="h-5 w-5 text-indigo-400" />}
+          icon={<Percent className="h-5 w-5 text-emerald-600" />}
         />
         <KpiCard
           title="Net Operating Income"
           value={pnlData ? `$${(pnlData.netOperatingIncomeMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}` : '$56,380.00'}
           trend={{ value: 14.8, isPositive: true }}
           description="After shipping, ads & processor fees"
-          icon={<TrendingUp className="h-5 w-5 text-emerald-400" />}
+          icon={<TrendingUp className="h-5 w-5 text-emerald-600" />}
         />
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-200">
         <button
           onClick={() => setActiveTab('pnl')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'pnl'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <FileSpreadsheet className="h-4 w-4" />
@@ -146,30 +146,30 @@ export default function FinancePage() {
 
         <button
           onClick={() => setActiveTab('ledger')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'ledger'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <Scale className="h-4 w-4" />
           <span>Double-Entry Ledger</span>
-          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300 font-mono">
+          <span className="rounded-full bg-white border border-zinc-300 px-2 py-0.5 text-xs text-black font-mono">
             {transactions.length} entries
           </span>
         </button>
 
         <button
           onClick={() => setActiveTab('payouts')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'payouts'
-              ? 'border-emerald-500 text-emerald-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <CreditCard className="h-4 w-4" />
           <span>Payout Reconciliation</span>
-          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400 font-mono">
+          <span className="rounded-full bg-white border border-emerald-500 text-emerald-700 px-2 py-0.5 text-xs font-mono font-bold">
             Zero Drift
           </span>
         </button>
@@ -178,29 +178,29 @@ export default function FinancePage() {
       {/* Tab 1: Real-Time P&L Statement */}
       {activeTab === 'pnl' && pnlData && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden shadow-xl">
-            <div className="p-4 bg-zinc-950/60 border-b border-zinc-800 flex items-center justify-between">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <div className="p-4 bg-white border-b border-zinc-200 flex items-center justify-between">
               <div>
-                <h3 className="text-base font-bold text-zinc-100">Profit & Loss Statement ({pnlData.period})</h3>
-                <p className="text-xs text-zinc-400 mt-0.5">
+                <h3 className="text-base font-bold text-black">Profit & Loss Statement ({pnlData.period})</h3>
+                <p className="text-xs text-zinc-600 mt-0.5 font-medium">
                   Click &quot;Drill Down&quot; on any line item to inspect underlying double-entry ledger journal entries down to the exact cent.
                 </p>
               </div>
-              <span className="rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 text-xs font-mono font-bold">
+              <span className="rounded bg-white text-black border border-zinc-300 px-2.5 py-1 text-xs font-mono font-bold">
                 Currency: {pnlData.currency}
               </span>
             </div>
 
-            <div className="divide-y divide-zinc-800/80 text-sm font-medium">
+            <div className="divide-y divide-zinc-200 text-sm font-medium bg-white">
               {/* REVENUE SECTION */}
-              <div className="bg-zinc-950/30 px-4 py-2 text-xs font-bold uppercase tracking-wider text-zinc-400">
+              <div className="bg-zinc-50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-black border-y border-zinc-200">
                 1. Operating Revenue
               </div>
 
               {/* Gross Sales */}
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-200">Gross Sales Revenue</span>
+                  <span className="text-black font-bold">Gross Sales Revenue</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -209,20 +209,20 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'gross_revenue')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono flex items-center gap-1"
+                    className="text-xs text-black font-bold underline font-mono flex items-center gap-1"
                   >
                     Drill Down ({pnlData.lineItems.find((l) => l.key === 'gross_revenue')?.transactionIds.length} tx)
                   </button>
                 </div>
-                <span className="font-mono font-bold text-zinc-100">
+                <span className="font-mono font-bold text-black">
                   ${(pnlData.revenue.grossSalesMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* Returns & Allowances */}
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-400">Less: Returns & Allowances</span>
+                  <span className="text-zinc-600 font-medium">Less: Returns & Allowances</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -231,31 +231,31 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'returns_allowances')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono"
+                    className="text-xs text-black font-bold underline font-mono"
                   >
                     Drill Down
                   </button>
                 </div>
-                <span className="font-mono text-rose-400">
+                <span className="font-mono font-bold text-red-600">
                   -${(pnlData.revenue.returnsAllowancesMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* Net Sales Subtotal */}
-              <div className="p-4 flex items-center justify-between bg-zinc-950/40 font-bold border-y border-zinc-800">
-                <span className="text-zinc-200">Net Sales</span>
-                <span className="font-mono text-emerald-400">
+              <div className="p-4 flex items-center justify-between bg-zinc-50 font-bold border-y border-zinc-200">
+                <span className="text-black">Net Sales</span>
+                <span className="font-mono font-bold text-emerald-600">
                   ${(pnlData.revenue.netSalesMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* COGS SECTION */}
-              <div className="bg-zinc-950/30 px-4 py-2 text-xs font-bold uppercase tracking-wider text-zinc-400">
+              <div className="bg-zinc-50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-black border-y border-zinc-200">
                 2. Cost of Goods Sold (COGS)
               </div>
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-300">Product Inventory Costs (Weighted Average)</span>
+                  <span className="text-black font-medium">Product Inventory Costs (Weighted Average)</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -264,36 +264,36 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'cogs')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono"
+                    className="text-xs text-black font-bold underline font-mono"
                   >
                     Drill Down
                   </button>
                 </div>
-                <span className="font-mono text-zinc-200">
+                <span className="font-mono font-bold text-black">
                   -${(pnlData.cogs.totalCogsMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* Gross Profit Subtotal */}
-              <div className="p-4 flex items-center justify-between bg-zinc-950/60 font-black border-y border-zinc-800 text-base">
+              <div className="p-4 flex items-center justify-between bg-zinc-50 font-black border-y border-zinc-200 text-base">
                 <div className="flex items-center gap-2">
-                  <span className="text-zinc-100">Gross Profit</span>
-                  <span className="rounded bg-indigo-500/10 text-indigo-400 text-xs px-2 py-0.5 border border-indigo-500/20 font-mono">
+                  <span className="text-black">Gross Profit</span>
+                  <span className="rounded bg-white text-emerald-700 text-xs px-2 py-0.5 border border-emerald-500 font-mono font-bold">
                     {(pnlData.grossMarginBps / 100).toFixed(1)}% Margin
                   </span>
                 </div>
-                <span className="font-mono text-emerald-400">
+                <span className="font-mono font-bold text-emerald-600">
                   ${(pnlData.grossProfitMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* OPEX SECTION */}
-              <div className="bg-zinc-950/30 px-4 py-2 text-xs font-bold uppercase tracking-wider text-zinc-400">
+              <div className="bg-zinc-50 px-4 py-2 text-xs font-bold uppercase tracking-wider text-black border-y border-zinc-200">
                 3. Operating Expenses (OpEx)
               </div>
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-300">Outbound Shipping & Carrier Postage</span>
+                  <span className="text-black font-medium">Outbound Shipping & Carrier Postage</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -302,19 +302,19 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'shipping_fulfillment')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono"
+                    className="text-xs text-black font-bold underline font-mono"
                   >
                     Drill Down
                   </button>
                 </div>
-                <span className="font-mono text-zinc-300">
+                <span className="font-mono font-bold text-black">
                   -${(pnlData.operatingExpenses.shippingFulfillmentMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-300">Stripe & Merchant Payment Processor Fees</span>
+                  <span className="text-black font-medium">Stripe & Merchant Payment Processor Fees</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -323,19 +323,19 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'merchant_fees')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono"
+                    className="text-xs text-black font-bold underline font-mono"
                   >
                     Drill Down
                   </button>
                 </div>
-                <span className="font-mono text-zinc-300">
+                <span className="font-mono font-bold text-black">
                   -${(pnlData.operatingExpenses.paymentProcessorFeesMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
-              <div className="p-4 flex items-center justify-between hover:bg-zinc-800/30">
+              <div className="p-4 flex items-center justify-between hover:bg-zinc-50">
                 <div className="flex items-center gap-3">
-                  <span className="text-zinc-300">Digital Advertising (Meta & Google Ads)</span>
+                  <span className="text-black font-medium">Digital Advertising (Meta & Google Ads)</span>
                   <button
                     onClick={() =>
                       setDrillDownLine({
@@ -344,25 +344,25 @@ export default function FinancePage() {
                         transactionIds: pnlData.lineItems.find((l) => l.key === 'ad_spend')?.transactionIds || [],
                       })
                     }
-                    className="text-xs text-indigo-400 hover:text-indigo-300 underline font-mono"
+                    className="text-xs text-black font-bold underline font-mono"
                   >
                     Drill Down
                   </button>
                 </div>
-                <span className="font-mono text-zinc-300">
+                <span className="font-mono font-bold text-black">
                   -${(pnlData.operatingExpenses.advertisingSpendMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
 
               {/* Net Operating Income Bottom Line */}
-              <div className="p-5 flex items-center justify-between bg-zinc-950 font-black border-t-2 border-emerald-500 text-lg">
+              <div className="p-5 flex items-center justify-between bg-zinc-50 font-black border-t-2 border-black text-lg">
                 <div className="flex items-center gap-2">
-                  <span className="text-white">Net Operating Income (NOI)</span>
-                  <span className="rounded bg-emerald-500/10 text-emerald-400 text-xs px-2 py-0.5 border border-emerald-500/20 font-mono">
+                  <span className="text-black">Net Operating Income (NOI)</span>
+                  <span className="rounded bg-white text-emerald-700 text-xs px-2 py-0.5 border border-emerald-500 font-mono font-bold">
                     {(pnlData.netMarginBps / 100).toFixed(1)}% Net Margin
                   </span>
                 </div>
-                <span className="font-mono text-emerald-400 text-xl">
+                <span className="font-mono font-bold text-emerald-600 text-xl">
                   ${(pnlData.netOperatingIncomeMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </span>
               </div>
@@ -374,24 +374,24 @@ export default function FinancePage() {
       {/* Tab 2: Double-Entry Ledger */}
       {activeTab === 'ledger' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 rounded-xl border border-zinc-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
             <div>
-              <h3 className="text-base font-bold text-zinc-100">General Ledger Journal Entries</h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <h3 className="text-base font-bold text-black">General Ledger Journal Entries</h3>
+              <p className="text-xs text-zinc-600 mt-0.5 font-medium">
                 Immutable, append-only double-entry financial events. Sum of Debits strictly equals Sum of Credits down to the exact cent.
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/20">
-                <CheckCircle2 className="h-4 w-4" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                 Ledger Balanced ($0.00 Drift)
               </span>
             </div>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Entry #</th>
                   <th className="py-3 px-4">Date</th>
@@ -402,35 +402,35 @@ export default function FinancePage() {
                   <th className="py-3 px-4 text-right">Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium">
+              <tbody className="divide-y divide-zinc-200 font-medium bg-white">
                 {transactions.map((tx) => {
                   const totalDr = tx.lines.reduce((acc, l) => acc + l.debitMinor, 0);
                   const totalCr = tx.lines.reduce((acc, l) => acc + l.creditMinor, 0);
                   return (
-                    <tr key={tx.id} className="hover:bg-zinc-800/30 transition-colors">
-                      <td className="py-3.5 px-4 font-mono font-bold text-indigo-400">{tx.entryNumber}</td>
-                      <td className="py-3.5 px-4 font-mono text-xs text-zinc-400">
+                    <tr key={tx.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">{tx.entryNumber}</td>
+                      <td className="py-3.5 px-4 font-mono text-xs text-zinc-600 font-medium">
                         {new Date(tx.occurredAtIso).toLocaleDateString()}
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="rounded bg-zinc-800 px-2 py-0.5 text-xs font-mono text-zinc-300 uppercase">
+                        <span className="rounded bg-white border border-zinc-300 px-2 py-0.5 text-xs font-mono font-bold text-black uppercase">
                           {tx.category}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-zinc-200">
-                        <p>{tx.description}</p>
-                        <p className="text-[11px] font-mono text-zinc-500 mt-0.5">
+                      <td className="py-3.5 px-4 text-black">
+                        <p className="font-bold">{tx.description}</p>
+                        <p className="text-[11px] font-mono text-zinc-500 font-medium mt-0.5">
                           {tx.lines.map((l) => l.accountName).join(' &bull; ')}
                         </p>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-emerald-400">
+                      <td className="py-3.5 px-4 font-mono font-bold text-emerald-600">
                         ${(totalDr / 100).toFixed(2)}
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-zinc-200">
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">
                         ${(totalCr / 100).toFixed(2)}
                       </td>
                       <td className="py-3.5 px-4 text-right">
-                        <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-400 font-bold">
+                        <span className="rounded-full bg-white border border-emerald-500 px-2 py-0.5 text-[11px] text-emerald-700 font-bold">
                           Balanced
                         </span>
                       </td>
@@ -446,18 +446,18 @@ export default function FinancePage() {
       {/* Tab 3: Payout Reconciliation */}
       {activeTab === 'payouts' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 rounded-xl border border-zinc-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
             <div>
-              <h3 className="text-base font-bold text-zinc-100">Bank Settlement Payout Reconciliation</h3>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <h3 className="text-base font-bold text-black">Bank Settlement Payout Reconciliation</h3>
+              <p className="text-xs text-zinc-600 mt-0.5 font-medium">
                 Stripe and Shopify payout matching against gross sales, refunds, and merchant fees. Zero discrepancy verified.
               </p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Payout ID</th>
                   <th className="py-3 px-4">Gross Sales</th>
@@ -468,28 +468,28 @@ export default function FinancePage() {
                   <th className="py-3 px-4 text-right">Reconciliation</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium">
+              <tbody className="divide-y divide-zinc-200 font-medium bg-white">
                 {payouts.map((po) => (
-                  <tr key={po.payoutId} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-bold text-indigo-400">{po.payoutId}</td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-200">
+                  <tr key={po.payoutId} className="hover:bg-zinc-50 transition-colors bg-white">
+                    <td className="py-3.5 px-4 font-mono font-bold text-black">{po.payoutId}</td>
+                    <td className="py-3.5 px-4 font-mono font-bold text-black">
                       ${(po.grossSalesMinor / 100).toFixed(2)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-rose-400">
+                    <td className="py-3.5 px-4 font-mono font-bold text-red-600">
                       -${(po.refundsMinor / 100).toFixed(2)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-amber-400">
+                    <td className="py-3.5 px-4 font-mono font-bold text-orange-600">
                       -${(po.processorFeesMinor / 100).toFixed(2)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-200">
+                    <td className="py-3.5 px-4 font-mono font-bold text-black">
                       ${(po.reconciliation.expectedDepositMinor / 100).toFixed(2)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-emerald-400">
+                    <td className="py-3.5 px-4 font-mono font-bold text-emerald-600">
                       ${(po.bankDepositMinor / 100).toFixed(2)}
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-bold text-emerald-400 border border-emerald-500/20">
-                        <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-500">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                         Matched ($0.00 drift)
                       </span>
                     </td>
@@ -503,50 +503,50 @@ export default function FinancePage() {
 
       {/* Transaction Drill-Down Modal */}
       {drillDownLine && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl space-y-5 text-black">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div>
-                <span className="text-xs uppercase font-bold text-indigo-400 tracking-wider">
+                <span className="text-xs uppercase font-bold text-black tracking-wider">
                   P&L Line Item Drill-Down
                 </span>
-                <h3 className="text-lg font-bold text-zinc-100">{drillDownLine.name}</h3>
+                <h3 className="text-lg font-bold text-black">{drillDownLine.name}</h3>
               </div>
               <button
                 onClick={() => setDrillDownLine(null)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                className="rounded-lg p-1 text-zinc-500 hover:bg-zinc-100 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="rounded-lg bg-zinc-950 p-3 border border-zinc-800 text-xs flex justify-between">
-              <span className="text-zinc-400">Total Line Item Balance:</span>
-              <span className="font-mono font-bold text-emerald-400 text-sm">
+            <div className="rounded-lg bg-zinc-50 p-3 border border-zinc-200 text-xs flex justify-between">
+              <span className="text-zinc-600 font-medium">Total Line Item Balance:</span>
+              <span className="font-mono font-bold text-emerald-600 text-sm">
                 ${(drillDownLine.amountMinor / 100).toLocaleString('en-US', { minimumFractionDigits: 2 })}
               </span>
             </div>
 
             <div className="space-y-3">
-              <p className="text-xs font-semibold text-zinc-300">
+              <p className="text-xs font-bold text-black">
                 Underlying Double-Entry Ledger Transactions ({drillDownTransactions.length}):
               </p>
 
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950 divide-y divide-zinc-800/80 max-h-60 overflow-y-auto">
+              <div className="rounded-xl border border-zinc-200 bg-white divide-y divide-zinc-200 max-h-60 overflow-y-auto">
                 {drillDownTransactions.map((tx) => (
                   <div key={tx.id} className="p-3 text-xs space-y-1">
                     <div className="flex justify-between items-center">
-                      <span className="font-mono font-bold text-indigo-400">{tx.entryNumber}</span>
-                      <span className="font-mono text-zinc-400">
+                      <span className="font-mono font-bold text-black">{tx.entryNumber}</span>
+                      <span className="font-mono text-zinc-500">
                         {new Date(tx.occurredAtIso).toLocaleDateString()}
                       </span>
                     </div>
-                    <p className="text-zinc-200 font-medium">{tx.description}</p>
-                    <div className="pt-1 text-[11px] font-mono text-zinc-400 space-y-0.5">
+                    <p className="text-black font-semibold">{tx.description}</p>
+                    <div className="pt-1 text-[11px] font-mono text-zinc-600 space-y-0.5">
                       {tx.lines.map((l, i) => (
                         <div key={i} className="flex justify-between">
                           <span>{l.accountName}</span>
-                          <span>
+                          <span className="font-bold">
                             {l.debitMinor > 0
                               ? `Dr $${(l.debitMinor / 100).toFixed(2)}`
                               : `Cr $${(l.creditMinor / 100).toFixed(2)}`}
@@ -559,10 +559,10 @@ export default function FinancePage() {
               </div>
             </div>
 
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-end pt-2 border-t border-zinc-200">
               <button
                 onClick={() => setDrillDownLine(null)}
-                className="rounded-lg bg-zinc-800 px-4 py-2 text-xs font-semibold text-zinc-200 hover:bg-zinc-700"
+                className="rounded-lg bg-black px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
               >
                 Close Drill-Down
               </button>

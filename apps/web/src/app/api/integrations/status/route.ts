@@ -1,11 +1,20 @@
 import { NextResponse } from 'next/server';
+import { db } from '@storefront-ops/db';
+import { cookies } from 'next/headers';
+import { SESSION_COOKIE_NAME, parseSessionToken } from '@/lib/auth/session';
 
 export async function GET() {
-  const integrations = [
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const session = parseSessionToken(sessionCookie);
+
+  // Default core platform adapters
+  const defaultIntegrations = [
     {
       id: 'int-1',
-      name: 'Shopify Admin API',
+      name: 'Shopify Admin API Webhook Bus',
       category: 'ecommerce',
+      platform: 'shopify',
       status: 'connected',
       endpoint: '/api/webhooks/shopify',
       lastSyncAt: '1 minute ago',
@@ -19,6 +28,7 @@ export async function GET() {
       id: 'int-2',
       name: 'WooCommerce Store REST API v3',
       category: 'ecommerce',
+      platform: 'woocommerce',
       status: 'connected',
       endpoint: '/api/webhooks/woocommerce',
       lastSyncAt: '3 minutes ago',
@@ -32,6 +42,7 @@ export async function GET() {
       id: 'int-3',
       name: 'Stripe Payments & Disputes',
       category: 'payments',
+      platform: 'stripe',
       status: 'connected',
       endpoint: '/api/webhooks/stripe',
       lastSyncAt: 'Just now',
@@ -44,15 +55,40 @@ export async function GET() {
       id: 'int-4',
       name: 'Shippo & EasyPost Multi-Carrier Aggregator',
       category: 'shipping',
+      platform: 'carrier',
       status: 'connected',
       endpoint: '/api/fulfillment/rates',
       lastSyncAt: '5 minutes ago',
       metrics: {
         labelsPurchasedToday: 142,
-        carrierExceptionCount: 3,
+        carrierExceptionCount: 0,
       },
     },
   ];
+
+  // Retrieve merchant-connected stores from persistent DB
+  let userStores: any[] = [];
+  if (session?.organizationId) {
+    const persisted = db.getStores(session.organizationId);
+    userStores = persisted.map((s) => ({
+      id: s.id,
+      name: s.name,
+      category: s.platform === 'carrier' ? 'shipping' : s.platform === 'stripe' ? 'payments' : 'ecommerce',
+      platform: s.platform,
+      status: s.status,
+      endpoint: s.platform === 'shopify' ? '/api/webhooks/shopify' : s.platform === 'woocommerce' ? '/api/webhooks/woocommerce' : '/api/webhooks/stripe',
+      lastSyncAt: s.last_sync_at,
+      customStore: true,
+      shopDomain: s.shop_domain,
+      storeUrl: s.store_url,
+      metrics: {
+        ordersIngested: 0,
+        syncErrorsCount: 0,
+      },
+    }));
+  }
+
+  const integrations = [...userStores, ...defaultIntegrations];
 
   const deadLetterQueue = [
     {

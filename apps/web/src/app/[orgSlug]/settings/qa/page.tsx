@@ -133,19 +133,19 @@ export default function QaAcceptancePage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8">
+    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-white min-h-screen text-black">
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow">
-              <FileCheck className="h-5 w-5" />
+            <div className="h-8 w-8 rounded-lg bg-black flex items-center justify-center text-white shadow-xs">
+              <FileCheck className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold tracking-tight text-black">
               QA Acceptance & 12 Core Journeys Matrix
             </h1>
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-zinc-600 mt-1">
             Continuous integration test pyramid verifying all 12 operational user flows and persona acceptance criteria.
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function QaAcceptancePage() {
         <button
           onClick={handleRunAll}
           disabled={isRunning}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow flex items-center gap-2"
+          className="px-4 py-2 bg-black hover:bg-zinc-800 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-2"
         >
           {isRunning ? (
             <>
@@ -161,29 +161,29 @@ export default function QaAcceptancePage() {
             </>
           ) : (
             <>
-              <Play className="h-4 w-4" /> Run 12 E2E Journeys
+              <Play className="h-4 w-4 fill-white" /> Run 12 E2E Journeys
             </>
           )}
         </button>
       </div>
 
       {/* Summary KPI Banner */}
-      <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-4 bg-white border-2 border-green-500 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white shrink-0 shadow">
-            <CheckCircle2 className="h-6 w-6" />
+          <div className="h-10 w-10 rounded-xl bg-green-600 flex items-center justify-center text-white shrink-0 shadow-xs">
+            <CheckCircle2 className="h-6 w-6 text-white" />
           </div>
           <div>
-            <div className="font-extrabold text-sm text-emerald-900 dark:text-emerald-200">
+            <div className="font-extrabold text-sm text-black">
               All 12 Core End-to-End Operational Journeys Passing (12 / 12)
             </div>
-            <div className="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
+            <div className="text-xs text-zinc-600 mt-0.5 font-medium">
               Zero flaky tests • Total suite runtime: 257ms • Zero data drift across all invariants
             </div>
           </div>
         </div>
 
-        <div className="text-xs font-mono text-emerald-800 dark:text-emerald-300">
+        <div className="text-xs font-mono font-bold text-green-700">
           Last verified: {lastRunTimestamp}
         </div>
       </div>
@@ -193,20 +193,20 @@ export default function QaAcceptancePage() {
         {journeys.map((j) => (
           <div
             key={j.id}
-            className="p-5 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 shadow-sm space-y-3 hover:border-indigo-300 transition"
+            className="p-5 rounded-2xl border border-zinc-200 bg-white shadow-sm space-y-3 hover:border-black transition"
           >
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-black">
                 {j.role}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 flex items-center gap-1">
-                <CheckCircle2 className="h-3 w-3" /> {j.status} ({j.latency})
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-white text-green-700 border border-green-300 flex items-center gap-1">
+                <CheckCircle2 className="h-3 w-3 text-green-600" /> {j.status} ({j.latency})
               </span>
             </div>
 
-            <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100">{j.title}</h3>
+            <h3 className="font-bold text-sm text-black">{j.title}</h3>
 
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-xs text-zinc-600 leading-relaxed font-normal">
               {j.description}
             </p>
           </div>

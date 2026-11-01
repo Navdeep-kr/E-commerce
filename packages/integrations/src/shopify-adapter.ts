@@ -64,7 +64,7 @@ export class ShopifyAdapter implements OrdersProvider, InventoryProvider {
       customerName: addr.name || `${addr.first_name || ''} ${addr.last_name || ''}`.trim() || 'Guest Customer',
       currency: raw.currency || 'USD',
       totalAmountMinor: totalMinor,
-      status: 'pending',
+      status: 'paid',
       lines,
       shippingAddress: {
         address1: addr.address1 || '1 Main St',

@@ -292,7 +292,7 @@ describe('Step 22: Testing, QA & Acceptance — 12 Core End-to-End Journeys Matr
         trackingNumber: '1Z999AA10123456784',
         estimatedDelivery: 'November 4, 2026',
         totalCents: 8500,
-        items: [{ sku: 'SKU-HOODIE', quantity: 1 }],
+        items: [{ sku: 'SKU-HOODIE', name: 'Hoodie', quantity: 1 }],
       }
     );
 

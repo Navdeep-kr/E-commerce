@@ -152,7 +152,6 @@ export default function PackStationPage() {
         osc.start();
         osc.stop(ctx.currentTime + 0.15);
       } else if (type === 'complete') {
-        // Triumphant chord
         [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -166,7 +165,6 @@ export default function PackStationPage() {
           osc.stop(ctx.currentTime + i * 0.08 + 0.3);
         });
       } else {
-        // Low error buzzer
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
@@ -180,7 +178,7 @@ export default function PackStationPage() {
         osc.stop(ctx.currentTime + 0.35);
       }
     } catch {
-      // AudioContext not supported or blocked by browser policy
+      // AudioContext policy
     }
   };
 
@@ -282,36 +280,36 @@ export default function PackStationPage() {
   };
 
   return (
-    <div className="min-h-[85vh] flex flex-col space-y-5">
+    <div className="min-h-[85vh] flex flex-col space-y-5 bg-white">
       {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-4 gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-4 gap-4 bg-white">
         <div className="flex items-center gap-3">
           <Link
             href={`/${orgSlug}/fulfillment`}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-300 bg-white text-black hover:bg-zinc-100 transition-colors shadow-sm"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-emerald-400">Station #02</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-xs text-zinc-400">East Coast DC &bull; Live Scanner Active</span>
+              <span className="font-mono text-xs font-bold uppercase tracking-wider text-black">Station #02</span>
+              <span className="h-2 w-2 rounded-full bg-emerald-600" />
+              <span className="text-xs text-zinc-600 font-medium">East Coast DC &bull; Live Barcode Scanner Active</span>
             </div>
-            <h1 className="text-xl font-bold tracking-tight text-zinc-100 flex items-center gap-2">
+            <h1 className="text-xl font-bold tracking-tight text-black flex items-center gap-2">
               Pack Station Touch Terminal
             </h1>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-1.5 text-xs text-zinc-400">
-            <Clock className="h-3.5 w-3.5 text-amber-400" />
-            <span>Target Speed: &lt; 30s per order</span>
+          <div className="flex items-center gap-2 rounded-lg bg-white border border-zinc-300 px-3 py-1.5 text-xs text-zinc-600 shadow-xs">
+            <Clock className="h-3.5 w-3.5 text-orange-600" />
+            <span className="font-medium">Target Speed: &lt; 30s per order</span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-xs text-zinc-500">Quick Orders:</span>
+            <span className="text-xs text-zinc-600 font-bold">Quick Switch:</span>
             {['ORD-10892', 'ORD-10893', 'ORD-10894'].map((ord) => (
               <button
                 key={ord}
@@ -320,10 +318,10 @@ export default function PackStationPage() {
                   setCompletedShipment(null);
                   setAlertError(null);
                 }}
-                className={`px-2 py-1 text-xs font-mono font-medium rounded ${
+                className={`px-2.5 py-1 text-xs font-mono font-bold rounded border transition-colors ${
                   activeOrderNumber === ord
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                    ? 'bg-black text-white border-black shadow-sm'
+                    : 'bg-white text-black border-zinc-300 hover:bg-zinc-100'
                 }`}
               >
                 {ord}
@@ -335,15 +333,15 @@ export default function PackStationPage() {
 
       {/* Alert Banner */}
       {alertError && (
-        <div className="rounded-xl border border-rose-500/50 bg-rose-950/40 p-4 text-rose-300 shadow-lg shadow-rose-950/20 flex items-center gap-3 animate-bounce">
-          <AlertOctagon className="h-6 w-6 text-rose-400 flex-shrink-0" />
+        <div className="rounded-xl border-2 border-red-500 bg-white p-4 text-red-700 shadow-md flex items-center gap-3">
+          <AlertOctagon className="h-6 w-6 text-red-600 flex-shrink-0" />
           <div className="flex-1">
-            <p className="font-bold text-sm">SCAN VERIFICATION MISMATCH</p>
-            <p className="text-xs text-rose-200 mt-0.5">{alertError}</p>
+            <p className="font-bold text-sm text-red-700">SCAN VERIFICATION MISMATCH</p>
+            <p className="text-xs text-red-600 mt-0.5">{alertError}</p>
           </div>
           <button
             onClick={() => setAlertError(null)}
-            className="rounded px-2 py-1 text-xs font-bold text-rose-400 hover:bg-rose-900/60"
+            className="rounded px-2.5 py-1 text-xs font-bold text-red-700 border border-red-300 hover:bg-red-50"
           >
             DISMISS
           </button>
@@ -352,53 +350,53 @@ export default function PackStationPage() {
 
       {/* Completed Shipment Banner / Modal */}
       {completedShipment ? (
-        <div className="rounded-2xl border border-emerald-500/50 bg-zinc-900/90 p-8 shadow-2xl flex flex-col items-center text-center space-y-6">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+        <div className="rounded-2xl border-2 border-emerald-500 bg-white p-8 shadow-2xl flex flex-col items-center text-center space-y-6">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 border-2 border-emerald-500 text-emerald-600">
             <CheckCircle2 className="h-10 w-10" />
           </div>
 
           <div>
-            <h2 className="text-2xl font-black tracking-tight text-zinc-100">ORDER {activeOrderNumber} PACKED & LABELED!</h2>
-            <p className="mt-1 text-sm text-zinc-400">
-              Shipped via <span className="font-semibold text-zinc-200">{completedShipment.carrier}</span> &bull; Processed in{' '}
-              <span className="font-bold text-emerald-400">{completedShipment.elapsedSeconds} seconds</span> (Target met &lt; 30s)
+            <h2 className="text-2xl font-black tracking-tight text-black">ORDER {activeOrderNumber} PACKED & LABELED!</h2>
+            <p className="mt-1 text-sm text-zinc-600 font-medium">
+              Shipped via <span className="font-bold text-black">{completedShipment.carrier}</span> &bull; Processed in{' '}
+              <span className="font-bold text-emerald-600">{completedShipment.elapsedSeconds} seconds</span> (Target met &lt; 30s)
             </p>
           </div>
 
           {/* Simulated 4x6 Thermal Shipping Label */}
-          <div className="w-full max-w-sm rounded-xl border border-zinc-700 bg-white p-5 text-left text-zinc-900 shadow-xl font-mono">
+          <div className="w-full max-w-sm rounded-xl border-2 border-black bg-white p-5 text-left text-black shadow-lg font-mono">
             <div className="flex justify-between items-start border-b-2 border-black pb-2">
               <div>
-                <p className="font-black text-xl leading-none">{completedShipment.carrier}</p>
-                <p className="text-[10px] uppercase font-bold tracking-wider mt-0.5">PRIORITY MAIL 2-DAY</p>
+                <p className="font-black text-xl leading-none text-black">{completedShipment.carrier}</p>
+                <p className="text-[10px] uppercase font-bold tracking-wider mt-0.5 text-zinc-600">PRIORITY MAIL 2-DAY</p>
               </div>
-              <div className="border border-black px-1.5 py-0.5 text-right">
-                <p className="text-[10px] font-black">ZONE 4</p>
+              <div className="border border-black px-1.5 py-0.5 text-right font-black text-[10px]">
+                ZONE 4
               </div>
             </div>
 
             <div className="py-3 text-xs leading-tight border-b border-zinc-300">
-              <p className="text-[9px] uppercase text-zinc-500">SHIP TO:</p>
-              <p className="font-bold">{recipient.name}</p>
-              <p>{recipient.street}</p>
-              <p>
+              <p className="text-[9px] uppercase text-zinc-500 font-bold">SHIP TO:</p>
+              <p className="font-bold text-black">{recipient.name}</p>
+              <p className="text-zinc-800">{recipient.street}</p>
+              <p className="text-zinc-800">
                 {recipient.city}, {recipient.state} {recipient.zip}
               </p>
             </div>
 
             {/* Simulated 1D Barcode */}
             <div className="pt-3 text-center">
-              <div className="h-14 w-full flex items-center justify-center bg-zinc-100 border border-zinc-300 rounded font-mono text-xs tracking-[4px] font-black">
+              <div className="h-14 w-full flex items-center justify-center bg-zinc-50 border border-zinc-400 rounded font-mono text-xs tracking-[4px] font-black text-black">
                 ||| | |||| || ||| |||| | ||| ||||
               </div>
-              <p className="mt-1 text-[11px] font-bold tracking-wider">{completedShipment.trackingNumber}</p>
+              <p className="mt-1 text-[11px] font-bold tracking-wider text-black">{completedShipment.trackingNumber}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors"
+              className="flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-4 py-2.5 text-sm font-bold text-black hover:bg-zinc-100 transition-colors shadow-sm"
             >
               <Printer className="h-4 w-4" />
               Reprint Label
@@ -406,7 +404,7 @@ export default function PackStationPage() {
 
             <button
               onClick={handleResetForNextOrder}
-              className="flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-emerald-500 shadow-lg shadow-emerald-950/40 transition-colors"
+              className="flex items-center gap-2 rounded-lg bg-black px-6 py-2.5 text-sm font-bold text-white hover:bg-zinc-800 shadow-sm transition-colors"
             >
               <span>Scan Next Order</span>
               <RotateCcw className="h-4 w-4" />
@@ -415,26 +413,26 @@ export default function PackStationPage() {
         </div>
       ) : (
         /* Active Packing Workspace Grid */
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 bg-white">
           {/* Left Column: Barcode Scanner & Line Items (7 cols) */}
           <div className="lg:col-span-7 flex flex-col space-y-4">
             {/* Scanner Input Bar */}
-            <div className="rounded-xl border border-indigo-500/30 bg-zinc-900/90 p-4 shadow-lg">
+            <div className="rounded-xl border border-zinc-300 bg-white p-4 shadow-sm">
               <form onSubmit={handleBarcodeSubmit} className="flex gap-2">
                 <div className="relative flex-1">
-                  <Barcode className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-400" />
+                  <Barcode className="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-black" />
                   <input
                     ref={scanInputRef}
                     type="text"
                     value={scanInput}
                     onChange={(e) => setScanInput(e.target.value)}
                     placeholder="Scan Item Barcode or SKU... (or press Enter)"
-                    className="w-full rounded-lg bg-zinc-950 border border-zinc-800 pl-11 pr-4 py-3 text-sm font-mono text-white placeholder-zinc-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full rounded-lg bg-white border border-zinc-300 pl-11 pr-4 py-3 text-sm font-mono text-black placeholder-zinc-400 focus:border-black focus:outline-none"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="rounded-lg bg-indigo-600 px-5 py-3 text-sm font-bold text-white hover:bg-indigo-500 transition-colors"
+                  className="rounded-lg bg-black px-5 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
                 >
                   Scan
                 </button>
@@ -442,7 +440,7 @@ export default function PackStationPage() {
 
               {/* Quick Click-to-Scan Simulator Chips */}
               <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-                <span className="text-zinc-500 text-[11px]">Click to simulate physical scanner:</span>
+                <span className="text-zinc-600 font-semibold text-[11px]">Simulate physical scanner:</span>
                 {lines.map((l) => (
                   <button
                     key={l.sku}
@@ -460,7 +458,7 @@ export default function PackStationPage() {
                       }
                       setScanInput('');
                     }}
-                    className="font-mono bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 px-2 py-1 rounded"
+                    className="font-mono bg-white hover:bg-zinc-100 text-black border border-zinc-300 px-2.5 py-1 rounded-md font-bold shadow-xs"
                   >
                     + Scan {l.sku}
                   </button>
@@ -473,7 +471,7 @@ export default function PackStationPage() {
                     playSound('error');
                     setAlertError(result.message);
                   }}
-                  className="font-mono bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 px-2 py-1 rounded"
+                  className="font-mono bg-white hover:bg-red-50 text-red-600 border border-red-300 px-2.5 py-1 rounded-md font-bold shadow-xs"
                 >
                   Test Mismatch Alert
                 </button>
@@ -481,60 +479,60 @@ export default function PackStationPage() {
             </div>
 
             {/* Scan Verification Progress */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 space-y-4">
+            <div className="rounded-xl border border-zinc-200 bg-white p-5 space-y-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-zinc-100">Order Items Verification</h3>
-                  <p className="text-xs text-zinc-400">
+                  <h3 className="text-base font-bold text-black">Order Items Verification</h3>
+                  <p className="text-xs text-zinc-600 font-medium">
                     {totalItemsScanned} of {totalItemsRequired} items scanned & verified
                   </p>
                 </div>
                 {isAllVerified ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-400 border border-emerald-500/20">
-                    <CheckCircle2 className="h-4 w-4" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                     All Items Verified
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-400 border border-amber-500/20">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-orange-600 border border-orange-400">
                     Scanning in Progress
                   </span>
                 )}
               </div>
 
               {/* Progress Bar */}
-              <div className="h-2.5 w-full rounded-full bg-zinc-800 overflow-hidden">
+              <div className="h-2.5 w-full rounded-full bg-zinc-100 border border-zinc-200 overflow-hidden">
                 <div
                   className={`h-full transition-all duration-300 ${
-                    isAllVerified ? 'bg-emerald-500' : 'bg-indigo-500'
+                    isAllVerified ? 'bg-emerald-600' : 'bg-black'
                   }`}
                   style={{ width: `${Math.min(100, (totalItemsScanned / totalItemsRequired) * 100)}%` }}
                 />
               </div>
 
               {/* Line Items List */}
-              <div className="divide-y divide-zinc-800">
+              <div className="divide-y divide-zinc-200">
                 {lines.map((item) => {
                   const isLineDone = item.quantityScanned >= item.quantityOrdered;
                   return (
                     <div
                       key={item.sku}
-                      className={`py-3.5 flex items-center justify-between transition-colors ${
-                        isLineDone ? 'opacity-70 bg-zinc-900/30' : ''
+                      className={`py-3.5 flex items-center justify-between transition-colors bg-white ${
+                        isLineDone ? 'opacity-80' : ''
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div
                           className={`flex h-8 w-8 items-center justify-center rounded-full border ${
                             isLineDone
-                              ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-400'
-                              : 'border-zinc-700 bg-zinc-800 text-zinc-400'
+                              ? 'border-emerald-500 bg-white text-emerald-600'
+                              : 'border-zinc-300 bg-white text-zinc-600'
                           }`}
                         >
                           {isLineDone ? <CheckCircle2 className="h-5 w-5" /> : <Package className="h-4 w-4" />}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-zinc-100">{item.variantTitle}</p>
-                          <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-400 font-mono">
+                          <p className="text-sm font-bold text-black">{item.variantTitle}</p>
+                          <div className="mt-0.5 flex items-center gap-2 text-xs text-zinc-600 font-mono font-medium">
                             <span>SKU: {item.sku}</span>
                             <span>&bull;</span>
                             <span>Barcode: {item.barcode}</span>
@@ -544,12 +542,12 @@ export default function PackStationPage() {
 
                       <div className="text-right">
                         <div className="font-mono text-lg font-bold">
-                          <span className={isLineDone ? 'text-emerald-400' : 'text-zinc-200'}>
+                          <span className={isLineDone ? 'text-emerald-600' : 'text-black'}>
                             {item.quantityScanned}
                           </span>
                           <span className="text-zinc-500 font-normal"> / {item.quantityOrdered}</span>
                         </div>
-                        <span className="text-[10px] uppercase font-semibold text-zinc-500">
+                        <span className="text-[10px] uppercase font-bold text-zinc-500">
                           {isLineDone ? 'Complete' : 'Pending Scan'}
                         </span>
                       </div>
@@ -563,9 +561,9 @@ export default function PackStationPage() {
           {/* Right Column: Packaging, Rate Shopping & 1-Click Buy (5 cols) */}
           <div className="lg:col-span-5 flex flex-col space-y-4">
             {/* Box Size & Scale Weight */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
-                <Package className="h-4 w-4 text-indigo-400" />
+            <div className="rounded-xl border border-zinc-200 bg-white p-5 space-y-4 shadow-sm">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-black flex items-center gap-2">
+                <Package className="h-4 w-4 text-black" />
                 1. Box Size & Scale Weight
               </h3>
 
@@ -577,43 +575,43 @@ export default function PackStationPage() {
                     onClick={() => setSelectedBox(box.id)}
                     className={`p-3 rounded-lg border text-left transition-all ${
                       selectedBox === box.id
-                        ? 'border-indigo-500 bg-indigo-500/10 text-white shadow-sm'
-                        : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+                        ? 'border-2 border-black bg-white text-black shadow-sm'
+                        : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-400 hover:text-black'
                     }`}
                   >
-                    <p className="text-xs font-bold text-zinc-200">{box.name}</p>
+                    <p className="text-xs font-bold text-black">{box.name}</p>
                     <p className="text-[11px] font-mono text-zinc-500 mt-0.5">{box.dimensions}</p>
                   </button>
                 ))}
               </div>
 
               {/* Weight Scale */}
-              <div className="flex items-center justify-between rounded-lg border border-zinc-800 bg-zinc-950 p-3">
-                <div className="flex items-center gap-2 text-zinc-300">
-                  <Scale className="h-4 w-4 text-amber-400" />
-                  <span className="text-xs font-medium">Digital Scale (USB):</span>
+              <div className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 p-3">
+                <div className="flex items-center gap-2 text-black">
+                  <Scale className="h-4 w-4 text-black" />
+                  <span className="text-xs font-bold">Digital Scale (USB):</span>
                 </div>
-                <div className="flex items-center gap-1 font-mono font-bold text-base text-zinc-100">
+                <div className="flex items-center gap-1 font-mono font-bold text-base text-black">
                   <input
                     type="number"
                     step="0.1"
                     value={packageWeightLbs}
                     onChange={(e) => setPackageWeightLbs(parseFloat(e.target.value) || 1)}
-                    className="w-16 bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-right font-mono text-sm"
+                    className="w-16 bg-white border border-zinc-300 rounded px-1.5 py-0.5 text-right font-mono text-sm text-black focus:border-black focus:outline-none"
                   />
-                  <span className="text-xs text-zinc-400">lbs</span>
+                  <span className="text-xs text-zinc-600">lbs</span>
                 </div>
               </div>
             </div>
 
             {/* Carrier Rate Shopping */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 space-y-3">
+            <div className="rounded-xl border border-zinc-200 bg-white p-5 space-y-3 shadow-sm">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-300 flex items-center gap-2">
-                  <Truck className="h-4 w-4 text-emerald-400" />
+                <h3 className="text-sm font-bold uppercase tracking-wider text-black flex items-center gap-2">
+                  <Truck className="h-4 w-4 text-emerald-600" />
                   2. Rate Shopping ({recipient.city}, {recipient.state})
                 </h3>
-                <span className="rounded bg-emerald-500/10 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
+                <span className="rounded bg-white border border-emerald-500 text-emerald-700 px-2 py-0.5 text-[10px] font-bold">
                   BEST RATE AUTO-SELECTED
                 </span>
               </div>
@@ -625,8 +623,8 @@ export default function PackStationPage() {
                     onClick={() => setSelectedRateId(rate.rateId)}
                     className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
                       selectedRateId === rate.rateId
-                        ? 'border-emerald-500 bg-emerald-500/10 text-white'
-                        : 'border-zinc-800 bg-zinc-950/60 text-zinc-300 hover:border-zinc-700'
+                        ? 'border-2 border-emerald-600 bg-white text-black shadow-sm'
+                        : 'border-zinc-200 bg-white text-black hover:border-zinc-300'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
@@ -635,15 +633,15 @@ export default function PackStationPage() {
                         name="shippingRate"
                         checked={selectedRateId === rate.rateId}
                         onChange={() => {}}
-                        className="text-emerald-500 focus:ring-0"
+                        className="text-black focus:ring-0"
                       />
                       <div>
-                        <p className="text-xs font-bold text-zinc-200">{rate.carrier} &bull; {rate.serviceName}</p>
-                        <p className="text-[11px] text-zinc-400">{rate.estimatedDeliveryDays} business days</p>
+                        <p className="text-xs font-bold text-black">{rate.carrier} &bull; {rate.serviceName}</p>
+                        <p className="text-[11px] text-zinc-600 font-medium">{rate.estimatedDeliveryDays} business days</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="font-mono font-bold text-sm text-zinc-100">
+                      <span className="font-mono font-bold text-sm text-black">
                         ${(rate.amountMinor / 100).toFixed(2)}
                       </span>
                     </div>
@@ -658,10 +656,10 @@ export default function PackStationPage() {
                 type="button"
                 disabled={!isAllVerified || isProcessing}
                 onClick={handlePrintAndShip}
-                className={`w-full py-4 rounded-xl font-bold text-base shadow-xl flex items-center justify-center gap-2 transition-all ${
+                className={`w-full py-4 rounded-xl font-bold text-base shadow-lg flex items-center justify-center gap-2 transition-all ${
                   isAllVerified && !isProcessing
-                    ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-950/50 cursor-pointer active:scale-[0.99]'
-                    : 'bg-zinc-800 text-zinc-500 border border-zinc-700 cursor-not-allowed opacity-60'
+                    ? 'bg-black hover:bg-zinc-800 text-white cursor-pointer active:scale-[0.99]'
+                    : 'bg-zinc-100 text-zinc-400 border border-zinc-300 cursor-not-allowed opacity-70'
                 }`}
               >
                 {isProcessing ? (
@@ -681,7 +679,7 @@ export default function PackStationPage() {
                   </>
                 )}
               </button>
-              <p className="text-center text-[11px] text-zinc-500 mt-2">
+              <p className="text-center text-[11px] text-zinc-600 font-medium mt-2">
                 Pressing prints 4x6 label on thermal printer and auto-advances station queue
               </p>
             </div>

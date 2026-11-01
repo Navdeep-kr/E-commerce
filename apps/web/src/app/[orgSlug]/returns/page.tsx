@@ -98,7 +98,7 @@ export default function ReturnsPage() {
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 4500);
+    setTimeout(() => setToastMessage(null), 4000);
   };
 
   const handleGradeSubmit = async () => {
@@ -110,12 +110,9 @@ export default function ReturnsPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orderId: selectedForGrading.orderNumber,
-          sku: selectedForGrading.sku,
-          quantity: selectedForGrading.quantity,
-          unitPriceMinor: selectedForGrading.refundAmountMinor / selectedForGrading.quantity,
-          grade: gradingChoice,
-          targetBin,
+          conditionGrade: gradingChoice,
+          targetBinLocation: gradingChoice === 'restock' ? targetBin : undefined,
+          processedByStaffId: 'staff-warehouse-lead',
         }),
       });
 
@@ -124,17 +121,21 @@ export default function ReturnsPage() {
         setReturnsList((prev) =>
           prev.map((r) =>
             r.id === selectedForGrading.id
-              ? { ...r, status: 'graded', conditionGrade: gradingChoice }
+              ? {
+                  ...r,
+                  status: 'graded',
+                  conditionGrade: gradingChoice,
+                }
               : r
           )
         );
         showToast(data.message);
         setSelectedForGrading(null);
       } else {
-        showToast(data.error || 'Failed to complete grading.');
+        showToast(data.error || 'Failed to grade return.');
       }
     } catch {
-      showToast('Network error during grading.');
+      showToast('Network error submitting return grade.');
     } finally {
       setIsSubmitting(false);
     }
@@ -146,27 +147,27 @@ export default function ReturnsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white min-h-screen">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-zinc-900 border border-emerald-500/50 px-4 py-3 text-sm text-emerald-400 shadow-xl shadow-black/40">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-white border-2 border-emerald-500 px-4 py-3 text-sm font-bold text-emerald-700 shadow-xl">
+          <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-600" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-rose-400">Warehouse Operations</span>
-            <span className="rounded-full bg-rose-500/10 px-2 py-0.5 text-[10px] font-medium text-rose-400 border border-rose-500/20">
-              Receiving & Inspection
+            <span className="text-xs font-semibold uppercase tracking-wider text-black">Reverse Logistics</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-black border border-zinc-300">
+              Warehouse Grading
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">Returns & Exchanges</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
-            Intake inspection, condition grading (restock/dispose), automated refunds, and customer return portal.
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Returns & RMA Management</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
+            Intake inspection dock, condition grading, automatic restock ledger sync, and Stripe refund execution.
           </p>
         </div>
 
@@ -174,9 +175,9 @@ export default function ReturnsPage() {
           <Link
             href={`/${orgSlug}/returns/portal`}
             target="_blank"
-            className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-sm font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-xs font-bold text-black hover:bg-zinc-100 transition-colors shadow-sm"
           >
-            <ExternalLink className="h-4 w-4" />
+            <ExternalLink className="h-3.5 w-3.5 text-black" />
             <span>Customer Return Portal</span>
           </Link>
         </div>
@@ -188,39 +189,39 @@ export default function ReturnsPage() {
           title="Awaiting Inspection"
           value="4"
           description="Packages arrived at warehouse dock"
-          icon={<RotateCcw className="h-5 w-5 text-amber-400" />}
+          icon={<RotateCcw className="h-5 w-5 text-orange-600" />}
         />
         <KpiCard
           title="In Transit Returns"
           value="12"
           description="Carrier scanned return labels"
-          icon={<Package className="h-5 w-5 text-indigo-400" />}
+          icon={<Package className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Return Rate"
           value="4.2%"
           trend={{ value: 0.8, isPositive: true }}
           description="Below 5.0% industry benchmark"
-          icon={<TrendingDown className="h-5 w-5 text-emerald-400" />}
+          icon={<TrendingDown className="h-5 w-5 text-emerald-600" />}
         />
         <KpiCard
           title="Restock Rate"
           value="82%"
           description="Graded resalable & returned to bins"
-          icon={<ShieldCheck className="h-5 w-5 text-indigo-400" />}
+          icon={<ShieldCheck className="h-5 w-5 text-black" />}
         />
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-200">
         {(['all', 'received', 'in_transit', 'graded'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`border-b-2 px-4 py-3 text-sm font-medium capitalize transition-colors ${
+            className={`border-b-2 px-4 py-3 text-xs font-bold capitalize transition-colors ${
               activeTab === tab
-                ? 'border-rose-500 text-rose-400'
-                : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                ? 'border-black text-black'
+                : 'border-transparent text-zinc-600 hover:text-black'
             }`}
           >
             {tab === 'all' ? 'All Returns' : tab === 'received' ? 'Awaiting Inspection' : tab.replace('_', ' ')}
@@ -229,9 +230,9 @@ export default function ReturnsPage() {
       </div>
 
       {/* Returns Queue Table */}
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+      <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+        <table className="w-full text-left text-sm bg-white">
+          <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
             <tr>
               <th className="py-3 px-4">RMA / Return #</th>
               <th className="py-3 px-4">Order #</th>
@@ -243,30 +244,30 @@ export default function ReturnsPage() {
               <th className="py-3 px-4 text-right">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-800 font-medium">
+          <tbody className="divide-y divide-zinc-200 font-medium bg-white">
             {filtered.map((ret) => (
-              <tr key={ret.id} className="hover:bg-zinc-800/30 transition-colors">
-                <td className="py-3.5 px-4 font-mono font-semibold text-rose-400">{ret.rmaNumber}</td>
-                <td className="py-3.5 px-4 font-mono text-zinc-300">{ret.orderNumber}</td>
-                <td className="py-3.5 px-4 text-zinc-200">
-                  <p>{ret.customerName}</p>
-                  <p className="text-xs text-zinc-500">{ret.customerEmail}</p>
+              <tr key={ret.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                <td className="py-3.5 px-4 font-mono font-bold text-black">{ret.rmaNumber}</td>
+                <td className="py-3.5 px-4 font-mono text-zinc-700">{ret.orderNumber}</td>
+                <td className="py-3.5 px-4 text-black">
+                  <p className="font-bold">{ret.customerName}</p>
+                  <p className="text-xs text-zinc-500 font-medium">{ret.customerEmail}</p>
                 </td>
                 <td className="py-3.5 px-4 text-xs">
-                  <p className="font-mono text-zinc-200">{ret.sku} (x{ret.quantity})</p>
-                  <p className="text-zinc-400 capitalize">{ret.reason.replace('_', ' ')}</p>
+                  <p className="font-mono font-bold text-black">{ret.sku} (x{ret.quantity})</p>
+                  <p className="text-zinc-600 capitalize font-medium">{ret.reason.replace('_', ' ')}</p>
                 </td>
-                <td className="py-3.5 px-4 font-mono text-zinc-200">
+                <td className="py-3.5 px-4 font-mono font-bold text-black">
                   ${(ret.refundAmountMinor / 100).toFixed(2)}
                 </td>
                 <td className="py-3.5 px-4">
                   <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold border ${
                       ret.status === 'received'
-                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                        ? 'bg-white text-orange-600 border-orange-400'
                         : ret.status === 'graded'
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        : 'bg-zinc-800 text-zinc-400 border border-zinc-700'
+                        ? 'bg-white text-emerald-700 border-emerald-500'
+                        : 'bg-white text-zinc-700 border-zinc-300'
                     }`}
                   >
                     {ret.status.replace('_', ' ')}
@@ -274,24 +275,24 @@ export default function ReturnsPage() {
                 </td>
                 <td className="py-3.5 px-4">
                   {ret.conditionGrade ? (
-                    <span className="font-mono text-xs uppercase font-bold text-zinc-300">
+                    <span className="font-mono text-xs uppercase font-bold text-black">
                       {ret.conditionGrade}
                     </span>
                   ) : (
-                    <span className="text-zinc-600 text-xs italic">Uninspected</span>
+                    <span className="text-zinc-500 text-xs italic font-medium">Uninspected</span>
                   )}
                 </td>
                 <td className="py-3.5 px-4 text-right">
                   {ret.status === 'received' ? (
                     <button
                       onClick={() => setSelectedForGrading(ret)}
-                      className="inline-flex items-center gap-1.5 rounded-md bg-rose-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-rose-500 shadow-sm transition-colors"
+                      className="inline-flex items-center gap-1.5 rounded-md bg-black px-3 py-1.5 text-xs font-bold text-white hover:bg-zinc-800 shadow-sm transition-colors"
                     >
                       <Barcode className="h-3.5 w-3.5" />
                       Grade & Restock
                     </button>
                   ) : (
-                    <span className="text-xs text-zinc-500">Processed</span>
+                    <span className="text-xs text-zinc-500 font-semibold">Processed</span>
                   )}
                 </td>
               </tr>
@@ -302,37 +303,37 @@ export default function ReturnsPage() {
 
       {/* Warehouse Condition Grading Modal */}
       {selectedForGrading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-zinc-700 bg-zinc-900 p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-2xl border border-zinc-200 bg-white p-6 shadow-2xl space-y-5 text-black">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
               <div>
-                <span className="text-xs font-mono font-bold text-rose-400">{selectedForGrading.rmaNumber}</span>
-                <h3 className="text-lg font-bold text-zinc-100">Intake Condition Grading</h3>
+                <span className="text-xs font-mono font-bold text-black">{selectedForGrading.rmaNumber}</span>
+                <h3 className="text-lg font-bold text-black">Intake Condition Grading</h3>
               </div>
               <button
                 onClick={() => setSelectedForGrading(null)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                className="rounded-lg p-1 text-zinc-500 hover:bg-zinc-100 hover:text-black transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="rounded-lg bg-zinc-950 p-3 border border-zinc-800 text-xs space-y-1">
+            <div className="rounded-lg bg-zinc-50 p-3 border border-zinc-200 text-xs space-y-1.5">
               <div className="flex justify-between">
-                <span className="text-zinc-400">Order:</span>
-                <span className="font-mono text-zinc-200">{selectedForGrading.orderNumber}</span>
+                <span className="text-zinc-600 font-medium">Order:</span>
+                <span className="font-mono font-bold text-black">{selectedForGrading.orderNumber}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Item:</span>
-                <span className="font-mono font-bold text-zinc-100">{selectedForGrading.sku}</span>
+                <span className="text-zinc-600 font-medium">Item:</span>
+                <span className="font-mono font-bold text-black">{selectedForGrading.sku}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Customer Reason:</span>
-                <span className="text-zinc-300 capitalize">{selectedForGrading.reason.replace('_', ' ')}</span>
+                <span className="text-zinc-600 font-medium">Customer Reason:</span>
+                <span className="text-black capitalize font-semibold">{selectedForGrading.reason.replace('_', ' ')}</span>
               </div>
-              <div className="flex justify-between border-t border-zinc-800 pt-1">
-                <span className="text-zinc-400">Net Refund Payable:</span>
-                <span className="font-mono font-bold text-emerald-400">
+              <div className="flex justify-between border-t border-zinc-200 pt-1.5">
+                <span className="text-zinc-600 font-medium">Net Refund Payable:</span>
+                <span className="font-mono font-bold text-emerald-600 text-sm">
                   ${(selectedForGrading.refundAmountMinor / 100).toFixed(2)}
                 </span>
               </div>
@@ -340,7 +341,7 @@ export default function ReturnsPage() {
 
             {/* Condition Grade Selection */}
             <div className="space-y-3">
-              <label className="text-xs font-semibold text-zinc-300 uppercase tracking-wider">
+              <label className="text-xs font-bold text-black uppercase tracking-wider">
                 Select Physical Condition:
               </label>
               <div className="grid grid-cols-3 gap-3">
@@ -349,12 +350,12 @@ export default function ReturnsPage() {
                   onClick={() => setGradingChoice('restock')}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     gradingChoice === 'restock'
-                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400 font-bold'
-                      : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                      ? 'border-2 border-emerald-600 bg-white text-emerald-700 font-bold shadow-sm'
+                      : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-black'
                   }`}
                 >
-                  <p className="text-sm">Restock</p>
-                  <p className="text-[10px] text-zinc-500 mt-0.5">Like new & resellable</p>
+                  <p className="text-sm font-bold">Restock</p>
+                  <p className="text-[10px] text-zinc-500 mt-0.5 font-medium">Like new & resellable</p>
                 </button>
 
                 <button
@@ -362,12 +363,12 @@ export default function ReturnsPage() {
                   onClick={() => setGradingChoice('quarantine')}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     gradingChoice === 'quarantine'
-                      ? 'border-amber-500 bg-amber-500/10 text-amber-400 font-bold'
-                      : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                      ? 'border-2 border-orange-500 bg-white text-orange-600 font-bold shadow-sm'
+                      : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-black'
                   }`}
                 >
-                  <p className="text-sm">Quarantine</p>
-                  <p className="text-[10px] text-zinc-500 mt-0.5">Needs cleaning/repair</p>
+                  <p className="text-sm font-bold">Quarantine</p>
+                  <p className="text-[10px] text-zinc-500 mt-0.5 font-medium">Needs cleaning/repair</p>
                 </button>
 
                 <button
@@ -375,38 +376,38 @@ export default function ReturnsPage() {
                   onClick={() => setGradingChoice('dispose')}
                   className={`p-3 rounded-xl border text-center transition-all ${
                     gradingChoice === 'dispose'
-                      ? 'border-rose-500 bg-rose-500/10 text-rose-400 font-bold'
-                      : 'border-zinc-800 bg-zinc-950/60 text-zinc-400 hover:border-zinc-700'
+                      ? 'border-2 border-red-500 bg-white text-red-600 font-bold shadow-sm'
+                      : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-black'
                   }`}
                 >
-                  <p className="text-sm">Dispose</p>
-                  <p className="text-[10px] text-zinc-500 mt-0.5">Damaged / Write-off</p>
+                  <p className="text-sm font-bold">Dispose</p>
+                  <p className="text-[10px] text-zinc-500 mt-0.5 font-medium">Damaged / Write-off</p>
                 </button>
               </div>
             </div>
 
             {gradingChoice === 'restock' && (
-              <div className="rounded-lg bg-emerald-950/20 border border-emerald-500/30 p-3 space-y-2">
+              <div className="rounded-lg bg-zinc-50 border border-zinc-200 p-3 space-y-2">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-emerald-300">Target Restock Bin Location:</span>
+                  <span className="font-bold text-black">Target Restock Bin Location:</span>
                   <input
                     type="text"
                     value={targetBin}
                     onChange={(e) => setTargetBin(e.target.value)}
-                    className="w-24 bg-zinc-900 border border-zinc-700 rounded px-2 py-1 font-mono text-right text-emerald-400 font-bold"
+                    className="w-24 bg-white border border-zinc-300 rounded px-2 py-1 font-mono text-right text-black font-bold focus:border-black focus:outline-none"
                   />
                 </div>
-                <p className="text-[11px] text-zinc-400">
+                <p className="text-[11px] text-zinc-600 font-medium">
                   &bull; Automatically adds +{selectedForGrading.quantity} to inventory ledger upon submission.
                 </p>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-2">
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-zinc-200">
               <button
                 type="button"
                 onClick={() => setSelectedForGrading(null)}
-                className="px-4 py-2 text-xs font-semibold text-zinc-400 hover:text-zinc-200"
+                className="px-4 py-2 text-xs font-bold text-zinc-600 hover:text-black transition-colors"
               >
                 Cancel
               </button>
@@ -414,7 +415,7 @@ export default function ReturnsPage() {
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleGradeSubmit}
-                className="rounded-lg bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white hover:bg-emerald-500 transition-colors flex items-center gap-1.5"
+                className="rounded-lg bg-black px-5 py-2.5 text-xs font-bold text-white hover:bg-zinc-800 transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 {isSubmitting ? (
                   <span>Processing Refund & Stock...</span>

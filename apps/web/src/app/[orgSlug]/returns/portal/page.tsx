@@ -111,7 +111,7 @@ export default function CustomerReturnPortal() {
           sku: it.sku,
           quantity: 1,
           unitPriceMinor: it.priceMinor,
-          reason: selectedItems[it.orderItemId]?.reason as any || 'wrong_size',
+          reason: (selectedItems[it.orderItemId]?.reason as any) || 'wrong_size',
           isFinalSale: it.isFinalSale,
         }));
 
@@ -151,38 +151,44 @@ export default function CustomerReturnPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-white text-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto space-y-8">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400 border border-rose-500/20">
-            <RotateCcw className="h-3.5 w-3.5" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-bold text-black border border-zinc-300 shadow-xs">
+            <RotateCcw className="h-3.5 w-3.5 text-black" />
             <span>Storefront Ops Returns Portal</span>
           </div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-white">Returns & Exchanges</h1>
-          <p className="text-sm text-zinc-400">
+          <h1 className="text-3xl font-black tracking-tight text-black">Returns & Exchanges</h1>
+          <p className="text-sm text-zinc-600 font-medium">
             Fast, hassle-free returns within 30 days of delivery with prepaid shipping labels.
           </p>
         </div>
 
         {/* Step Indicator */}
-        <div className="flex items-center justify-center gap-4 text-xs font-semibold">
-          <div className={`flex items-center gap-1.5 ${step >= 1 ? 'text-rose-400' : 'text-zinc-600'}`}>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/20 border border-rose-500/40">
+        <div className="flex items-center justify-center gap-4 text-xs font-bold">
+          <div className={`flex items-center gap-1.5 ${step >= 1 ? 'text-black' : 'text-zinc-400'}`}>
+            <span className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-mono font-bold ${
+              step >= 1 ? 'border-black bg-black text-white' : 'border-zinc-300 bg-white text-zinc-400'
+            }`}>
               1
             </span>
             <span>Lookup</span>
           </div>
-          <div className="h-0.5 w-8 bg-zinc-800" />
-          <div className={`flex items-center gap-1.5 ${step >= 2 ? 'text-rose-400' : 'text-zinc-600'}`}>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/20 border border-rose-500/40">
+          <div className="h-0.5 w-8 bg-zinc-200" />
+          <div className={`flex items-center gap-1.5 ${step >= 2 ? 'text-black' : 'text-zinc-400'}`}>
+            <span className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-mono font-bold ${
+              step >= 2 ? 'border-black bg-black text-white' : 'border-zinc-300 bg-white text-zinc-400'
+            }`}>
               2
             </span>
             <span>Items & Reason</span>
           </div>
-          <div className="h-0.5 w-8 bg-zinc-800" />
-          <div className={`flex items-center gap-1.5 ${step >= 3 ? 'text-rose-400' : 'text-zinc-600'}`}>
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-rose-500/20 border border-rose-500/40">
+          <div className="h-0.5 w-8 bg-zinc-200" />
+          <div className={`flex items-center gap-1.5 ${step >= 3 ? 'text-black' : 'text-zinc-400'}`}>
+            <span className={`flex h-6 w-6 items-center justify-center rounded-full border text-xs font-mono font-bold ${
+              step >= 3 ? 'border-black bg-black text-white' : 'border-zinc-300 bg-white text-zinc-400'
+            }`}>
               3
             </span>
             <span>Label & Instructions</span>
@@ -191,14 +197,14 @@ export default function CustomerReturnPortal() {
 
         {/* Step 1: Order Lookup */}
         {step === 1 && (
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-xl space-y-6">
-            <div className="border-b border-zinc-800 pb-4">
-              <h2 className="text-lg font-bold text-zinc-100">Find Your Order</h2>
-              <p className="text-xs text-zinc-400 mt-1">Enter your order number and shipping zip code.</p>
+          <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm space-y-6">
+            <div className="border-b border-zinc-200 pb-4">
+              <h2 className="text-lg font-bold text-black">Find Your Order</h2>
+              <p className="text-xs text-zinc-600 font-medium mt-1">Enter your order number and shipping zip code.</p>
             </div>
 
             {lookupError && (
-              <div className="rounded-lg bg-rose-950/40 border border-rose-500/40 p-3 text-xs text-rose-300 flex items-center gap-2">
+              <div className="rounded-lg bg-white border border-red-400 p-3 text-xs text-red-600 font-medium flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 flex-shrink-0" />
                 <span>{lookupError}</span>
               </div>
@@ -206,7 +212,7 @@ export default function CustomerReturnPortal() {
 
             <form onSubmit={handleLookup} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
                   Order Number
                 </label>
                 <input
@@ -214,13 +220,13 @@ export default function CustomerReturnPortal() {
                   value={orderNumberInput}
                   onChange={(e) => setOrderNumberInput(e.target.value)}
                   placeholder="e.g. ORD-10892"
-                  className="w-full rounded-lg bg-zinc-950 border border-zinc-800 px-3.5 py-2.5 text-sm font-mono text-white focus:border-rose-500 focus:outline-none"
+                  className="w-full rounded-lg bg-white border border-zinc-300 px-3.5 py-2.5 text-sm font-mono text-black placeholder-zinc-400 focus:border-black focus:outline-none"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5">
+                <label className="block text-xs font-bold uppercase tracking-wider text-black mb-1.5">
                   Delivery Zip / Postal Code
                 </label>
                 <input
@@ -228,14 +234,14 @@ export default function CustomerReturnPortal() {
                   value={zipInput}
                   onChange={(e) => setZipInput(e.target.value)}
                   placeholder="e.g. 11249"
-                  className="w-full rounded-lg bg-zinc-950 border border-zinc-800 px-3.5 py-2.5 text-sm font-mono text-white focus:border-rose-500 focus:outline-none"
+                  className="w-full rounded-lg bg-white border border-zinc-300 px-3.5 py-2.5 text-sm font-mono text-black placeholder-zinc-400 focus:border-black focus:outline-none"
                   required
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full rounded-lg bg-rose-600 py-3 text-sm font-bold text-white hover:bg-rose-500 transition-colors shadow-lg shadow-rose-950/40 flex items-center justify-center gap-2"
+                className="w-full rounded-lg bg-black py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm flex items-center justify-center gap-2"
               >
                 <span>Find Order</span>
                 <ArrowRight className="h-4 w-4" />
@@ -246,13 +252,13 @@ export default function CustomerReturnPortal() {
 
         {/* Step 2: Select Items */}
         {step === 2 && foundOrder && (
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8 shadow-xl space-y-6">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
+          <div className="rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm space-y-6">
+            <div className="flex items-center justify-between border-b border-zinc-200 pb-4">
               <div>
-                <span className="font-mono text-xs font-bold text-rose-400">{foundOrder.orderNumber}</span>
-                <h2 className="text-lg font-bold text-zinc-100">Select Items to Return</h2>
+                <span className="font-mono text-xs font-bold text-black">{foundOrder.orderNumber}</span>
+                <h2 className="text-lg font-bold text-black">Select Items to Return</h2>
               </div>
-              <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
+              <span className="rounded-full bg-white px-2.5 py-0.5 text-xs font-bold text-emerald-700 border border-emerald-500">
                 Eligible &bull; Delivered 6 days ago
               </span>
             </div>
@@ -263,10 +269,10 @@ export default function CustomerReturnPortal() {
                 return (
                   <div
                     key={item.orderItemId}
-                    className={`rounded-xl border p-4 space-y-3 transition-colors ${
+                    className={`rounded-xl border p-4 space-y-3 transition-colors bg-white ${
                       isSelected
-                        ? 'border-rose-500/50 bg-rose-950/10'
-                        : 'border-zinc-800 bg-zinc-950/40 opacity-70'
+                        ? 'border-2 border-black shadow-sm'
+                        : 'border-zinc-200 opacity-80'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -283,21 +289,21 @@ export default function CustomerReturnPortal() {
                               },
                             }))
                           }
-                          className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-rose-600 focus:ring-0 cursor-pointer"
+                          className="h-4 w-4 rounded border-zinc-300 text-black focus:ring-0 cursor-pointer"
                         />
                         <div>
-                          <p className="text-sm font-bold text-zinc-200">{item.title}</p>
-                          <p className="font-mono text-xs text-zinc-400">SKU: {item.sku}</p>
+                          <p className="text-sm font-bold text-black">{item.title}</p>
+                          <p className="font-mono text-xs text-zinc-600 font-medium">SKU: {item.sku}</p>
                         </div>
                       </div>
-                      <span className="font-mono font-bold text-sm text-zinc-200">
+                      <span className="font-mono font-bold text-sm text-black">
                         ${(item.priceMinor / 100).toFixed(2)}
                       </span>
                     </div>
 
                     {isSelected && (
-                      <div className="pt-2 border-t border-zinc-800/60">
-                        <label className="block text-xs text-zinc-400 mb-1">Reason for return:</label>
+                      <div className="pt-2 border-t border-zinc-200">
+                        <label className="block text-xs font-bold text-black mb-1">Reason for return:</label>
                         <select
                           value={selectedItems[item.orderItemId]?.reason}
                           onChange={(e) =>
@@ -306,7 +312,7 @@ export default function CustomerReturnPortal() {
                               [item.orderItemId]: { ...prev[item.orderItemId], reason: e.target.value },
                             }))
                           }
-                          className="w-full rounded-md bg-zinc-900 border border-zinc-700 px-3 py-1.5 text-xs text-zinc-200"
+                          className="w-full rounded-md bg-white border border-zinc-300 px-3 py-1.5 text-xs text-black font-medium focus:border-black focus:outline-none"
                         >
                           <option value="wrong_size">Wrong size / Fit not as expected</option>
                           <option value="changed_mind">Changed my mind / No longer needed</option>
@@ -321,11 +327,11 @@ export default function CustomerReturnPortal() {
               })}
             </div>
 
-            <div className="flex items-center justify-between border-t border-zinc-800 pt-4">
+            <div className="flex items-center justify-between border-t border-zinc-200 pt-4">
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="text-xs text-zinc-400 hover:text-zinc-200"
+                className="text-xs font-bold text-zinc-600 hover:text-black transition-colors"
               >
                 &larr; Back to lookup
               </button>
@@ -334,7 +340,7 @@ export default function CustomerReturnPortal() {
                 type="button"
                 disabled={isSubmitting}
                 onClick={handleCreateReturn}
-                className="rounded-lg bg-rose-600 px-6 py-2.5 text-sm font-bold text-white hover:bg-rose-500 shadow-lg shadow-rose-950/40 transition-colors"
+                className="rounded-lg bg-black px-6 py-2.5 text-sm font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
               >
                 {isSubmitting ? 'Generating Return Label...' : 'Submit & Get Return Label'}
               </button>
@@ -344,32 +350,32 @@ export default function CustomerReturnPortal() {
 
         {/* Step 3: Success & Download Label */}
         {step === 3 && completedRma && (
-          <div className="rounded-2xl border border-emerald-500/40 bg-zinc-900 p-8 shadow-2xl text-center space-y-6">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <div className="rounded-2xl border-2 border-emerald-500 bg-white p-8 shadow-sm text-center space-y-6">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-white border-2 border-emerald-500 text-emerald-600">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
             <div>
-              <h2 className="text-2xl font-black text-white">Return Approved & Label Ready!</h2>
-              <p className="mt-1 text-sm text-zinc-400">
-                RMA Number: <span className="font-mono font-bold text-rose-400">{completedRma.rmaNumber}</span>
+              <h2 className="text-2xl font-black text-black">Return Approved & Label Ready!</h2>
+              <p className="mt-1 text-sm text-zinc-600 font-medium">
+                RMA Number: <span className="font-mono font-bold text-black">{completedRma.rmaNumber}</span>
               </p>
             </div>
 
-            <div className="rounded-xl bg-zinc-950 p-4 border border-zinc-800 text-left space-y-2 text-xs">
+            <div className="rounded-xl bg-zinc-50 p-4 border border-zinc-200 text-left space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-zinc-400">Estimated Refund:</span>
-                <span className="font-mono font-bold text-emerald-400">
+                <span className="text-zinc-600 font-medium">Estimated Refund:</span>
+                <span className="font-mono font-bold text-emerald-600">
                   ${(completedRma.refundAmountMinor / 100).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Refund Method:</span>
-                <span className="text-zinc-200">Original Payment Method (Stripe)</span>
+                <span className="text-zinc-600 font-medium">Refund Method:</span>
+                <span className="text-black font-semibold">Original Payment Method (Stripe)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-400">Return Carrier:</span>
-                <span className="text-zinc-200">USPS Prepaid Priority</span>
+                <span className="text-zinc-600 font-medium">Return Carrier:</span>
+                <span className="text-black font-semibold">USPS Prepaid Priority</span>
               </div>
             </div>
 
@@ -378,7 +384,7 @@ export default function CustomerReturnPortal() {
                 href={completedRma.labelUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-bold text-white hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-950/40"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg bg-black px-5 py-3 text-sm font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
               >
                 <Download className="h-4 w-4" />
                 <span>Download Prepaid Label (PDF)</span>
@@ -386,7 +392,7 @@ export default function CustomerReturnPortal() {
 
               <button
                 onClick={() => window.print()}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-lg border border-zinc-300 bg-white px-5 py-3 text-sm font-bold text-black hover:bg-zinc-100 transition-colors shadow-sm"
               >
                 <Printer className="h-4 w-4" />
                 <span>Print Instructions</span>

@@ -58,7 +58,7 @@ describe('Step 19: Performance, Load Testing & Scalability', () => {
       let pageCount = 0;
 
       do {
-        const page = paginationService.paginate(mockOrders, cursor, pageSize);
+        const page: any = paginationService.paginate(mockOrders, cursor, pageSize);
         for (const item of page.items) {
           collectedIds.push(item.id);
         }

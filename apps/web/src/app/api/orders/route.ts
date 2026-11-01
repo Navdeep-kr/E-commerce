@@ -142,7 +142,7 @@ export async function POST(request: Request) {
       customerName: data.customerName,
       customerEmail: data.customerEmail,
       channel: data.channel,
-      status: risk.recommendation === 'auto_hold' ? 'on_hold' : 'paid',
+      status: (risk.recommendation === 'auto_hold' ? 'on_hold' : 'paid') as any,
       paymentStatus: 'paid',
       fulfillmentStatus: 'unfulfilled',
       totalMinor: totals.totalMinor,

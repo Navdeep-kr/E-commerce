@@ -97,26 +97,26 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white min-h-screen text-black">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-zinc-900 border border-emerald-500/50 px-4 py-3 text-sm text-emerald-400 shadow-xl shadow-black/40">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-white border-2 border-emerald-500 px-4 py-3 text-sm font-bold text-emerald-700 shadow-xl">
+          <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-600" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-indigo-400">BI & Analytics</span>
-            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400 border border-emerald-500/20">
+            <span className="text-xs font-semibold uppercase tracking-wider text-black">BI & Analytics</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-black border border-zinc-300">
               Safe Parameterized SQL Engine
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">Analytics & Custom Reports</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Analytics & Custom Reports</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
             Ad-hoc custom report builder, parameterized SQL compiler, and centralized Metric Dictionary.
           </p>
         </div>
@@ -124,9 +124,9 @@ export default function ReportsPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => showToast('Report exported as CSV successfully.')}
-            className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-800 px-3.5 py-2 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors"
+            className="flex items-center gap-2 rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-xs font-bold text-black hover:bg-zinc-100 transition-colors shadow-sm"
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-3.5 w-3.5 text-black" />
             <span>Export CSV</span>
           </button>
         </div>
@@ -139,37 +139,37 @@ export default function ReportsPage() {
           value="$166,700.00"
           trend={{ value: 16.2, isPositive: true }}
           description="E-commerce + Wholesale B2B"
-          icon={<DollarSign className="h-5 w-5 text-emerald-400" />}
+          icon={<DollarSign className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Gross Margin"
           value="62.5%"
           description="6,250 bps profitability"
-          icon={<Percent className="h-5 w-5 text-indigo-400" />}
+          icon={<Percent className="h-5 w-5 text-emerald-600" />}
         />
         <KpiCard
           title="Average Order Value"
           value="$138.45"
           trend={{ value: 5.1, isPositive: true }}
           description="Trailing 30-day average"
-          icon={<TrendingUp className="h-5 w-5 text-amber-400" />}
+          icon={<TrendingUp className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Repeat Purchase Rate"
           value="34.8%"
-          description="Customers with &ge; 2 orders"
-          icon={<Sparkles className="h-5 w-5 text-pink-400" />}
+          description="Customers with ≥ 2 orders"
+          icon={<Sparkles className="h-5 w-5 text-emerald-600" />}
         />
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-200">
         <button
           onClick={() => setActiveTab('builder')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'builder'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <BarChart3 className="h-4 w-4" />
@@ -178,15 +178,15 @@ export default function ReportsPage() {
 
         <button
           onClick={() => setActiveTab('dictionary')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'dictionary'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <BookOpen className="h-4 w-4" />
           <span>Central Metric Dictionary</span>
-          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300 font-mono">
+          <span className="rounded-full bg-white border border-zinc-300 px-2 py-0.5 text-xs text-black font-mono">
             {Object.keys(METRIC_DICTIONARY).length} KPIs
           </span>
         </button>
@@ -196,10 +196,10 @@ export default function ReportsPage() {
       {activeTab === 'builder' && (
         <div className="space-y-5">
           {/* Controls: Dimension & Metric Pickers */}
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 p-5 space-y-4">
+          <div className="rounded-xl border border-zinc-200 bg-white p-5 space-y-4 shadow-sm">
             {/* Dimensions */}
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-black">
                 1. Select Dimensions (Group By):
               </span>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -210,10 +210,10 @@ export default function ReportsPage() {
                       key={dim}
                       type="button"
                       onClick={() => toggleDimension(dim)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all border ${
                         isSelected
-                          ? 'bg-indigo-600 text-white shadow-sm'
-                          : 'bg-zinc-950 border border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                          ? 'bg-black text-white border-black shadow-sm'
+                          : 'bg-white border-zinc-300 text-black hover:bg-zinc-100'
                       }`}
                     >
                       {dim}
@@ -224,8 +224,8 @@ export default function ReportsPage() {
             </div>
 
             {/* Metrics */}
-            <div className="pt-2 border-t border-zinc-800">
-              <span className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+            <div className="pt-2 border-t border-zinc-200">
+              <span className="text-xs font-bold uppercase tracking-wider text-black">
                 2. Select Aggregated Metrics:
               </span>
               <div className="mt-2 flex flex-wrap gap-2">
@@ -236,10 +236,10 @@ export default function ReportsPage() {
                       key={mKey}
                       type="button"
                       onClick={() => toggleMetric(mKey)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                         isSelected
-                          ? 'bg-emerald-600 text-white shadow-sm'
-                          : 'bg-zinc-950 border border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                          ? 'bg-black text-white border-black shadow-sm'
+                          : 'bg-white border-zinc-300 text-black hover:bg-zinc-100'
                       }`}
                     >
                       {METRIC_DICTIONARY[mKey].name}
@@ -249,9 +249,9 @@ export default function ReportsPage() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-zinc-800 flex items-center justify-between">
-              <div className="text-xs text-zinc-400 flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-emerald-400" />
+            <div className="pt-3 border-t border-zinc-200 flex items-center justify-between">
+              <div className="text-xs text-zinc-600 font-medium flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 <span>Tenant Isolation Guaranteed &bull; Safe Parameterized SQL Only</span>
               </div>
 
@@ -259,7 +259,7 @@ export default function ReportsPage() {
                 type="button"
                 disabled={isCompiling || selectedMetrics.length === 0}
                 onClick={handleRunQuery}
-                className="flex items-center gap-2 rounded-lg bg-indigo-600 px-5 py-2 text-xs font-bold text-white hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-950/40"
+                className="flex items-center gap-2 rounded-lg bg-black px-5 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm disabled:opacity-50"
               >
                 <Play className="h-3.5 w-3.5" />
                 <span>{isCompiling ? 'Compiling Query...' : 'Compile & Run Safe Query'}</span>
@@ -269,36 +269,36 @@ export default function ReportsPage() {
 
           {/* Compiled SQL Inspector */}
           {compiledSql && (
-            <div className="rounded-xl border border-indigo-500/30 bg-zinc-950 p-4 space-y-2">
+            <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-4 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-1.5 font-mono">
-                  <Code className="h-4 w-4" />
+                <span className="text-xs font-bold uppercase tracking-wider text-black flex items-center gap-1.5 font-mono">
+                  <Code className="h-4 w-4 text-black" />
                   Compiled Safe Parameterized SQL Query
                 </span>
-                <span className="rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-2 py-0.5 border border-emerald-500/20 font-mono">
+                <span className="rounded bg-white text-emerald-700 text-[10px] font-bold px-2 py-0.5 border border-emerald-500 font-mono">
                   100% Parameterized ($1, $2, ...)
                 </span>
               </div>
 
-              <pre className="font-mono text-xs text-zinc-300 p-3 bg-zinc-900 rounded border border-zinc-800 overflow-x-auto whitespace-pre">
+              <pre className="font-mono text-xs text-black p-3 bg-white rounded border border-zinc-200 overflow-x-auto whitespace-pre">
                 {compiledSql}
               </pre>
 
-              <div className="pt-1 flex items-center gap-2 text-[11px] font-mono text-zinc-400">
-                <span className="text-zinc-500 font-bold">Parameters:</span>
+              <div className="pt-1 flex items-center gap-2 text-[11px] font-mono text-zinc-600 font-medium">
+                <span className="text-black font-bold">Parameters:</span>
                 <span>{JSON.stringify(compiledParams)}</span>
               </div>
             </div>
           )}
 
           {/* Query Results Table */}
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <div className="p-3 bg-zinc-950/60 border-b border-zinc-800 flex items-center justify-between">
-              <span className="text-xs font-bold uppercase text-zinc-300">Query Results ({reportRows.length} rows)</span>
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <div className="p-3 bg-white border-b border-zinc-200 flex items-center justify-between">
+              <span className="text-xs font-bold uppercase text-black">Query Results ({reportRows.length} rows)</span>
             </div>
 
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/40 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   {selectedDimensions.map((d) => (
                     <th key={d} className="py-3 px-4 font-mono">{d}</th>
@@ -308,17 +308,17 @@ export default function ReportsPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium">
+              <tbody className="divide-y divide-zinc-200 font-medium bg-white">
                 {reportRows.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-zinc-800/30 transition-colors">
+                  <tr key={idx} className="hover:bg-zinc-50 transition-colors bg-white">
                     {selectedDimensions.map((d) => (
-                      <td key={d} className="py-3 px-4 text-zinc-200">{row[d] || 'N/A'}</td>
+                      <td key={d} className="py-3 px-4 text-black font-semibold">{row[d] || 'N/A'}</td>
                     ))}
                     {selectedMetrics.map((m) => {
                       const val = row[m];
                       const isMoney = METRIC_DICTIONARY[m]?.unit === 'currency_minor';
                       return (
-                        <td key={m} className="py-3 px-4 font-mono text-right text-zinc-100">
+                        <td key={m} className="py-3 px-4 font-mono text-right text-black font-bold">
                           {isMoney ? `$${(val / 100).toFixed(2)}` : val}
                         </td>
                       );
@@ -334,16 +334,16 @@ export default function ReportsPage() {
       {/* Tab 2: Central Metric Dictionary */}
       {activeTab === 'dictionary' && (
         <div className="space-y-4">
-          <div className="p-4 rounded-xl border border-zinc-800 bg-zinc-900">
-            <h3 className="text-base font-bold text-zinc-100">Centralized Storefront Ops Metric Dictionary</h3>
-            <p className="text-xs text-zinc-400 mt-0.5">
+          <div className="p-4 rounded-xl border border-zinc-200 bg-white shadow-sm">
+            <h3 className="text-base font-bold text-black">Centralized Storefront Ops Metric Dictionary</h3>
+            <p className="text-xs text-zinc-600 mt-0.5 font-medium">
               Strict domain definitions ensuring every department (Finance, Marketing, Fulfillment, Sales) computes KPIs identically.
             </p>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Metric ID</th>
                   <th className="py-3 px-4">Metric Name</th>
@@ -353,19 +353,19 @@ export default function ReportsPage() {
                   <th className="py-3 px-4">Canonical SQL Formula</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium text-xs">
+              <tbody className="divide-y divide-zinc-200 font-medium text-xs bg-white">
                 {Object.values(METRIC_DICTIONARY).map((metric) => (
-                  <tr key={metric.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-indigo-400">{metric.id}</td>
-                    <td className="py-3 px-4 font-semibold text-zinc-100">{metric.name}</td>
-                    <td className="py-3 px-4">
-                      <span className="rounded bg-zinc-800 px-2 py-0.5 text-[10px] font-mono uppercase text-zinc-300">
+                  <tr key={metric.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                    <td className="py-3.5 px-4 font-mono font-bold text-black">{metric.id}</td>
+                    <td className="py-3.5 px-4 font-bold text-black">{metric.name}</td>
+                    <td className="py-3.5 px-4">
+                      <span className="rounded bg-white border border-zinc-300 px-2 py-0.5 text-[10px] font-mono font-bold uppercase text-black">
                         {metric.category}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono text-zinc-400">{metric.unit}</td>
-                    <td className="py-3 px-4 text-zinc-300">{metric.description}</td>
-                    <td className="py-3 px-4 font-mono text-emerald-400 text-[11px] max-w-xs truncate">
+                    <td className="py-3.5 px-4 font-mono text-zinc-600 font-medium">{metric.unit}</td>
+                    <td className="py-3.5 px-4 text-zinc-700 font-medium">{metric.description}</td>
+                    <td className="py-3.5 px-4 font-mono text-emerald-700 font-semibold text-[11px] max-w-xs truncate">
                       {metric.sqlFormula}
                     </td>
                   </tr>

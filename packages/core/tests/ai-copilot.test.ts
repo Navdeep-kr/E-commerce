@@ -209,7 +209,7 @@ describe('Step 16: AI Assistant & Intelligent Operations', () => {
           trackingNumber: '1Z9999999999999999',
           estimatedDelivery: 'November 4, 2026',
           totalCents: 8500,
-          items: [{ sku: 'SKU-HOODIE-BLK-M', quantity: 1 }],
+          items: [{ sku: 'SKU-HOODIE-BLK-M', name: 'Hoodie', quantity: 1 }],
         }
       );
 
@@ -241,7 +241,7 @@ describe('Step 16: AI Assistant & Intelligent Operations', () => {
           orderNumber: 'ORD-9901',
           status: 'delivered',
           totalCents: 3500,
-          items: [{ sku: 'SKU-CLEARANCE', quantity: 1, isFinalSale: true }],
+          items: [{ sku: 'SKU-CLEARANCE', name: 'Clearance Shirt', quantity: 1, isFinalSale: true }],
         }
       );
 

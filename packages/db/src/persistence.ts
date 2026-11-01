@@ -48,6 +48,19 @@ export interface StoredUser extends User {
   organization_name: string;
 }
 
+export interface StoreIntegration {
+  id: string;
+  organization_id: string;
+  platform: 'shopify' | 'woocommerce' | 'stripe' | 'carrier';
+  name: string;
+  store_url?: string;
+  shop_domain?: string;
+  api_key?: string;
+  status: 'connected' | 'disconnected' | 'error';
+  created_at: string;
+  last_sync_at: string;
+}
+
 export interface DatabaseState {
   organizations: Organization[];
   users: StoredUser[];
@@ -58,6 +71,7 @@ export interface DatabaseState {
   inventory: InventoryLevel[];
   tasks: Task[];
   tickets: Ticket[];
+  stores?: StoreIntegration[];
 }
 
 class PersistenceEngine {
@@ -280,7 +294,7 @@ class PersistenceEngine {
       total_minor: so.totalMinor,
       payment_status: so.status === 'pending_payment' ? 'unpaid' : 'paid',
       fulfillment_status: ['packed', 'shipped', 'delivered'].includes(so.status) ? 'fulfilled' : 'unfulfilled',
-      risk_level: so.riskLevel,
+      risk_level: so.riskLevel as 'low' | 'medium' | 'high',
       shipping_address: {},
       billing_address: {},
       tags: [],
@@ -562,6 +576,55 @@ class PersistenceEngine {
     task.updated_at = new Date().toISOString();
     this.save();
     return task;
+  }
+
+  // -------------------------------------------------------------
+  // Store Integrations Operations
+  // -------------------------------------------------------------
+  public getStores(organizationId: string): StoreIntegration[] {
+    const state = this.ensureLoaded();
+    if (!state.stores) state.stores = [];
+    return state.stores.filter((s) => s.organization_id === organizationId);
+  }
+
+  public createStore(data: {
+    organizationId: string;
+    platform: 'shopify' | 'woocommerce' | 'stripe' | 'carrier';
+    name: string;
+    storeUrl?: string;
+    shopDomain?: string;
+    apiKey?: string;
+  }): StoreIntegration {
+    const state = this.ensureLoaded();
+    if (!state.stores) state.stores = [];
+    const nowIso = new Date().toISOString();
+    const store: StoreIntegration = {
+      id: `store-${randomBytes(6).toString('hex')}`,
+      organization_id: data.organizationId,
+      platform: data.platform,
+      name: data.name,
+      store_url: data.storeUrl,
+      shop_domain: data.shopDomain,
+      api_key: data.apiKey,
+      status: 'connected',
+      created_at: nowIso,
+      last_sync_at: 'Just now',
+    };
+    state.stores.push(store);
+    this.save();
+    return store;
+  }
+
+  public deleteStore(storeId: string, organizationId: string): boolean {
+    const state = this.ensureLoaded();
+    if (!state.stores) return false;
+    const initialLen = state.stores.length;
+    state.stores = state.stores.filter((s) => !(s.id === storeId && s.organization_id === organizationId));
+    if (state.stores.length !== initialLen) {
+      this.save();
+      return true;
+    }
+    return false;
   }
 }
 

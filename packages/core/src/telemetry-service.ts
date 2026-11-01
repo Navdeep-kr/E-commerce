@@ -267,23 +267,23 @@ export class TelemetryService {
     return entry;
   }
 
-  public debug(message: string, options?: { traceId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
+  public debug(message: string, options?: { traceId?: string; spanId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
     return this.log('DEBUG', message, options);
   }
 
-  public info(message: string, options?: { traceId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
+  public info(message: string, options?: { traceId?: string; spanId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
     return this.log('INFO', message, options);
   }
 
-  public warn(message: string, options?: { traceId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
+  public warn(message: string, options?: { traceId?: string; spanId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
     return this.log('WARN', message, options);
   }
 
-  public error(message: string, options?: { traceId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
+  public error(message: string, options?: { traceId?: string; spanId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
     return this.log('ERROR', message, options);
   }
 
-  public fatal(message: string, options?: { traceId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
+  public fatal(message: string, options?: { traceId?: string; spanId?: string; tenantId?: string; metadata?: Record<string, unknown> }): StructuredLogEntry {
     return this.log('FATAL', message, options);
   }
 

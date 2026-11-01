@@ -102,31 +102,31 @@ export default function NotificationsPage() {
   const filtered = filter === 'all' ? notifications : notifications.filter((n) => n.category === filter);
 
   const categoryIcons = {
-    fulfillment: <Truck className="h-4 w-4 text-amber-600" />,
-    inventory: <Package className="h-4 w-4 text-rose-600" />,
-    orders: <ShoppingCart className="h-4 w-4 text-indigo-600" />,
-    system: <ShieldCheck className="h-4 w-4 text-emerald-600" />,
+    fulfillment: <Truck className="h-4 w-4 text-orange-600" />,
+    inventory: <Package className="h-4 w-4 text-red-600" />,
+    orders: <ShoppingCart className="h-4 w-4 text-black" />,
+    system: <ShieldCheck className="h-4 w-4 text-green-700" />,
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-6">
+    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-6 bg-white min-h-screen text-black">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b pb-4 gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow">
-              <Bell className="h-5 w-5" />
+            <div className="h-8 w-8 rounded-lg bg-black flex items-center justify-center text-white shadow-xs">
+              <Bell className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+            <h1 className="text-2xl font-bold tracking-tight text-black">
               Notification Center
             </h1>
             {unreadCount > 0 && (
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-500 text-white shadow">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-red-600 text-white shadow-xs">
                 {unreadCount} new
               </span>
             )}
           </div>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-zinc-600 mt-1">
             Real-time operations alerts, warehouse fulfillment notifications, and customer communications.
           </p>
         </div>
@@ -134,22 +134,22 @@ export default function NotificationsPage() {
         <button
           onClick={handleMarkAllRead}
           disabled={unreadCount === 0}
-          className="px-3.5 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 text-xs font-semibold flex items-center gap-1.5 transition"
+          className="px-3.5 py-1.5 rounded-lg border border-zinc-300 hover:bg-zinc-100 disabled:opacity-40 text-xs font-bold text-black flex items-center gap-1.5 transition shadow-xs"
         >
-          <CheckCheck className="h-4 w-4 text-emerald-600" /> Mark all read
+          <CheckCheck className="h-4 w-4 text-green-600" /> Mark all read
         </button>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex flex-wrap gap-2 border-b pb-3">
+      <div className="flex flex-wrap gap-2 border-b border-zinc-200 pb-3">
         {(['all', 'fulfillment', 'inventory', 'orders', 'system'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium capitalize transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition shadow-xs ${
               filter === tab
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                ? 'bg-black text-white shadow-xs'
+                : 'bg-white text-zinc-600 border border-zinc-200 hover:text-black'
             }`}
           >
             {tab === 'all' ? 'All Alerts' : tab}
@@ -160,34 +160,34 @@ export default function NotificationsPage() {
       {/* Notifications List */}
       <div className="space-y-3">
         {filtered.length === 0 ? (
-          <div className="p-8 text-center border rounded-2xl bg-white dark:bg-gray-900 text-gray-400 text-sm">
+          <div className="p-8 text-center border border-zinc-200 rounded-2xl bg-white text-zinc-500 text-sm shadow-xs">
             No notifications in this category.
           </div>
         ) : (
           filtered.map((item) => (
             <div
               key={item.id}
-              className={`p-4 rounded-xl border transition shadow-sm flex items-start justify-between gap-4 ${
+              className={`p-4 rounded-xl border transition shadow-sm flex items-start justify-between gap-4 bg-white ${
                 item.read
-                  ? 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 opacity-80'
-                  : 'bg-indigo-50/20 dark:bg-indigo-950/20 border-indigo-200 dark:border-indigo-900 ring-1 ring-indigo-500/10'
+                  ? 'border-zinc-200 opacity-80'
+                  : 'border-2 border-orange-400'
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 mt-0.5">
+                <div className="p-2 rounded-lg bg-white border border-zinc-200 mt-0.5 shadow-xs">
                   {categoryIcons[item.category]}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-gray-100">{item.title}</h3>
+                    <h3 className="font-bold text-sm text-black">{item.title}</h3>
                     {!item.read && (
-                      <span className="h-2 w-2 rounded-full bg-rose-500" />
+                      <span className="h-2 w-2 rounded-full bg-red-600" />
                     )}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-300 mt-1 leading-relaxed">
+                  <p className="text-xs text-zinc-600 mt-1 leading-relaxed font-normal">
                     {item.message}
                   </p>
-                  <span className="text-[11px] text-gray-400 mt-2 block">{item.timestamp}</span>
+                  <span className="text-[11px] text-zinc-500 mt-2 block font-medium">{item.timestamp}</span>
                 </div>
               </div>
 
@@ -195,7 +195,7 @@ export default function NotificationsPage() {
                 {!item.read && (
                   <button
                     onClick={() => handleMarkOne(item.id)}
-                    className="text-[11px] text-gray-500 hover:text-indigo-600 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    className="text-[11px] text-zinc-600 hover:text-black font-bold px-2 py-1 rounded border border-zinc-200 hover:bg-zinc-100 transition shadow-xs"
                   >
                     Mark read
                   </button>
@@ -203,7 +203,7 @@ export default function NotificationsPage() {
                 {item.actionUrl && (
                   <a
                     href={item.actionUrl}
-                    className="p-1.5 rounded-lg text-gray-500 hover:text-indigo-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                    className="p-1.5 rounded-lg text-zinc-600 hover:text-black border border-zinc-200 hover:bg-zinc-100 transition shadow-xs"
                   >
                     <ExternalLink className="h-4 w-4" />
                   </a>
@@ -215,34 +215,34 @@ export default function NotificationsPage() {
       </div>
 
       {/* Communications Timeline Live Preview Box */}
-      <div className="bg-white dark:bg-gray-900 border rounded-2xl p-6 shadow-sm space-y-4 mt-8">
-        <div className="flex items-center justify-between border-b pb-3">
+      <div className="bg-white border border-zinc-200 rounded-2xl p-6 shadow-sm space-y-4 mt-8">
+        <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
           <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
-              <MessageSquare className="h-4 w-4 text-indigo-600" /> Order Communications Timeline (Live Sync Preview)
+            <h2 className="text-base font-bold text-black flex items-center gap-2">
+              <MessageSquare className="h-4 w-4 text-black" /> Order Communications Timeline (Live Sync Preview)
             </h2>
-            <p className="text-xs text-gray-500 mt-0.5">
+            <p className="text-xs text-zinc-600 mt-0.5">
               Every dispatched customer notification (Email, SMS) automatically logs directly to the order audit timeline.
             </p>
           </div>
-          <span className="text-xs font-mono bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded">
+          <span className="text-xs font-mono font-bold bg-white border border-zinc-300 text-black px-2.5 py-1 rounded shadow-xs">
             Target: ORD-5501
           </span>
         </div>
 
-        <div className="space-y-4 pl-4 border-l-2 border-indigo-200 dark:border-indigo-900 ml-2">
+        <div className="space-y-4 pl-4 border-l-2 border-zinc-300 ml-2">
           {/* Item 1 */}
           <div className="relative space-y-1">
-            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-900 dark:text-gray-100">
-              <Mail className="h-3.5 w-3.5 text-indigo-600" /> Sent Order Shipped via EMAIL
-              <span className="text-[10px] text-gray-400">10:14 AM</span>
+            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-green-600 border-2 border-white" />
+            <div className="flex items-center gap-2 text-xs font-bold text-black">
+              <Mail className="h-3.5 w-3.5 text-black" /> Sent Order Shipped via EMAIL
+              <span className="text-[10px] text-zinc-500 font-medium">10:14 AM</span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-zinc-600">
               Tracking link sent to sarah.j@example.com (UPS: 1Z999AA10123456784)
             </p>
             <div className="pt-1">
-              <span className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/40 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono text-black font-semibold bg-white border border-zinc-200 px-2 py-0.5 rounded shadow-xs">
                 https://track.storefrontops.com/UPS/1Z999AA10123456784
               </span>
             </div>
@@ -250,24 +250,24 @@ export default function NotificationsPage() {
 
           {/* Item 2 */}
           <div className="relative space-y-1">
-            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-gray-900" />
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-900 dark:text-gray-100">
-              <Smartphone className="h-3.5 w-3.5 text-indigo-600" /> Sent Out for Delivery via SMS
-              <span className="text-[10px] text-gray-400">08:30 AM</span>
+            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-green-600 border-2 border-white" />
+            <div className="flex items-center gap-2 text-xs font-bold text-black">
+              <Smartphone className="h-3.5 w-3.5 text-black" /> Sent Out for Delivery via SMS
+              <span className="text-[10px] text-zinc-500 font-medium">08:30 AM</span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-zinc-600">
               SMS dispatch to +14155552671: &quot;Your package ORD-5501 is out for delivery today with UPS!&quot;
             </p>
           </div>
 
           {/* Item 3 */}
           <div className="relative space-y-1">
-            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-blue-500 border-2 border-white dark:border-gray-900" />
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-900 dark:text-gray-100">
-              <Mail className="h-3.5 w-3.5 text-indigo-600" /> Sent Order Confirmed via EMAIL
-              <span className="text-[10px] text-gray-400">Yesterday</span>
+            <div className="absolute -left-[23px] top-1 h-3.5 w-3.5 rounded-full bg-black border-2 border-white" />
+            <div className="flex items-center gap-2 text-xs font-bold text-black">
+              <Mail className="h-3.5 w-3.5 text-black" /> Sent Order Confirmed via EMAIL
+              <span className="text-[10px] text-zinc-500 font-medium">Yesterday</span>
             </div>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
+            <p className="text-xs text-zinc-600">
               Order confirmation recap dispatched to customer with total of $125.00.
             </p>
           </div>

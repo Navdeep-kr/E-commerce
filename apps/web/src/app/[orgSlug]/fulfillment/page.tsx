@@ -169,7 +169,6 @@ export default function FulfillmentPage() {
   };
 
   const handleSimulatePoReceipt = () => {
-    // Receive 4 units of HOODIE-BLK-XL
     const result = FulfillmentService.releaseBackorders(
       { 'HOODIE-BLK-XL': 4 },
       backorders
@@ -188,26 +187,26 @@ export default function FulfillmentPage() {
   const criticalOrdersCount = orders.filter((o) => o.slaStatus === 'critical' || o.slaStatus === 'breached').length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white min-h-screen">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-zinc-900 border border-emerald-500/50 px-4 py-3 text-sm text-emerald-400 shadow-xl shadow-black/40">
-          <CheckCircle2 className="h-5 w-5 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-lg bg-white border-2 border-emerald-500 px-4 py-3 text-sm font-bold text-emerald-700 shadow-xl">
+          <CheckCircle2 className="h-5 w-5 flex-shrink-0 text-emerald-600" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       {/* Top Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-800 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Warehouse Operations</span>
-            <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-400 border border-amber-500/20">
+            <span className="text-xs font-semibold uppercase tracking-wider text-black">Warehouse Operations</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-black border border-zinc-300">
               East Coast DC
             </span>
           </div>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-zinc-100">Fulfillment Workspace</h1>
-          <p className="mt-0.5 text-sm text-zinc-400">
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Fulfillment Workspace</h1>
+          <p className="mt-0.5 text-sm text-zinc-600">
             Wave picking path optimization, SLA cutoffs, pack verification, and carrier exceptions.
           </p>
         </div>
@@ -215,7 +214,7 @@ export default function FulfillmentPage() {
         <div className="flex items-center gap-3">
           <Link
             href={`/${orgSlug}/fulfillment/pack-station`}
-            className="flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-950/40 hover:bg-emerald-500 transition-colors"
+            className="flex items-center gap-2 rounded-lg bg-black px-4 py-2.5 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
           >
             <Barcode className="h-4 w-4" />
             <span>Launch Pack Station</span>
@@ -231,99 +230,107 @@ export default function FulfillmentPage() {
           value="28"
           trend={{ value: 12, isPositive: true }}
           description="In picking & packing queues"
-          icon={<Package className="h-5 w-5 text-indigo-400" />}
+          icon={<Package className="h-5 w-5 text-black" />}
         />
         <KpiCard
           title="Critical SLA (< 2h)"
           value={String(criticalOrdersCount)}
           description="Carrier cutoff approaching"
-          icon={<Flame className="h-5 w-5 text-rose-400" />}
+          icon={<Flame className="h-5 w-5 text-red-600" />}
         />
         <KpiCard
           title="Packed Today"
           value="142"
           trend={{ value: 8, isPositive: true }}
           description="Across 3 packing stations"
-          icon={<CheckCircle2 className="h-5 w-5 text-emerald-400" />}
+          icon={<CheckCircle2 className="h-5 w-5 text-emerald-600" />}
         />
         <KpiCard
           title="Delivery Exceptions"
           value={String(exceptions.length)}
           description="Carrier delays & address holds"
-          icon={<AlertTriangle className="h-5 w-5 text-amber-400" />}
+          icon={<AlertTriangle className="h-5 w-5 text-orange-600" />}
         />
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-2 border-b border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-200">
         <button
           onClick={() => setActiveTab('sla')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'sla'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <Clock className="h-4 w-4" />
           <span>SLA Countdown Board</span>
-          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300">{orders.length}</span>
+          <span className="rounded-full bg-white border border-zinc-300 px-2 py-0.5 text-xs text-black font-mono">
+            {orders.length}
+          </span>
         </button>
 
         <button
           onClick={() => setActiveTab('batches')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'batches'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <Layers className="h-4 w-4" />
           <span>Wave & Batch Picking</span>
-          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300">5 items</span>
+          <span className="rounded-full bg-white border border-zinc-300 px-2 py-0.5 text-xs text-black font-mono">
+            5 items
+          </span>
         </button>
 
         <button
           onClick={() => setActiveTab('exceptions')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'exceptions'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
-          <AlertTriangle className="h-4 w-4" />
+          <AlertTriangle className="h-4 w-4 text-orange-600" />
           <span>Carrier Exceptions</span>
-          <span className="rounded-full bg-rose-500/20 px-2 py-0.5 text-xs text-rose-300">{exceptions.length}</span>
+          <span className="rounded-full bg-white border border-red-300 px-2 py-0.5 text-xs text-red-600 font-mono font-bold">
+            {exceptions.length}
+          </span>
         </button>
 
         <button
           onClick={() => setActiveTab('backorders')}
-          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 border-b-2 px-4 py-3 text-xs font-bold transition-colors ${
             activeTab === 'backorders'
-              ? 'border-indigo-500 text-indigo-400'
-              : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              ? 'border-black text-black'
+              : 'border-transparent text-zinc-600 hover:text-black'
           }`}
         >
           <RotateCcw className="h-4 w-4" />
           <span>Backorders (FIFO Queue)</span>
-          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-xs text-zinc-300">{backorders.length}</span>
+          <span className="rounded-full bg-white border border-zinc-300 px-2 py-0.5 text-xs text-black font-mono">
+            {backorders.length}
+          </span>
         </button>
       </div>
 
       {/* Tab 1: SLA Countdown Board */}
       {activeTab === 'sla' && (
         <div className="space-y-4">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-zinc-900/60 p-4 rounded-xl border border-zinc-800">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between bg-white p-4 rounded-xl border border-zinc-200 shadow-sm">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-zinc-400">Filter Urgency:</span>
+              <span className="text-xs font-bold text-black">Filter Urgency:</span>
               <div className="flex items-center gap-1.5">
                 {(['all', 'critical', 'warning', 'ok'] as const).map((filter) => (
                   <button
                     key={filter}
                     onClick={() => setSlaFilter(filter)}
-                    className={`rounded-lg px-2.5 py-1 text-xs font-medium capitalize transition-colors ${
+                    className={`rounded-lg px-2.5 py-1 text-xs font-bold capitalize transition-colors border ${
                       slaFilter === filter
-                        ? 'bg-zinc-800 text-white border border-zinc-700'
-                        : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-300'
+                        ? 'bg-black text-white border-black shadow-sm'
+                        : 'bg-white text-zinc-600 border-zinc-200 hover:text-black'
                     }`}
                   >
                     {filter === 'all' ? 'All Orders' : filter}
@@ -332,15 +339,15 @@ export default function FulfillmentPage() {
               </div>
             </div>
 
-            <div className="text-xs text-zinc-400 flex items-center gap-2">
-              <span className="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="text-xs text-zinc-600 font-medium flex items-center gap-2">
+              <span className="inline-block h-2 w-2 rounded-full bg-emerald-600" />
               <span>Carrier Cutoff: 4:00 PM EST daily</span>
             </div>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">Order</th>
                   <th className="py-3 px-4">Customer</th>
@@ -352,7 +359,7 @@ export default function FulfillmentPage() {
                   <th className="py-3 px-4 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800/60 font-medium">
+              <tbody className="divide-y divide-zinc-200 font-medium bg-white">
                 {filteredOrders.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="py-8 bg-white">
@@ -373,48 +380,49 @@ export default function FulfillmentPage() {
                   </tr>
                 ) : (
                   filteredOrders.map((o) => (
-                  <tr key={o.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="py-3.5 px-4 font-mono font-semibold text-indigo-400">
-                      <Link href={`/${orgSlug}/orders/${o.id}`} className="hover:underline">
-                        {o.orderNumber}
-                      </Link>
-                    </td>
-                    <td className="py-3.5 px-4 text-zinc-200">{o.customerName}</td>
-                    <td className="py-3.5 px-4 text-zinc-400 text-xs">{o.destination}</td>
-                    <td className="py-3.5 px-4 text-zinc-300">{o.itemsCount} units</td>
-                    <td className="py-3.5 px-4 font-mono text-zinc-200">
-                      ${(o.totalMinor / 100).toFixed(2)}
-                    </td>
-                    <td className="py-3.5 px-4 text-xs font-mono text-zinc-400">
-                      {new Date(o.deadlineIso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      {o.slaStatus === 'critical' ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-400 border border-rose-500/20">
-                          <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-ping" />
-                          Critical ({o.hoursRemaining}h left)
-                        </span>
-                      ) : o.slaStatus === 'warning' ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-400 border border-amber-500/20">
-                          Warning ({o.hoursRemaining}h left)
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-medium text-emerald-400 border border-emerald-500/20">
-                          On Track ({o.hoursRemaining}h left)
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <Link
-                        href={`/${orgSlug}/fulfillment/pack-station?order=${o.orderNumber}`}
-                        className="inline-flex items-center gap-1 rounded-md bg-zinc-800 px-2.5 py-1 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 hover:text-white transition-colors"
-                      >
-                        <Barcode className="h-3.5 w-3.5" />
-                        Pack Now
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                    <tr key={o.id} className="hover:bg-zinc-50 transition-colors bg-white">
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">
+                        <Link href={`/${orgSlug}/orders/${o.id}`} className="hover:underline">
+                          {o.orderNumber}
+                        </Link>
+                      </td>
+                      <td className="py-3.5 px-4 text-black font-semibold">{o.customerName}</td>
+                      <td className="py-3.5 px-4 text-zinc-600 text-xs font-medium">{o.destination}</td>
+                      <td className="py-3.5 px-4 text-black">{o.itemsCount} units</td>
+                      <td className="py-3.5 px-4 font-mono font-bold text-black">
+                        ${(o.totalMinor / 100).toFixed(2)}
+                      </td>
+                      <td className="py-3.5 px-4 text-xs font-mono text-zinc-600 font-semibold">
+                        {new Date(o.deadlineIso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {o.slaStatus === 'critical' ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-red-600 border border-red-500">
+                            <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
+                            Critical ({o.hoursRemaining}h left)
+                          </span>
+                        ) : o.slaStatus === 'warning' ? (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-orange-600 border border-orange-400">
+                            Warning ({o.hoursRemaining}h left)
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-xs font-bold text-emerald-700 border border-emerald-500">
+                            On Track ({o.hoursRemaining}h left)
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        <Link
+                          href={`/${orgSlug}/fulfillment/pack-station?order=${o.orderNumber}`}
+                          className="inline-flex items-center gap-1 rounded-md bg-white border border-zinc-300 px-2.5 py-1 text-xs font-bold text-black hover:bg-zinc-100 transition-colors shadow-xs"
+                        >
+                          <Barcode className="h-3.5 w-3.5 text-black" />
+                          Pack Now
+                        </Link>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -424,15 +432,15 @@ export default function FulfillmentPage() {
       {/* Tab 2: Wave & Batch Picking */}
       {activeTab === 'batches' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white p-4 rounded-xl border border-zinc-200 shadow-sm gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-semibold text-zinc-100">{pickBatch.batchId}</h3>
-                <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs font-medium text-indigo-400 border border-indigo-500/20">
+                <h3 className="text-base font-bold text-black">{pickBatch.batchId}</h3>
+                <span className="rounded-full bg-white px-2 py-0.5 text-xs font-bold text-black border border-zinc-300">
                   {pickBatch.zone}
                 </span>
               </div>
-              <p className="mt-1 text-xs text-zinc-400">
+              <p className="mt-1 text-xs text-zinc-600 font-medium">
                 Optimized bin sequence pick path (Zone &rarr; Aisle &rarr; Shelf &rarr; Bin) eliminates aisle backtracking.
               </p>
             </div>
@@ -440,28 +448,28 @@ export default function FulfillmentPage() {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => showToast('Pick sheet sent to warehouse zebra printer.')}
-                className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-medium text-zinc-200 hover:bg-zinc-700 transition-colors"
+                className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3.5 py-1.5 text-xs font-bold text-black hover:bg-zinc-100 transition-colors shadow-sm"
               >
-                <Printer className="h-3.5 w-3.5" />
+                <Printer className="h-3.5 w-3.5 text-black" />
                 Print Pick Sheet
               </button>
             </div>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <div className="bg-zinc-950/50 px-4 py-3 border-b border-zinc-800 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase text-zinc-400">Pick Sequence (5 Items)</span>
-              <span className="text-xs text-zinc-400">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <div className="bg-white px-4 py-3 border-b border-zinc-200 flex items-center justify-between">
+              <span className="text-xs font-bold uppercase text-black">Pick Sequence (5 Items)</span>
+              <span className="text-xs text-zinc-600 font-medium">
                 {pickBatch.items.filter((i) => i.picked).length} of {pickBatch.items.length} items collected
               </span>
             </div>
-            <div className="divide-y divide-zinc-800">
+            <div className="divide-y divide-zinc-200 bg-white">
               {pickBatch.items.map((item, idx) => (
                 <div
                   key={`${item.sku}-${idx}`}
                   onClick={() => togglePickedItem(idx)}
-                  className={`flex items-center justify-between p-4 cursor-pointer transition-colors ${
-                    item.picked ? 'bg-zinc-900/40 opacity-60' : 'hover:bg-zinc-800/40'
+                  className={`flex items-center justify-between p-4 cursor-pointer transition-colors bg-white ${
+                    item.picked ? 'opacity-60 bg-zinc-50' : 'hover:bg-zinc-50'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -469,16 +477,16 @@ export default function FulfillmentPage() {
                       type="checkbox"
                       checked={item.picked}
                       onChange={() => {}}
-                      className="h-4 w-4 rounded border-zinc-700 bg-zinc-800 text-indigo-600 focus:ring-0 focus:ring-offset-0 cursor-pointer"
+                      className="h-4 w-4 rounded border-zinc-300 text-black focus:ring-0 cursor-pointer"
                     />
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-white text-orange-600 border border-orange-400">
                           {item.binLocation}
                         </span>
-                        <span className="font-semibold text-sm text-zinc-200">{item.variantTitle}</span>
+                        <span className="font-bold text-sm text-black">{item.variantTitle}</span>
                       </div>
-                      <div className="mt-1 flex items-center gap-3 text-xs text-zinc-400">
+                      <div className="mt-1 flex items-center gap-3 text-xs text-zinc-600 font-medium">
                         <span className="font-mono">{item.sku}</span>
                         <span>&bull;</span>
                         <span>For {item.orderNumber}</span>
@@ -487,8 +495,8 @@ export default function FulfillmentPage() {
                   </div>
 
                   <div className="text-right">
-                    <span className="text-lg font-bold font-mono text-zinc-100">x{item.quantity}</span>
-                    <p className="text-[11px] text-zinc-500">Pick qty</p>
+                    <span className="text-lg font-bold font-mono text-black">x{item.quantity}</span>
+                    <p className="text-[11px] text-zinc-500 font-medium">Pick qty</p>
                   </div>
                 </div>
               ))}
@@ -500,29 +508,29 @@ export default function FulfillmentPage() {
       {/* Tab 3: Carrier Exceptions */}
       {activeTab === 'exceptions' && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <div className="bg-zinc-950/50 px-4 py-3 border-b border-zinc-800">
-              <h3 className="text-sm font-semibold text-zinc-200">Active Delivery Exceptions & Delays</h3>
-              <p className="text-xs text-zinc-400">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <div className="bg-white px-4 py-3 border-b border-zinc-200">
+              <h3 className="text-sm font-bold text-black">Active Delivery Exceptions & Delays</h3>
+              <p className="text-xs text-zinc-600 font-medium">
                 Shipments requiring intervention, carrier inquiries, or recipient address verification.
               </p>
             </div>
-            <div className="divide-y divide-zinc-800">
+            <div className="divide-y divide-zinc-200 bg-white">
               {exceptions.map((exc) => (
-                <div key={exc.id} className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div key={exc.id} className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="rounded-md bg-rose-500/10 px-2 py-0.5 text-xs font-semibold text-rose-400 border border-rose-500/20">
+                      <span className="rounded-md bg-white border border-red-400 px-2 py-0.5 text-xs font-bold text-red-600">
                         {exc.carrier}
                       </span>
-                      <span className="font-mono text-xs text-zinc-300">{exc.trackingNumber}</span>
-                      <span className="text-xs text-zinc-500">&bull; {exc.lastUpdated}</span>
+                      <span className="font-mono text-xs font-bold text-black">{exc.trackingNumber}</span>
+                      <span className="text-xs text-zinc-500 font-medium">&bull; {exc.lastUpdated}</span>
                     </div>
-                    <p className="mt-1.5 text-sm font-medium text-rose-300 flex items-center gap-1.5">
+                    <p className="mt-1.5 text-sm font-semibold text-red-600 flex items-center gap-1.5">
                       <AlertTriangle className="h-4 w-4 flex-shrink-0" />
                       {exc.issue}
                     </p>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-zinc-400">
+                    <div className="mt-1 flex items-center gap-2 text-xs text-zinc-600 font-medium">
                       <span>Order: {exc.orderNumber}</span>
                       <span>&bull;</span>
                       <span>Recipient: {exc.customerName} ({exc.destination})</span>
@@ -532,7 +540,7 @@ export default function FulfillmentPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => showToast(`Reroute request filed with ${exc.carrier}.`)}
-                      className="rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-1.5 text-xs font-semibold text-zinc-200 hover:bg-zinc-700 transition-colors"
+                      className="rounded-lg border border-zinc-300 bg-white px-3.5 py-1.5 text-xs font-bold text-black hover:bg-zinc-100 transition-colors shadow-xs"
                     >
                       Resolve Exception
                     </button>
@@ -547,26 +555,26 @@ export default function FulfillmentPage() {
       {/* Tab 4: Backorder FIFO Queue */}
       {activeTab === 'backorders' && (
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-zinc-900 p-4 rounded-xl border border-zinc-800 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white p-4 rounded-xl border border-zinc-200 shadow-sm gap-4">
             <div>
-              <h3 className="text-sm font-semibold text-zinc-100">FIFO Backorder Release Engine</h3>
-              <p className="text-xs text-zinc-400">
+              <h3 className="text-sm font-bold text-black">FIFO Backorder Release Engine</h3>
+              <p className="text-xs text-zinc-600 font-medium">
                 When incoming PO stock is received, the system releases pending orders in strict FIFO order (oldest first).
               </p>
             </div>
 
             <button
               onClick={handleSimulatePoReceipt}
-              className="flex items-center gap-2 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-semibold text-white hover:bg-indigo-500 transition-colors"
+              className="flex items-center gap-2 rounded-lg bg-black px-3.5 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               Simulate PO Stock Receipt (4x HOODIE-BLK-XL)
             </button>
           </div>
 
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
-            <table className="w-full text-left text-sm">
-              <thead className="border-b border-zinc-800 bg-zinc-950/60 text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+          <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden shadow-sm">
+            <table className="w-full text-left text-sm bg-white">
+              <thead className="border-b border-zinc-200 bg-white text-xs font-bold text-black uppercase tracking-wider">
                 <tr>
                   <th className="py-3 px-4">FIFO Rank</th>
                   <th className="py-3 px-4">Order #</th>
@@ -576,25 +584,25 @@ export default function FulfillmentPage() {
                   <th className="py-3 px-4 text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-800 font-medium">
+              <tbody className="divide-y divide-zinc-200 font-medium bg-white">
                 {backorders.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="py-8 text-center text-zinc-500 text-sm">
+                    <td colSpan={6} className="py-8 text-center text-zinc-500 text-sm font-semibold bg-white">
                       No orders currently blocked on backorders!
                     </td>
                   </tr>
                 ) : (
                   backorders.map((bo, index) => (
-                    <tr key={bo.orderId} className="hover:bg-zinc-800/30">
-                      <td className="py-3 px-4 font-mono font-bold text-amber-400">#{index + 1}</td>
-                      <td className="py-3 px-4 font-mono font-semibold text-indigo-400">{bo.orderNumber}</td>
-                      <td className="py-3 px-4 font-mono text-zinc-300">{bo.sku}</td>
-                      <td className="py-3 px-4 text-zinc-200">{bo.quantityWaiting} units</td>
-                      <td className="py-3 px-4 text-xs font-mono text-zinc-400">
+                    <tr key={bo.orderId} className="hover:bg-zinc-50 transition-colors bg-white">
+                      <td className="py-3 px-4 font-mono font-bold text-orange-600">#{index + 1}</td>
+                      <td className="py-3 px-4 font-mono font-bold text-black">{bo.orderNumber}</td>
+                      <td className="py-3 px-4 font-mono text-black">{bo.sku}</td>
+                      <td className="py-3 px-4 text-black font-semibold">{bo.quantityWaiting} units</td>
+                      <td className="py-3 px-4 text-xs font-mono text-zinc-600 font-semibold">
                         {new Date(bo.placedAt).toLocaleString()}
                       </td>
                       <td className="py-3 px-4 text-right">
-                        <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-xs text-amber-400 border border-amber-500/20">
+                        <span className="rounded-full bg-white px-2 py-0.5 text-xs font-bold text-orange-600 border border-orange-400">
                           Waiting Stock
                         </span>
                       </td>
