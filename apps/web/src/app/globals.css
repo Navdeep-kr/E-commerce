@@ -46,12 +46,21 @@
 }
 
 /* ============================================================ */
-/* 80% ZOOM DENSE & CLEAN VIEWPORT SCALING                     */
+/* TYPOGRAPHY SCALING: 20% BIGGER ACROSS WHOLE APPLICATION     */
 /* ============================================================ */
 
 html {
-  zoom: 0.82; /* Compact 80% dashboard viewport zoom */
-  font-size: 14px; /* Crisp, readable, clear compact text */
+  zoom: 0.82; /* Compact dashboard viewport zoom */
+  font-size: 16.8px; /* 20% bigger font size (14px * 1.20 = 16.8px) */
+  -webkit-text-size-adjust: 100%;
+}
+
+[class*="text-[10px]"] {
+  font-size: 0.72rem !important; /* Scaled 20% */
+}
+
+[class*="text-[11px]"] {
+  font-size: 0.78rem !important; /* Scaled 20% */
 }
 
 html, body {
