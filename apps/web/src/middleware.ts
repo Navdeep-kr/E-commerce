@@ -54,6 +54,14 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(`/${session.organizationSlug}/today`, request.url));
     }
 
+    // Cross-tenant boundary protection: redirect users attempting to access another organization
+    if (orgSlug && session.organizationSlug && session.organizationSlug !== orgSlug) {
+      const isDemoSuperAdmin = session.email === 'admin@acmecommerce.com';
+      if (!isDemoSuperAdmin) {
+        return NextResponse.redirect(new URL(`/${session.organizationSlug}/today`, request.url));
+      }
+    }
+
     // Role-based route authorization checks (Exit check: Support cannot open Finance)
     const subRoute = pathParts[1];
     if (subRoute === 'finance') {

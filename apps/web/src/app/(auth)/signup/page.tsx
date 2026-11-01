@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Building2, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { Building2, ArrowRight, Loader2, AlertCircle, ShieldCheck } from 'lucide-react';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -40,83 +41,92 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md space-y-8 rounded-xl border border-border bg-card p-8 shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-12 text-black">
+      <div className="w-full max-w-md space-y-6 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            <Building2 className="h-4 w-4" /> Multi-Tenant Workspace Setup
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-bold text-orange-600 border border-orange-300">
+            <ShieldCheck className="h-4 w-4 text-orange-600" />
+            <span>Multi-Tenant Workspace Setup</span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Create Your Ops Workspace</h1>
-          <p className="text-sm text-muted-foreground">
-            Get started with your team in 2 minutes.
+          <h1 className="text-2xl font-bold tracking-tight text-black">Create Your Ops Workspace</h1>
+          <p className="text-xs text-zinc-600">
+            Get started with your entire retail operations team in 2 minutes.
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-            <AlertCircle className="h-4 w-4 shrink-0" />
+          <div className="flex items-center gap-2 rounded-lg border border-red-300 bg-white p-3 text-xs font-semibold text-red-600">
+            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSignup} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Your Full Name</label>
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-black">Your Full Name</label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="e.g. Alex Mercer"
               required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-black placeholder-zinc-400 focus:outline-none focus:border-black font-medium"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Organization / Company Name</label>
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-black">Organization / Company Name</label>
             <input
               type="text"
               value={organizationName}
               onChange={(e) => setOrganizationName(e.target.value)}
-              placeholder="e.g. Acme Commerce Labs"
+              placeholder="e.g. Peak Athletics Co."
               required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-black placeholder-zinc-400 focus:outline-none focus:border-black font-medium"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Work Email</label>
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-black">Work Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="alex@acme.com"
+              placeholder="alex@company.com"
               required
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-black placeholder-zinc-400 focus:outline-none focus:border-black font-medium"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-foreground">Password (min 8 chars)</label>
+          <div className="space-y-1">
+            <label className="text-xs font-bold text-black">Password (min 8 characters)</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+              placeholder="••••••••"
+              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs text-black placeholder-zinc-400 focus:outline-none focus:border-black font-medium"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-md bg-primary py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-black py-2.5 text-xs font-bold text-white transition-colors hover:bg-zinc-800 disabled:opacity-50 shadow-sm"
           >
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
             <span>Create Workspace</span>
           </button>
         </form>
+
+        <div className="pt-4 border-t border-zinc-100 text-center text-xs">
+          <span className="text-zinc-600">Already have an account? </span>
+          <Link href="/login" className="font-bold text-black hover:underline">
+            Sign in
+          </Link>
+        </div>
       </div>
     </div>
   );

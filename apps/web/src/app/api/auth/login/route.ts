@@ -1,11 +1,12 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { DEMO_USERS, SESSION_COOKIE_NAME, encodeSessionToken } from '@/lib/auth/session';
+import { db } from '@storefront-ops/db';
+import { DEMO_USERS, SESSION_COOKIE_NAME, encodeSessionToken, type UserSession } from '@/lib/auth/session';
 import { RateLimiter } from '@/lib/auth/rate-limiter';
 
 const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(1, 'Password is required'),
   role: z.string().optional(),
 });
 
@@ -32,13 +33,38 @@ export async function POST(request: Request) {
       );
     }
 
-    // Role switcher or demo login
-    let session = Object.values(DEMO_USERS).find((u) => u.email.toLowerCase() === email.toLowerCase());
-    if (role && DEMO_USERS[role]) {
-      session = DEMO_USERS[role];
+    let session: UserSession | null = null;
+
+    // 1. Check persistent database for registered user
+    const authenticatedUser = db.authenticate(email, password);
+    if (authenticatedUser) {
+      session = {
+        userId: authenticatedUser.id,
+        email: authenticatedUser.email,
+        fullName: authenticatedUser.full_name,
+        role: authenticatedUser.role,
+        organizationId: authenticatedUser.organization_id,
+        organizationSlug: authenticatedUser.organization_slug,
+        organizationName: authenticatedUser.organization_name,
+      };
     }
 
-    if (!session && password !== 'password123') {
+    // 2. Fallback to demo users & quick role switchers
+    if (!session) {
+      if (role && DEMO_USERS[role]) {
+        session = DEMO_USERS[role];
+      } else {
+        const demoMatch = Object.values(DEMO_USERS).find(
+          (u) => u.email.toLowerCase() === email.toLowerCase()
+        );
+        if (demoMatch && password === 'password123') {
+          session = demoMatch;
+        }
+      }
+    }
+
+    // 3. Reject if invalid credentials
+    if (!session) {
       const failResult = RateLimiter.recordFailure(email);
       return NextResponse.json(
         {
@@ -48,19 +74,6 @@ export async function POST(request: Request) {
         },
         { status: 401 }
       );
-    }
-
-    if (!session) {
-      // Default to demo admin if unregistered demo email
-      session = {
-        userId: '30000000-0000-0000-0000-000000000001',
-        email,
-        fullName: email.split('@')[0],
-        role: 'owner_admin',
-        organizationId: '00000000-0000-0000-0000-000000000001',
-        organizationSlug: 'acme-commerce',
-        organizationName: 'Acme Commerce Labs',
-      };
     }
 
     RateLimiter.reset(email);
@@ -83,6 +96,6 @@ export async function POST(request: Request) {
     return response;
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Authentication failed' }, { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Sidebar } from '@/components/shell/sidebar';
 import { Topbar } from '@/components/shell/topbar';
@@ -20,8 +20,23 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   const [quickCreateOpen, setQuickCreateOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-  // Active session context (defaults to admin demo user)
-  const currentSession: UserSession = DEMO_USERS.admin;
+  // Active session context (dynamically retrieved from authenticated cookie)
+  const [currentSession, setCurrentSession] = useState<UserSession>(() => DEMO_USERS.admin);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (isMounted && data?.user) {
+          setCurrentSession(data.user);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, [orgSlug]);
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white text-black antialiased">
