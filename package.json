@@ -18,7 +18,11 @@
     "typecheck:core": "tsc --project packages/core/tsconfig.json --noEmit",
     "typecheck:web": "tsc --project apps/web/tsconfig.json --noEmit",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\""
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:migrate": "node packages/db/scripts/migrate.js",
+    "db:seed": "node packages/db/scripts/seed.js",
+    "db:reset": "node packages/db/scripts/reset.js",
+    "db:types": "node packages/db/scripts/types.js"
   },
   "devDependencies": {
     "prettier": "^3.5.0",
