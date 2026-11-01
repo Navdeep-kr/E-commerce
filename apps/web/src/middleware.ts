@@ -5,9 +5,12 @@ import { SESSION_COOKIE_NAME, parseSessionToken } from './lib/auth/session';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1. Allow public landing page, auth endpoints, and static assets
+  // 1. Allow public landing page, auth endpoints, legal pages, and static assets
   if (
     pathname === '/' ||
+    pathname === '/terms' ||
+    pathname === '/privacy' ||
+    pathname === '/dpa' ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
