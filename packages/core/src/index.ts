@@ -33,3 +33,4 @@ export * from './deployment-engine.ts';
 export * from './onboarding-service.ts';
 export * from './public-demo-service.ts';
 export * from './rollout-engine.ts';
+export * from './growth-metrics-service.ts';
