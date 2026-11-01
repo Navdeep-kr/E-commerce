@@ -1,12 +1,18 @@
 import React from 'react';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
-interface KPICardProps {
+export interface KPICardProps {
   title: string;
   value: string;
   previousValue?: string;
   changePercent?: number;
   periodLabel?: string;
+  description?: string;
+  trend?: {
+    value: number;
+    isPositive?: boolean;
+    label?: string;
+  };
   icon?: React.ReactNode;
   alert?: boolean;
   className?: string;
@@ -18,12 +24,20 @@ export function KPICard({
   previousValue,
   changePercent,
   periodLabel = 'vs previous period',
+  description,
+  trend,
   icon,
   alert = false,
   className = '',
 }: KPICardProps) {
-  const isPositive = changePercent !== undefined && changePercent > 0;
-  const isNegative = changePercent !== undefined && changePercent < 0;
+  // Support both changePercent and trend object
+  const effectiveChange = trend ? trend.value : changePercent;
+  const isPositive = trend
+    ? trend.isPositive ?? trend.value > 0
+    : changePercent !== undefined && changePercent > 0;
+  const isNegative = trend
+    ? !isPositive && trend.value !== 0
+    : changePercent !== undefined && changePercent < 0;
 
   return (
     <div
@@ -39,7 +53,7 @@ export function KPICard({
       <div className="mt-3 flex items-baseline justify-between">
         <div className="text-2xl font-bold font-mono tracking-tight text-foreground">{value}</div>
 
-        {changePercent !== undefined && (
+        {effectiveChange !== undefined && (
           <div
             className={`inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold ${
               isPositive
@@ -52,12 +66,16 @@ export function KPICard({
             {isPositive && <ArrowUpRight className="h-3 w-3" />}
             {isNegative && <ArrowDownRight className="h-3 w-3" />}
             {!isPositive && !isNegative && <Minus className="h-3 w-3" />}
-            <span>{Math.abs(changePercent)}%</span>
+            <span>{Math.abs(effectiveChange)}%</span>
           </div>
         )}
       </div>
 
-      {(previousValue || periodLabel) && (
+      {description && (
+        <div className="mt-2 text-xs text-muted-foreground">{description}</div>
+      )}
+
+      {!description && (previousValue || periodLabel) && (
         <div className="mt-2 text-[11px] text-muted-foreground">
           {previousValue && <span className="font-mono">{previousValue} </span>}
           <span>{periodLabel}</span>
@@ -66,3 +84,7 @@ export function KPICard({
     </div>
   );
 }
+
+// Export aliases for backwards compatibility with all screens
+export const KpiCard = KPICard;
+export default KPICard;
