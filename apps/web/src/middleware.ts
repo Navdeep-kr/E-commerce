@@ -13,6 +13,7 @@ export function middleware(request: NextRequest) {
     pathname === '/dpa' ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/webhooks') ||
+    pathname.startsWith('/api/integrations/shopify') ||
     pathname.startsWith('/api/v1') ||
     pathname.endsWith('/returns/portal') ||
     pathname.startsWith('/login') ||

@@ -61,6 +61,23 @@ export interface StoreIntegration {
   last_sync_at: string;
 }
 
+export type SubscriptionPlanId = 'starter' | 'growth' | 'scale';
+export type SubscriptionStatus = 'trialing' | 'active' | 'past_due' | 'canceled' | 'unpaid';
+
+export interface TenantSubscription {
+  organizationId: string;
+  planId: SubscriptionPlanId;
+  status: SubscriptionStatus;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+  trialEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  gracePeriodEnd: string | null;
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
+  isReadOnly: boolean;
+}
+
 export interface DatabaseState {
   organizations: Organization[];
   users: StoredUser[];
@@ -72,6 +89,7 @@ export interface DatabaseState {
   tasks: Task[];
   tickets: Ticket[];
   stores?: StoreIntegration[];
+  subscriptions?: Record<string, TenantSubscription>;
 }
 
 class PersistenceEngine {
@@ -340,6 +358,36 @@ class PersistenceEngine {
       },
     ];
 
+    const periodEnd = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const subscriptions: Record<string, TenantSubscription> = {
+      [defaultOrgId]: {
+        organizationId: defaultOrgId,
+        planId: 'growth',
+        status: 'active',
+        currentPeriodStart: nowIso,
+        currentPeriodEnd: periodEnd,
+        trialEnd: null,
+        cancelAtPeriodEnd: false,
+        gracePeriodEnd: null,
+        stripeCustomerId: 'cus_acme_prod',
+        stripeSubscriptionId: 'sub_growth_monthly',
+        isReadOnly: false,
+      },
+      [secondaryOrgId]: {
+        organizationId: secondaryOrgId,
+        planId: 'starter',
+        status: 'active',
+        currentPeriodStart: nowIso,
+        currentPeriodEnd: periodEnd,
+        trialEnd: null,
+        cancelAtPeriodEnd: false,
+        gracePeriodEnd: null,
+        stripeCustomerId: 'cus_acme_corp',
+        stripeSubscriptionId: 'sub_starter_monthly',
+        isReadOnly: false,
+      },
+    };
+
     return {
       organizations: [defaultOrg, secondaryOrg],
       users: demoUsers,
@@ -350,6 +398,7 @@ class PersistenceEngine {
       inventory: [],
       tasks,
       tickets: [],
+      subscriptions,
     };
   }
 
@@ -439,6 +488,23 @@ class PersistenceEngine {
         updated_at: nowIso,
       }
     );
+
+    // Initialize 14-day Growth trial subscription for new tenant
+    if (!state.subscriptions) state.subscriptions = {};
+    const trialEnd = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+    state.subscriptions[id] = {
+      organizationId: id,
+      planId: 'growth',
+      status: 'trialing',
+      currentPeriodStart: nowIso,
+      currentPeriodEnd: trialEnd,
+      trialEnd,
+      cancelAtPeriodEnd: false,
+      gracePeriodEnd: null,
+      stripeCustomerId: `cus_${id.slice(0, 10)}`,
+      stripeSubscriptionId: `sub_trial_${id.slice(0, 8)}`,
+      isReadOnly: false,
+    };
 
     this.save();
     return org;
@@ -636,6 +702,62 @@ class PersistenceEngine {
       return true;
     }
     return false;
+  }
+
+  // -------------------------------------------------------------
+  // Subscription & Billing Operations
+  // -------------------------------------------------------------
+  public getSubscription(organizationId: string): TenantSubscription {
+    const state = this.ensureLoaded();
+    if (!state.subscriptions) state.subscriptions = {};
+    if (!state.subscriptions[organizationId]) {
+      const now = new Date();
+      const periodEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      state.subscriptions[organizationId] = {
+        organizationId,
+        planId: 'growth',
+        status: 'active',
+        currentPeriodStart: now.toISOString(),
+        currentPeriodEnd: periodEnd.toISOString(),
+        trialEnd: null,
+        cancelAtPeriodEnd: false,
+        gracePeriodEnd: null,
+        stripeCustomerId: `cus_${organizationId.slice(0, 10)}`,
+        stripeSubscriptionId: `sub_growth_${organizationId.slice(0, 8)}`,
+        isReadOnly: false,
+      };
+      this.save();
+    }
+    return state.subscriptions[organizationId];
+  }
+
+  public updateSubscription(
+    organizationId: string,
+    updates: Partial<TenantSubscription>
+  ): TenantSubscription {
+    const current = this.getSubscription(organizationId);
+    const updated: TenantSubscription = { ...current, ...updates };
+    const state = this.ensureLoaded();
+    if (!state.subscriptions) state.subscriptions = {};
+    state.subscriptions[organizationId] = updated;
+    this.save();
+    return updated;
+  }
+
+  public getUsageMetrics(organizationId: string): {
+    monthlyOrdersUsed: number;
+    activeSkusCount: number;
+    teamSeatsUsed: number;
+  } {
+    const state = this.ensureLoaded();
+    const ordersCount = state.orders.filter((o) => o.organization_id === organizationId).length;
+    const skusCount = state.inventory.filter((i) => i.organization_id === organizationId).length || 380;
+    const seatsCount = state.users.filter((u) => u.organization_id === organizationId).length || 1;
+    return {
+      monthlyOrdersUsed: ordersCount,
+      activeSkusCount: skusCount,
+      teamSeatsUsed: seatsCount,
+    };
   }
 }
 

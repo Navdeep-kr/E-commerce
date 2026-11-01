@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import {
   Plug,
   CheckCircle2,
@@ -21,12 +21,14 @@ import {
   X,
   Plus,
   Trash2,
+  Loader2,
 } from 'lucide-react';
 import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 
-export default function IntegrationsPage() {
+function IntegrationsContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const orgSlug = (params?.orgSlug as string) || 'acme-commerce';
 
   const [activeTab, setActiveTab] = useState<'connections' | 'dlq' | 'simulation'>('connections');
@@ -67,7 +69,11 @@ export default function IntegrationsPage() {
 
   useEffect(() => {
     fetchStatus();
-  }, []);
+    if (searchParams.get('connected') === 'shopify') {
+      const shop = searchParams.get('shop') || 'Shopify Store';
+      showToast(`🎉 Successfully installed and connected ${shop} via Shopify Partner App OAuth!`);
+    }
+  }, [searchParams]);
 
   const handleConnectStore = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -542,6 +548,30 @@ export default function IntegrationsPage() {
 
               {modalPlatform === 'shopify' && (
                 <>
+                  <div className="rounded-lg border border-zinc-200 bg-white p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-black">1-Click Shopify App Install (OAuth)</span>
+                      <span className="text-[10px] font-bold text-green-700 bg-white px-2 py-0.5 rounded border border-green-300">Recommended</span>
+                    </div>
+                    <p className="text-[11px] text-zinc-600">
+                      Installs the Storefront Ops partner app into your store with automatic order & inventory webhooks.
+                    </p>
+                    <a
+                      href={`/api/integrations/shopify/authorize?shop=${encodeURIComponent(shopDomain || 'my-store.myshopify.com')}&demo=true`}
+                      className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
+                    >
+                      <Plug className="h-4 w-4 text-white" />
+                      <span>Install & Authorize App via Shopify</span>
+                      <ArrowRight className="h-3.5 w-3.5 text-white" />
+                    </a>
+                  </div>
+
+                  <div className="relative flex py-1 items-center">
+                    <div className="flex-grow border-t border-zinc-200"></div>
+                    <span className="flex-shrink mx-2 text-[10px] font-bold text-zinc-500 uppercase">Or Connect Manually</span>
+                    <div className="flex-grow border-t border-zinc-200"></div>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-black mb-1">
                       Shopify Domain (.myshopify.com)
@@ -645,5 +675,19 @@ export default function IntegrationsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function IntegrationsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-64 items-center justify-center bg-white text-black">
+          <Loader2 className="h-6 w-6 animate-spin text-black" />
+        </div>
+      }
+    >
+      <IntegrationsContent />
+    </Suspense>
   );
 }

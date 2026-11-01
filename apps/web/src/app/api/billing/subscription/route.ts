@@ -1,45 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { db } from '@storefront-ops/db';
 import {
   BillingService,
   SUBSCRIPTION_PLANS,
   type TenantSubscription,
   type UsageMetrics,
 } from '@storefront-ops/core';
+import { SESSION_COOKIE_NAME, parseSessionToken } from '@/lib/auth/session';
 
 const billingService = new BillingService();
 
-// Mock store subscription state
-let mockSubscription: TenantSubscription = {
-  organizationId: 'acme-corp',
-  planId: 'growth',
-  status: 'active',
-  currentPeriodStart: '2026-11-01T00:00:00Z',
-  currentPeriodEnd: '2026-12-01T00:00:00Z',
-  trialEnd: null,
-  cancelAtPeriodEnd: false,
-  gracePeriodEnd: null,
-  stripeCustomerId: 'cus_acme_prod',
-  stripeSubscriptionId: 'sub_growth_monthly',
-  isReadOnly: false,
-};
-
-const mockUsage: UsageMetrics = {
-  monthlyOrdersUsed: 1420,
-  activeSkusCount: 380,
-  teamSeatsUsed: 4,
-};
-
 export async function GET(_req: NextRequest) {
-  const plan = SUBSCRIPTION_PLANS[mockSubscription.planId];
+  const cookieStore = await cookies();
+  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const session = parseSessionToken(token);
+  const orgId = session?.organizationId || 'org-acme-prod';
 
-  const orderQuota = billingService.checkQuota(mockSubscription, mockUsage, 'orders', 0);
-  const skuQuota = billingService.checkQuota(mockSubscription, mockUsage, 'skus', 0);
-  const seatQuota = billingService.checkQuota(mockSubscription, mockUsage, 'seats', 0);
+  const rawSub = db.getSubscription(orgId);
+  const subscription: TenantSubscription = {
+    organizationId: rawSub.organizationId,
+    planId: rawSub.planId,
+    status: rawSub.status,
+    currentPeriodStart: rawSub.currentPeriodStart,
+    currentPeriodEnd: rawSub.currentPeriodEnd,
+    trialEnd: rawSub.trialEnd,
+    cancelAtPeriodEnd: rawSub.cancelAtPeriodEnd,
+    gracePeriodEnd: rawSub.gracePeriodEnd,
+    stripeCustomerId: rawSub.stripeCustomerId,
+    stripeSubscriptionId: rawSub.stripeSubscriptionId,
+    isReadOnly: rawSub.isReadOnly,
+  };
+
+  const usage: UsageMetrics = db.getUsageMetrics(orgId);
+  const plan = SUBSCRIPTION_PLANS[subscription.planId];
+
+  const orderQuota = billingService.checkQuota(subscription, usage, 'orders', 0);
+  const skuQuota = billingService.checkQuota(subscription, usage, 'skus', 0);
+  const seatQuota = billingService.checkQuota(subscription, usage, 'seats', 0);
 
   return NextResponse.json({
-    subscription: mockSubscription,
+    subscription,
     plan,
-    usage: mockUsage,
+    usage,
     quotas: {
       orders: orderQuota,
       skus: skuQuota,
