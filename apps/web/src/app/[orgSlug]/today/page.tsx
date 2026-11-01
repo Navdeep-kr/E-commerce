@@ -15,9 +15,11 @@ import {
   Clock,
   ArrowRight,
   Filter,
+  Sparkles,
 } from 'lucide-react';
 import { KPICard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
+import { OnboardingBanner } from '@/components/shell/onboarding-banner';
 import { MoneyMath } from '@storefront-ops/core';
 
 export default function TodayDashboardPage() {
@@ -37,7 +39,7 @@ export default function TodayDashboardPage() {
       count: 12,
       subtext: '4 orders near carrier cutoff',
       href: `/${orgSlug}/fulfillment`,
-      variant: 'warning',
+      badgeColor: 'text-orange-600 bg-white border border-orange-300',
       icon: Truck,
     },
     {
@@ -45,8 +47,8 @@ export default function TodayDashboardPage() {
       title: 'Orders on fraud/risk hold',
       count: 4,
       subtext: 'Billing address mismatch',
-      href: `/${orgSlug}/orders?filter=on_hold`,
-      variant: 'danger',
+      href: `/${orgSlug}/orders`,
+      badgeColor: 'text-red-600 bg-white border border-red-300',
       icon: AlertOctagon,
     },
     {
@@ -54,8 +56,8 @@ export default function TodayDashboardPage() {
       title: 'Low stock alerts',
       count: 5,
       subtext: 'Projected stockout < 4 days',
-      href: `/${orgSlug}/inventory?filter=low_stock`,
-      variant: 'danger',
+      href: `/${orgSlug}/inventory`,
+      badgeColor: 'text-red-600 bg-white border border-red-300',
       icon: Boxes,
     },
     {
@@ -63,8 +65,8 @@ export default function TodayDashboardPage() {
       title: 'Tickets near SLA breach',
       count: 3,
       subtext: 'Over 3h since inquiry',
-      href: `/${orgSlug}/support?filter=sla_breaching`,
-      variant: 'warning',
+      href: `/${orgSlug}/support`,
+      badgeColor: 'text-orange-600 bg-white border border-orange-300',
       icon: Headphones,
     },
   ];
@@ -77,26 +79,32 @@ export default function TodayDashboardPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white text-black">
       {/* Top Header & Period Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Today's Operations Command</h1>
-          <p className="text-xs text-muted-foreground">
-            What needs attention across sales, warehouse, inventory, and support today.
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Operations Command</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-green-700 border border-green-300">
+              Live Engine Active
+            </span>
+          </div>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Today's Operations Command</h1>
+          <p className="text-xs text-zinc-600">
+            Real-time attention queue across sales, warehouse, inventory, and support.
           </p>
         </div>
 
         {/* Period Selector Tabs */}
-        <div className="inline-flex rounded-lg border border-border bg-card p-1 text-xs shadow-sm self-start sm:self-auto">
+        <div className="inline-flex rounded-lg border border-zinc-200 bg-white p-1 text-xs shadow-xs self-start sm:self-auto gap-1">
           {(['today', '7d', '30d'] as const).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`rounded-md px-3 py-1 font-medium transition-colors ${
+              className={`rounded-md px-3 py-1 font-bold transition-colors ${
                 period === p
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:text-foreground'
+                  ? 'bg-black text-white shadow-xs'
+                  : 'text-zinc-600 hover:text-black hover:bg-zinc-50'
               }`}
             >
               {p === 'today' ? 'Today' : p === '7d' ? 'Last 7 Days' : 'Last 30 Days'}
@@ -104,6 +112,12 @@ export default function TodayDashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* Onboarding Checklist for newly launched and active stores */}
+      <OnboardingBanner
+        orgSlug={orgSlug}
+        orgName={orgSlug === 'acme-commerce' ? 'Acme Commerce Labs' : orgSlug === 'acme-corp' ? 'Acme Corp' : orgSlug.replace(/-/g, ' ').toUpperCase()}
+      />
 
       {/* Primary KPI Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -131,51 +145,50 @@ export default function TodayDashboardPage() {
           title="Return Rate"
           value="1.4%"
           changePercent={-0.6}
-          icon={<CheckCircle2 className="h-4 w-4 text-emerald-500" />}
+          icon={<CheckCircle2 className="h-4 w-4 text-green-600" />}
         />
       </div>
 
       {/* Priority Action Queue */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold tracking-tight text-foreground flex items-center gap-2">
+          <h2 className="text-sm font-bold tracking-tight text-black flex items-center gap-2 uppercase">
             <span>Action Queue (Needs Attention Now)</span>
-            <span className="rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-bold px-2 py-0.5">
+            <span className="rounded-full bg-white border border-red-300 text-red-600 text-[10px] font-bold px-2 py-0.5">
               24 items
             </span>
           </h2>
-          <span className="text-xs text-muted-foreground">Click card to open filtered view</span>
+          <span className="text-xs text-zinc-500 font-medium">Click card to open filtered view</span>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {actionQueue.map((item) => {
-            const IconC = item.icon;
+            const Icon = item.icon;
             return (
               <Link
                 key={item.id}
                 href={item.href}
-                className="group relative flex flex-col justify-between rounded-xl border border-border bg-card p-4 transition-all hover:border-primary/50 hover:shadow-md"
+                className="group rounded-xl border border-zinc-200 bg-white p-4 shadow-sm hover:border-black transition-all flex flex-col justify-between space-y-3"
               >
-                <div>
-                  <div className="flex items-center justify-between text-muted-foreground mb-2">
-                    <IconC className="h-4 w-4 group-hover:text-primary transition-colors" />
-                    <span
-                      className={`text-lg font-bold font-mono ${
-                        item.variant === 'danger' ? 'text-rose-500' : 'text-amber-500'
-                      }`}
-                    >
-                      {item.count}
-                    </span>
+                <div className="flex items-center justify-between">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 text-black group-hover:bg-black group-hover:text-white transition-colors">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <h3 className="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {item.title}
-                  </h3>
-                  <p className="mt-1 text-[11px] text-muted-foreground">{item.subtext}</p>
+                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold font-mono ${item.badgeColor}`}>
+                    {item.count}
+                  </span>
                 </div>
 
-                <div className="mt-3 flex items-center gap-1 text-[11px] font-medium text-primary">
+                <div>
+                  <h3 className="text-xs font-bold text-black group-hover:text-black">
+                    {item.title}
+                  </h3>
+                  <p className="text-[11px] text-zinc-500 mt-0.5 font-medium">{item.subtext}</p>
+                </div>
+
+                <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-[11px] font-bold text-black">
                   <span>Take action</span>
-                  <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>
             );
@@ -183,73 +196,91 @@ export default function TodayDashboardPage() {
         </div>
       </div>
 
-      {/* Lower Dashboard Grid: Activity Stream & Channel Performance */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Recent Real-Time Activity Feed */}
-        <div className="lg:col-span-2 rounded-xl border border-border bg-card p-5 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between border-b border-border pb-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-              <Clock className="h-3.5 w-3.5 text-primary" />
-              <span>Streaming Event Log</span>
-            </h3>
-            <span className="text-[11px] text-emerald-500 font-medium flex items-center gap-1.5">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              Realtime Active
+      {/* Two-Column Section: Operational Feed & Store Health */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left: Recent Activity Feed (7 cols) */}
+        <div className="lg:col-span-7 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm space-y-4">
+          <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-black">Live Operations Stream</h2>
+            <span className="flex items-center gap-1.5 text-xs text-green-700 font-bold">
+              <span className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></span>
+              Live Sync Active
             </span>
           </div>
 
-          <div className="divide-y divide-border/60">
+          <div className="divide-y divide-zinc-100">
             {recentActivity.map((act) => (
-              <div key={act.id} className="flex items-center justify-between py-3 text-xs">
+              <div key={act.id} className="py-3 flex items-center justify-between text-xs">
                 <div className="space-y-0.5">
-                  <div className="font-medium text-foreground">{act.title}</div>
-                  <div className="text-[11px] text-muted-foreground">{act.sub}</div>
+                  <p className="font-bold text-black">{act.title}</p>
+                  <p className="text-[11px] text-zinc-500">{act.sub}</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <StatusPill status={act.status} />
-                  <span className="text-[11px] text-muted-foreground font-mono">{act.time}</span>
+                <div className="text-right space-y-1">
+                  <StatusPill status={act.status as any} />
+                  <p className="text-[10px] text-zinc-500 font-medium">{act.time}</p>
                 </div>
               </div>
             ))}
           </div>
+
+          <div className="pt-2 border-t border-zinc-100 flex justify-end">
+            <Link
+              href={`/${orgSlug}/orders`}
+              className="text-xs font-bold text-black hover:underline flex items-center gap-1"
+            >
+              <span>View all orders &amp; events</span>
+              <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
         </div>
 
-        {/* Channel Breakdown Card */}
-        <div className="rounded-xl border border-border bg-card p-5 space-y-4 shadow-sm">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border pb-3">
-            Sales by Channel
-          </h3>
-
-          <div className="space-y-3 text-xs">
-            <div>
-              <div className="flex justify-between font-medium text-foreground pb-1">
-                <span>Shopify Direct Store</span>
-                <span className="font-mono">72%</span>
-              </div>
-              <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                <div className="h-full bg-primary rounded-full" style={{ width: '72%' }} />
-              </div>
+        {/* Right: Quick Operational Links & Warehouse Status (5 cols) */}
+        <div className="lg:col-span-5 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm space-y-4 flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="border-b border-zinc-200 pb-3 flex items-center justify-between">
+              <h2 className="text-sm font-bold uppercase tracking-wider text-black">Fast Execution Hub</h2>
+              <span className="text-[10px] font-mono font-bold text-zinc-500">Sub-5ms Latency</span>
             </div>
 
-            <div>
-              <div className="flex justify-between font-medium text-foreground pb-1">
-                <span>WooCommerce UK</span>
-                <span className="font-mono">21%</span>
-              </div>
-              <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                <div className="h-full bg-blue-500 rounded-full" style={{ width: '21%' }} />
-              </div>
-            </div>
+            <div className="space-y-2">
+              <Link
+                href={`/${orgSlug}/fulfillment`}
+                className="flex items-center justify-between p-3 rounded-lg border border-zinc-200 hover:border-black bg-white transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Truck className="h-4 w-4 text-black" />
+                  <span className="text-xs font-bold text-black">Launch Warehouse Pack Station</span>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-zinc-400" />
+              </Link>
 
-            <div>
-              <div className="flex justify-between font-medium text-foreground pb-1">
-                <span>Direct Manual / Wholesale</span>
-                <span className="font-mono">7%</span>
-              </div>
-              <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: '7%' }} />
-              </div>
+              <Link
+                href={`/${orgSlug}/orders/new`}
+                className="flex items-center justify-between p-3 rounded-lg border border-zinc-200 hover:border-black bg-white transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShoppingCart className="h-4 w-4 text-black" />
+                  <span className="text-xs font-bold text-black">Create Manual B2B / Phone Order</span>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-zinc-400" />
+              </Link>
+
+              <Link
+                href={`/${orgSlug}/returns`}
+                className="flex items-center justify-between p-3 rounded-lg border border-zinc-200 hover:border-black bg-white transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Boxes className="h-4 w-4 text-black" />
+                  <span className="text-xs font-bold text-black">Scan Inbound RMA Return Label</span>
+                </div>
+                <ArrowRight className="h-3.5 w-3.5 text-zinc-400" />
+              </Link>
             </div>
+          </div>
+
+          <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-500 font-medium">
+            <span>Next carrier cutoff: 4:00 PM EST</span>
+            <span className="font-bold text-black">USPS &amp; UPS</span>
           </div>
         </div>
       </div>

@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
+import { EmptyState } from '@/components/ui/empty-state';
 import { CustomerService, type CustomerProfile, type RfmScores } from '@storefront-ops/core';
 
 interface EnrichedCustomer extends CustomerProfile {
@@ -262,7 +263,26 @@ export default function CustomersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200 font-medium bg-white">
-              {filteredCustomers.map((c) => (
+              {filteredCustomers.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="py-8 bg-white">
+                    <EmptyState
+                      icon={Users}
+                      title="No Customer Profiles Found"
+                      description="Customer profiles, RFM segments, and lifetime spend metrics are automatically created as orders are ingested from your connected channels."
+                      primaryAction={{
+                        label: 'Connect Sales Channel',
+                        href: `/${orgSlug}/integrations`,
+                      }}
+                      secondaryAction={{
+                        label: 'Create Manual Order',
+                        href: `/${orgSlug}/orders/new`,
+                      }}
+                    />
+                  </td>
+                </tr>
+              ) : (
+                filteredCustomers.map((c) => (
                 <tr key={c.id} className="hover:bg-zinc-50 transition-colors bg-white">
                   <td className="py-3.5 px-4 font-bold text-black">
                     <Link

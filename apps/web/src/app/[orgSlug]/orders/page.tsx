@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { DataTable, type Column } from '@/components/ui/data-table';
 import { StatusPill } from '@/components/ui/status-pill';
+import { EmptyState } from '@/components/ui/empty-state';
 import { MoneyMath } from '@storefront-ops/core';
 
 interface OrderRow {
@@ -146,63 +147,69 @@ export default function OrdersPage() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white text-black">
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Orders Management</h1>
-          <p className="text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Omnichannel Sales</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-green-700 border border-green-300">
+              Live Ingest Active
+            </span>
+          </div>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Orders Management</h1>
+          <p className="text-xs text-zinc-600">
             Move every order from placed to delivered with live tracking, stock reservation, and zero dropped steps.
           </p>
         </div>
 
         <Link
           href={`/${orgSlug}/orders/new`}
-          className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm self-start sm:self-auto"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm self-start sm:self-auto"
         >
           <Plus className="h-3.5 w-3.5" />
-          <span>Create Order</span>
+          <span>Create Manual Order</span>
         </Link>
       </div>
 
       {/* Saved Views Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-border pb-2 text-xs overflow-x-auto">
+      <div className="flex items-center gap-2 border-b border-zinc-200 pb-2 text-xs overflow-x-auto">
         <button
           onClick={() => setActiveTab('all')}
-          className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+          className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
             activeTab === 'all'
-              ? 'bg-muted text-foreground font-semibold'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'bg-black text-white'
+              : 'bg-white text-black border border-zinc-200 hover:bg-zinc-50'
           }`}
         >
           All Orders
         </button>
         <button
           onClick={() => setActiveTab('unfulfilled')}
-          className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+          className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
             activeTab === 'unfulfilled'
-              ? 'bg-muted text-foreground font-semibold'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'bg-black text-white'
+              : 'bg-white text-black border border-zinc-200 hover:bg-zinc-50'
           }`}
         >
           Ready to Pack (12)
         </button>
         <button
           onClick={() => setActiveTab('on_hold')}
-          className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+          className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
             activeTab === 'on_hold'
-              ? 'bg-muted text-foreground font-semibold'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'bg-black text-white'
+              : 'bg-white text-black border border-zinc-200 hover:bg-zinc-50'
           }`}
         >
           Fraud Holds (4)
         </button>
         <button
           onClick={() => setActiveTab('shipped')}
-          className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+          className={`px-3 py-1.5 rounded-lg font-bold transition-colors ${
             activeTab === 'shipped'
-              ? 'bg-muted text-foreground font-semibold'
-              : 'text-muted-foreground hover:text-foreground'
+              ? 'bg-black text-white'
+              : 'bg-white text-black border border-zinc-200 hover:bg-zinc-50'
           }`}
         >
           Shipped &amp; Delivered
@@ -215,6 +222,21 @@ export default function OrdersPage() {
         columns={columns}
         searchPlaceholder="Search by order #, customer, or email..."
         searchKey="orderNumber"
+        emptyState={
+          <EmptyState
+            icon={ShoppingCart}
+            title="No Orders Found"
+            description="Your store hasn't received any orders matching this view. Connect your Shopify or WooCommerce store to ingest live orders automatically, or create a manual order."
+            primaryAction={{
+              label: 'Create Manual Order',
+              href: `/${orgSlug}/orders/new`,
+            }}
+            secondaryAction={{
+              label: 'Connect Sales Channel',
+              href: `/${orgSlug}/integrations`,
+            }}
+          />
+        }
         bulkActions={[
           {
             label: 'Print Packing Slips',

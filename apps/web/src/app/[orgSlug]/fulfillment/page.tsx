@@ -23,6 +23,7 @@ import {
 import { KPICard as KpiCard } from '@/components/ui/kpi-card';
 import { StatusPill } from '@/components/ui/status-pill';
 import { DataTable, type Column } from '@/components/ui/data-table';
+import { EmptyState } from '@/components/ui/empty-state';
 import { FulfillmentService, type PickItem, type BackorderRecord } from '@storefront-ops/core';
 
 interface SlaOrder {
@@ -352,7 +353,26 @@ export default function FulfillmentPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60 font-medium">
-                {filteredOrders.map((o) => (
+                {filteredOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="py-8 bg-white">
+                      <EmptyState
+                        icon={Truck}
+                        title="All Caught Up! Zero Orders In Queue"
+                        description="There are currently no orders waiting in the picking or packing queue. New orders from connected storefronts will automatically route here."
+                        primaryAction={{
+                          label: 'Launch Pack Station Scanner',
+                          href: `/${orgSlug}/fulfillment/pack-station`,
+                        }}
+                        secondaryAction={{
+                          label: 'View Order History',
+                          href: `/${orgSlug}/orders`,
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ) : (
+                  filteredOrders.map((o) => (
                   <tr key={o.id} className="hover:bg-zinc-800/30 transition-colors">
                     <td className="py-3.5 px-4 font-mono font-semibold text-indigo-400">
                       <Link href={`/${orgSlug}/orders/${o.id}`} className="hover:underline">

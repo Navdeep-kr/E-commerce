@@ -17,6 +17,7 @@ import {
 import { DataTable, type Column } from '@/components/ui/data-table';
 import { StatusPill } from '@/components/ui/status-pill';
 import { BarcodeScannerModal } from '@/components/ui/barcode-scanner-modal';
+import { EmptyState } from '@/components/ui/empty-state';
 
 interface StockItem {
   id: string;
@@ -252,29 +253,35 @@ export default function InventoryPage() {
       )}
 
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 pb-4 gap-4 bg-white text-black">
         <div>
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Multi-Location Inventory</h1>
-          <p className="text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Inventory &amp; Stock</span>
+            <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold text-green-700 border border-green-300">
+              Append-Only Ledger Active
+            </span>
+          </div>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-black">Multi-Location Inventory</h1>
+          <p className="text-xs text-zinc-600">
             Real-time available-to-promise calculations, stockout prevention, and immutable movement ledger.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
           <button
             onClick={() => setScannerOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground hover:bg-muted transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-xs font-bold text-black hover:bg-zinc-50 transition-colors shadow-xs"
           >
-            <ScanBarcode className="h-3.5 w-3.5 text-primary" />
+            <ScanBarcode className="h-3.5 w-3.5 text-black" />
             <span>Barcode Scanner</span>
           </button>
 
           <Link
             href={`/${orgSlug}/inventory/cycle-count`}
-            className="inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-xs font-bold text-white hover:bg-zinc-800 transition-colors shadow-sm"
           >
             <Boxes className="h-3.5 w-3.5" />
-            <span>Cycle Count</span>
+            <span>Launch Cycle Count</span>
           </Link>
         </div>
       </div>
@@ -285,6 +292,21 @@ export default function InventoryPage() {
         columns={columns}
         searchPlaceholder="Filter by SKU or variant title..."
         searchKey="sku"
+        emptyState={
+          <EmptyState
+            icon={Boxes}
+            title="No Stock Tracked Yet"
+            description="Your inventory ledger currently has zero tracked SKUs. Import your catalog from Shopify or WooCommerce, or add manual items with bin locations."
+            primaryAction={{
+              label: 'Import Catalog SKUs',
+              href: `/${orgSlug}/catalog`,
+            }}
+            secondaryAction={{
+              label: 'Launch Cycle Count',
+              href: `/${orgSlug}/inventory/cycle-count`,
+            }}
+          />
+        }
       />
 
       {/* Barcode Scanner Modal */}
