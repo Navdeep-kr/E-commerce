@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Rocket,
   ShieldCheck,
@@ -26,8 +27,9 @@ interface BatchResult {
   durationMs: number;
 }
 
-export default function StagedLaunchPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params?.orgSlug || 'acme-corp';
+export default function StagedLaunchPage() {
+  const params = useParams();
+  const orgSlug = (params?.orgSlug as string) || 'acme-commerce';
 
   const [currentStage, setCurrentStage] = useState<'ALPHA' | 'BETA' | 'GA'>('GA');
   const [isRunningBatch, setIsRunningBatch] = useState<boolean>(false);

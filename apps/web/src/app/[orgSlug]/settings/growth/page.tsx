@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   TrendingUp,
   DollarSign,
@@ -21,8 +22,9 @@ import {
   Cpu
 } from 'lucide-react';
 
-export default function GrowthDashboardPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params?.orgSlug || 'acme-corp';
+export default function GrowthDashboardPage() {
+  const params = useParams();
+  const orgSlug = (params?.orgSlug as string) || 'acme-commerce';
 
   const [activeTab, setActiveTab] = useState<'metrics' | 'rhythm' | 'roadmap'>('metrics');
 

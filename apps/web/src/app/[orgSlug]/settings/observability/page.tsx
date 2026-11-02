@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   Activity,
   AlertTriangle,
@@ -31,8 +32,9 @@ interface SimulationResult {
   latencyMs: number;
 }
 
-export default function ObservabilityDashboardPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params?.orgSlug || 'acme-corp';
+export default function ObservabilityDashboardPage() {
+  const params = useParams();
+  const orgSlug = (params?.orgSlug as string) || 'acme-commerce';
 
   const [activeTab, setActiveTab] = useState<'overview' | 'runbooks' | 'simulator'>('overview');
   const [isSimulating, setIsSimulating] = useState(false);

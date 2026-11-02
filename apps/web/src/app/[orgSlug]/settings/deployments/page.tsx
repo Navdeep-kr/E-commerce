@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useParams } from 'next/navigation';
 import {
   GitCommit,
   Rocket,
@@ -27,8 +28,9 @@ interface DeploymentLog {
   type: 'info' | 'warn' | 'success' | 'rollback';
 }
 
-export default function DeploymentsPage({ params }: { params: { orgSlug: string } }) {
-  const orgSlug = params?.orgSlug || 'acme-corp';
+export default function DeploymentsPage() {
+  const params = useParams();
+  const orgSlug = (params?.orgSlug as string) || 'acme-commerce';
 
   const [activeSlot, setActiveSlot] = useState<'primary' | 'canary'>('primary');
   const [canaryPercent, setCanaryPercent] = useState<number>(0);
