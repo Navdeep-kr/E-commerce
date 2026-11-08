@@ -102,7 +102,7 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] max-w-7xl mx-auto p-4 md:p-6 space-y-4 bg-white text-black min-h-screen">
+    <div className="flex flex-col h-[calc(100vh-4rem)] w-full p-2 sm:p-4 space-y-4 bg-white text-black min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-3 bg-white">
         <div>

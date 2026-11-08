@@ -7,7 +7,7 @@ import { Layers, ArrowRight } from 'lucide-react';
 export function PublicNav() {
   return (
     <nav className="border-b border-zinc-200 bg-white/90 backdrop-blur-md sticky top-0 z-50 text-black">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
             SO

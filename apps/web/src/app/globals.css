@@ -50,9 +50,14 @@
 /* ============================================================ */
 
 html {
-  zoom: 0.85; /* Balanced, readable dashboard viewport zoom */
   font-size: 19.32px; /* 15% bigger font size (16.8px * 1.15 = 19.32px) */
   -webkit-text-size-adjust: 100%;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 [class*="text-[10px]"] {
@@ -75,7 +80,18 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+/* 100% full screen fluid width coverage across mobile, tablet, laptop, and desktop */
+#__next,
+[data-nextjs-scroll-focus-boundary],
+main {
+  width: 100%;
+  min-width: 100%;
 }
 
 /* 1. Force EVERY single container, card, panel, table, row, column to be 100% white */

@@ -7,7 +7,7 @@ import { ShieldCheck, CheckCircle2 } from 'lucide-react';
 export function PublicFooter() {
   return (
     <footer className="border-t border-zinc-200 bg-white text-black py-12 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+      <div className="w-full px-6 sm:px-10 lg:px-16 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs">
@@ -59,7 +59,7 @@ export function PublicFooter() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-3">
+      <div className="w-full px-6 sm:px-10 lg:px-16 pt-6 border-t border-zinc-100 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 gap-3">
         <div>&copy; {new Date().getFullYear()} Storefront Ops Inc. All rights reserved.</div>
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-green-500 inline-block animate-pulse"></span>

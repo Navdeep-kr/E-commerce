@@ -103,8 +103,8 @@ export default function MarketingLandingPage() {
       <PublicNav />
 
       {/* Hero Section */}
-      <section className="relative px-6 pt-16 pb-20 border-b border-zinc-200 bg-white">
-        <div className="max-w-5xl mx-auto text-center space-y-6">
+      <section className="relative w-full px-4 sm:px-8 lg:px-16 pt-16 pb-20 border-b border-zinc-200 bg-white">
+        <div className="w-full max-w-6xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-orange-300 bg-white px-3 py-1 text-xs font-bold text-orange-600 shadow-xs">
             <span className="flex h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
             <span>v2.4 GA Production Ready • Omnichannel Retail Engine</span>
@@ -146,8 +146,8 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Interactive Microsecond Lifecycle Simulator */}
-      <section id="demo" className="py-20 px-6 border-b border-zinc-200 bg-white">
-        <div className="max-w-5xl mx-auto space-y-8">
+      <section id="demo" className="py-20 w-full px-4 sm:px-8 lg:px-16 border-b border-zinc-200 bg-white">
+        <div className="w-full max-w-7xl mx-auto space-y-8">
           <div className="text-center space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Engine Benchmark</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
@@ -207,8 +207,8 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Core Features Grid */}
-      <section id="features" className="py-20 px-6 border-b border-zinc-200 bg-white">
-        <div className="max-w-6xl mx-auto space-y-12">
+      <section id="features" className="py-20 w-full px-4 sm:px-8 lg:px-16 border-b border-zinc-200 bg-white">
+        <div className="w-full max-w-7xl mx-auto space-y-12">
           <div className="text-center space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Enterprise Capabilities</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
@@ -284,8 +284,8 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Pricing Matrix & ROI Calculator */}
-      <section id="pricing" className="py-20 px-6 border-b border-zinc-200 bg-white">
-        <div className="max-w-5xl mx-auto space-y-12">
+      <section id="pricing" className="py-20 w-full px-4 sm:px-8 lg:px-16 border-b border-zinc-200 bg-white">
+        <div className="w-full max-w-7xl mx-auto space-y-12">
           <div className="text-center space-y-2">
             <span className="text-xs font-bold uppercase tracking-wider text-orange-600">Transparent Pricing</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
@@ -423,8 +423,8 @@ export default function MarketingLandingPage() {
       </section>
 
       {/* Call to Action Banner */}
-      <section className="py-16 px-6 bg-white border-b border-zinc-200 text-center">
-        <div className="max-w-3xl mx-auto space-y-4">
+      <section className="py-16 w-full px-4 sm:px-8 lg:px-16 bg-white border-b border-zinc-200 text-center">
+        <div className="w-full max-w-5xl mx-auto space-y-4">
           <h2 className="text-3xl font-black text-black tracking-tight">Ready to streamline your e-commerce operations?</h2>
           <p className="text-xs text-zinc-600 font-medium">
             Join enterprise retailers fulfilling millions in orders with zero oversell, automated wave picking, and double-entry precision.

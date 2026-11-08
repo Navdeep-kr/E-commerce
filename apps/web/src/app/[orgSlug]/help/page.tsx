@@ -251,7 +251,7 @@ export default function HelpCenterPage() {
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8 bg-white min-h-screen text-black">
+    <div className="w-full space-y-8 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-200 pb-6">
         <div>

@@ -108,7 +108,7 @@ export default function CreateOrderPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12">
+    <div className="space-y-6 w-full pb-12">
       {/* Top Header */}
       <div className="flex items-center gap-3">
         <Link

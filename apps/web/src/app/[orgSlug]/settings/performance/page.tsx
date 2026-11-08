@@ -103,7 +103,7 @@ export default function PerformancePage() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4 md:p-8 space-y-8 bg-white min-h-screen text-black">
+    <div className="w-full p-4 md:p-8 space-y-8 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>

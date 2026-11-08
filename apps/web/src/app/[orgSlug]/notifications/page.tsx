@@ -109,7 +109,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8 space-y-6 bg-white min-h-screen text-black">
+    <div className="w-full space-y-6 bg-white min-h-screen text-black">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-zinc-200 pb-4 gap-4">
         <div>

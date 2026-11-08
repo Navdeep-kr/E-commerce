@@ -39,12 +39,12 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   }, [orgSlug]);
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white text-black antialiased">
+    <div className="flex h-screen w-full min-w-full overflow-hidden bg-white text-black antialiased">
       {/* Collapsible Left Sidebar */}
       <Sidebar orgSlug={orgSlug} role={currentSession.role} orgName={currentSession.organizationName} />
 
       {/* Main Workspace Column */}
-      <div className="flex flex-1 flex-col overflow-hidden bg-white">
+      <div className="flex flex-1 flex-col overflow-hidden bg-white w-full min-w-0">
         {/* Top Header Bar */}
         <Topbar
           session={currentSession}
@@ -53,8 +53,8 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
           onOpenQuickCreate={() => setQuickCreateOpen(true)}
         />
 
-        {/* Scrollable Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-white">
+        {/* Scrollable Viewport - Full Width Fluid Container */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-white w-full min-w-0">
           {children}
         </main>
       </div>

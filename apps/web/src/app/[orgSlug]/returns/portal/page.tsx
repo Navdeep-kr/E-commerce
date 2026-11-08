@@ -151,8 +151,8 @@ export default function CustomerReturnPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <div className="min-h-screen bg-white text-black py-12 px-4 sm:px-6 lg:px-8 w-full">
+      <div className="w-full max-w-4xl mx-auto space-y-8">
         {/* Brand Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-bold text-black border border-zinc-300 shadow-xs">
