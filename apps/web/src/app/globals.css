@@ -46,21 +46,25 @@
 }
 
 /* ============================================================ */
-/* TYPOGRAPHY SCALING: 20% BIGGER ACROSS WHOLE APPLICATION     */
+/* TYPOGRAPHY SCALING: 15% BIGGER ACROSS WHOLE APPLICATION     */
 /* ============================================================ */
 
 html {
-  zoom: 0.82; /* Compact dashboard viewport zoom */
-  font-size: 16.8px; /* 20% bigger font size (14px * 1.20 = 16.8px) */
+  zoom: 0.85; /* Balanced, readable dashboard viewport zoom */
+  font-size: 19.32px; /* 15% bigger font size (16.8px * 1.15 = 19.32px) */
   -webkit-text-size-adjust: 100%;
 }
 
 [class*="text-[10px]"] {
-  font-size: 0.72rem !important; /* Scaled 20% */
+  font-size: 0.83rem !important; /* Scaled 15% */
 }
 
 [class*="text-[11px]"] {
-  font-size: 0.78rem !important; /* Scaled 20% */
+  font-size: 0.90rem !important; /* Scaled 15% */
+}
+
+[class*="text-[9px]"] {
+  font-size: 0.75rem !important; /* Scaled 15% */
 }
 
 html, body {
