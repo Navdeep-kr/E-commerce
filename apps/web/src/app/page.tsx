@@ -99,7 +99,7 @@ export default function MarketingLandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col justify-between selection:bg-black selection:text-white">
+    <div className="min-h-screen bg-white text-black flex flex-col justify-between">
       <PublicNav />
 
       {/* Hero Section */}

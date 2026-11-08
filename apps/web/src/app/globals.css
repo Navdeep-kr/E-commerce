@@ -73,7 +73,7 @@ html {
 }
 
 html, body {
-  color: #000000 !important;
+  color: #000000;
   background-color: #ffffff !important;
   background: #ffffff !important;
   font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
@@ -94,27 +94,13 @@ main {
   min-width: 100%;
 }
 
-/* 1. Force EVERY single container, card, panel, table, row, column to be 100% white */
+/* 1. Force pages, sections, tables, cards to be pure 100% white */
 section, main, aside, header, nav, footer,
 table, thead, tbody, tr, th, td,
-[class*="bg-zinc-9"],
-[class*="bg-zinc-8"],
-[class*="bg-slate-9"],
-[class*="bg-slate-8"],
-[class*="bg-gray-9"],
-[class*="bg-gray-8"],
-[class*="bg-amber-9"],
-[class*="bg-amber-500\/"],
-[class*="bg-orange-9"],
 .bg-background,
 .bg-card,
 .bg-white {
   background-color: #ffffff !important;
-}
-
-/* Ensure inner elements of buttons and navigation links are transparent */
-a *, button * {
-  background-color: transparent !important;
 }
 
 /* Subtle clean hover for table rows */
@@ -138,93 +124,18 @@ tr[class*="hover:bg-"]:hover {
 /* COLOR PALETTE: BLACK, RED, GREEN, ORANGE                    */
 /* ============================================================ */
 
-/* 1. BLACK: Headers, values, customer names, main text, tags on light backgrounds */
-h1:not(.bg-black *):not([class*="bg-black"] *),
-h2:not(.bg-black *):not([class*="bg-black"] *),
-h3:not(.bg-black *):not([class*="bg-black"] *),
-h4:not(.bg-black *):not([class*="bg-black"] *),
-h5:not(.bg-black *):not([class*="bg-black"] *),
-h6:not(.bg-black *):not([class*="bg-black"] *),
-.text-foreground:not(.bg-black *):not([class*="bg-black"] *),
-.text-black:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-zinc-100"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-zinc-200"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-zinc-300"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-slate-100"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-slate-200"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-slate-300"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-gray-100"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-gray-200"]:not(.bg-black *):not([class*="bg-black"] *),
-[class*="text-gray-300"]:not(.bg-black *):not([class*="bg-black"] *) {
+/* 1. BLACK: Headers, values, customer names, main text, tags */
+h1, h2, h3, h4, h5, h6,
+.text-foreground,
+.text-black {
   color: #000000 !important;
 }
 
-/* ============================================================ */
-/* DARK & BLACK ACCENTS / BUTTONS: CRISP WHITE TEXT & ICONS     */
-/* ============================================================ */
-
-/* Ensure black buttons, logos, badges, and avatars maintain black backgrounds */
-.bg-black,
-[class*="bg-black"],
-button.bg-black,
-button[class*="bg-black"],
-a.bg-black,
-a[class*="bg-black"],
-div.bg-black,
-div[class*="bg-black"],
-span.bg-black,
-span[class*="bg-black"] {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-}
-
-/* Subtle dark hover state for black buttons */
-button.bg-black:hover,
-button[class*="bg-black"]:hover,
-a.bg-black:hover,
-a[class*="bg-black"]:hover {
-  background-color: #18181b !important;
-  color: #ffffff !important;
-}
-
-/* Ensure all text, children, spans, and labels inside black elements are 100% white */
-.bg-black *,
-[class*="bg-black"] *,
-button.bg-black *,
-button[class*="bg-black"] *,
-a.bg-black *,
-a[class*="bg-black"] *,
-div.bg-black *,
-div[class*="bg-black"] *,
-span.bg-black *,
-span[class*="bg-black"] * {
-  color: #ffffff !important;
-}
-
-/* SVG icons inside black buttons/badges use pure white stroke/fill */
-.bg-black svg,
-.bg-black svg *,
-[class*="bg-black"] svg,
-[class*="bg-black"] svg * {
-  color: #ffffff !important;
-  stroke: #ffffff !important;
-}
-
-/* Pure white text class (used on dark buttons/badges/accents) */
-.text-white,
-[class*="text-white"] {
-  color: #ffffff !important;
-}
-
-/* Secondary descriptions and labels in high-contrast dark zinc */
-[class*="text-zinc-400"],
-[class*="text-zinc-500"],
-[class*="text-slate-400"],
-[class*="text-slate-500"],
-[class*="text-gray-400"],
-[class*="text-gray-500"],
+/* Secondary descriptions, subtitles and labels in high-contrast dark zinc */
+.text-zinc-600,
+.text-zinc-500,
 .text-muted-foreground {
-  color: #27272a !important;
+  color: #3f3f46 !important;
 }
 
 /* 2. RED: Danger, errors, cancellations, returns, refunds, breached SLA, at-risk */
@@ -267,67 +178,59 @@ input::placeholder, textarea::placeholder {
   color: #71717a !important;
 }
 
-/* Buttons and tag chips: pure white background (excluding black buttons) */
-button[class*="bg-zinc-"]:not(.bg-black):not([class*="bg-black"]),
-button[class*="bg-slate-"]:not(.bg-black):not([class*="bg-black"]),
-button[class*="bg-gray-"]:not(.bg-black):not([class*="bg-black"]),
-span[class*="bg-zinc-"]:not(.bg-black):not([class*="bg-black"]),
-span[class*="bg-slate-"]:not(.bg-black):not([class*="bg-black"]),
-span[class*="bg-gray-"]:not(.bg-black):not([class*="bg-black"]) {
+/* Buttons and tag chips: pure white background for white/neutral buttons */
+button.bg-white,
+button.bg-zinc-50,
+button.bg-zinc-100 {
   background-color: #ffffff !important;
   color: #000000 !important;
   border: 1px solid #e4e4e7 !important;
 }
 
 /* ============================================================ */
-/* HIGHEST CASCADE: BLACK BUTTONS, PILLS, BADGES & LOGO AVATARS */
-/* Guarantee 100% Crisp White Text & Icons on Black Elements    */
+/* BLACK BUTTONS, BRAND LOGO, PILLS & BADGES                   */
 /* ============================================================ */
 
-.bg-black,
-[class*="bg-black"],
+/* Explicit black elements */
+.bg-black {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
 button.bg-black,
-button[class*="bg-black"],
-a.bg-black,
-a[class*="bg-black"],
-div.bg-black,
-div[class*="bg-black"],
-span.bg-black,
-span[class*="bg-black"] {
+a.bg-black {
   background-color: #000000 !important;
   color: #ffffff !important;
 }
 
 button.bg-black:hover,
-button[class*="bg-black"]:hover,
-a.bg-black:hover,
-a[class*="bg-black"]:hover {
+a.bg-black:hover {
   background-color: #18181b !important;
   color: #ffffff !important;
 }
 
-.bg-black *,
-[class*="bg-black"] *,
+/* All text, spans, icons inside .bg-black containers must be crisp white */
+.bg-black > *,
+.bg-black span,
+.bg-black p,
+.bg-black a,
 button.bg-black *,
-button[class*="bg-black"] *,
-a.bg-black *,
-a[class*="bg-black"] *,
-div.bg-black *,
-div[class*="bg-black"] *,
-span.bg-black *,
-span[class*="bg-black"] * {
+a.bg-black * {
   color: #ffffff !important;
 }
 
 .bg-black svg,
-.bg-black svg *,
-[class*="bg-black"] svg,
-[class*="bg-black"] svg * {
+button.bg-black svg,
+a.bg-black svg {
   color: #ffffff !important;
   stroke: #ffffff !important;
 }
 
-.text-white,
-[class*="text-white"] {
+/* Explicit white text class (used on dark buttons/badges/accents) */
+.text-white {
   color: #ffffff !important;
+}
+
+.text-white svg {
+  stroke: #ffffff !important;
 }
