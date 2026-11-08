@@ -123,8 +123,8 @@ export function Topbar({
             onClick={() => setUserMenuOpen(!userMenuOpen)}
             className="flex items-center gap-2 rounded-full border border-zinc-200 p-1 pr-2 hover:bg-zinc-100 transition-colors"
           >
-            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white font-bold text-xs">
-              {session.fullName.charAt(0)}
+            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-black text-white font-bold text-xs select-none">
+              <span className="text-white font-bold text-xs leading-none">{session.fullName.charAt(0)}</span>
             </div>
             <span className="hidden md:inline text-xs font-bold text-black">
               {session.fullName}

@@ -10,8 +10,8 @@ export function PublicFooter() {
       <div className="w-full px-6 sm:px-10 lg:px-16 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs">
-              SO
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs select-none">
+              <span className="text-white font-black text-xs leading-none">SO</span>
             </div>
             <span className="font-bold text-sm tracking-tight text-black">Storefront Ops</span>
           </div>

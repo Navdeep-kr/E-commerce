@@ -333,7 +333,9 @@ export default function FulfillmentPage() {
                         : 'bg-white text-zinc-600 border-zinc-200 hover:text-black'
                     }`}
                   >
-                    {filter === 'all' ? 'All Orders' : filter}
+                    <span className={slaFilter === filter ? 'text-white font-bold' : 'text-zinc-600'}>
+                      {filter === 'all' ? 'All Orders' : filter}
+                    </span>
                   </button>
                 ))}
               </div>

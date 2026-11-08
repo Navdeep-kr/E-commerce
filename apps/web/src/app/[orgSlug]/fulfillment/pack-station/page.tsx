@@ -324,7 +324,9 @@ export default function PackStationPage() {
                     : 'bg-white text-black border-zinc-300 hover:bg-zinc-100'
                 }`}
               >
-                {ord}
+                <span className={activeOrderNumber === ord ? 'text-white font-bold' : 'text-black'}>
+                  {ord}
+                </span>
               </button>
             ))}
           </div>

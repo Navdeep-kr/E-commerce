@@ -113,8 +113,8 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
       <div className="flex h-14 items-center justify-between border-b border-zinc-200 px-4 bg-white">
         {!collapsed && (
           <div className="flex items-center gap-2 overflow-hidden">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
-              SO
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs select-none">
+              <span className="text-white font-black text-xs leading-none">SO</span>
             </div>
             <span className="truncate text-xs font-bold text-black tracking-tight">
               {orgName}
@@ -122,8 +122,8 @@ export function Sidebar({ orgSlug, role, orgName = 'Acme Commerce' }: SidebarPro
           </div>
         )}
         {collapsed && (
-          <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
-            SO
+          <div className="mx-auto flex h-7 w-7 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs select-none">
+            <span className="text-white font-black text-xs leading-none">SO</span>
           </div>
         )}
 

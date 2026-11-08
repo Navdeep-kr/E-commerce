@@ -9,8 +9,8 @@ export function PublicNav() {
     <nav className="border-b border-zinc-200 bg-white/90 backdrop-blur-md sticky top-0 z-50 text-black">
       <div className="w-full px-6 sm:px-10 lg:px-16 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs">
-            SO
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-black text-xs shadow-xs select-none">
+            <span className="text-white font-black text-xs leading-none">SO</span>
           </div>
           <span className="font-bold text-base tracking-tight text-black">Storefront Ops</span>
           <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-white text-green-700 border border-green-300">
