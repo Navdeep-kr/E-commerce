@@ -5,9 +5,11 @@
  */
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { scryptSync, randomBytes, timingSafeEqual } from 'node:crypto';
 import { generateSeedData } from './seed-generator.ts';
+import { PostgresClient } from './postgres-client.ts';
 import type {
   Organization,
   User,
@@ -157,11 +159,17 @@ class PersistenceEngine {
   private lastLoadedMtime = 0;
 
   constructor() {
-    // Determine path relative to root directory or apps/web
-    const webDataDir = path.resolve(process.cwd(), 'apps', 'web', '.data');
-    const localDataDir = path.resolve(process.cwd(), '.data');
-    const chosenDir = fs.existsSync(webDataDir) ? webDataDir : localDataDir;
-    this.dbFilePath = path.join(chosenDir, 'storefront-db.json');
+    // In serverless environments (Vercel Lambda / AWS Lambda), the deployment filesystem root is read-only (EROFS).
+    // Use os.tmpdir() to guarantee a writable persistent store for the serverless container.
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    if (isServerless) {
+      this.dbFilePath = path.join(os.tmpdir(), 'storefront-db.json');
+    } else {
+      const webDataDir = path.resolve(process.cwd(), 'apps', 'web', '.data');
+      const localDataDir = path.resolve(process.cwd(), '.data');
+      const chosenDir = fs.existsSync(webDataDir) ? webDataDir : localDataDir;
+      this.dbFilePath = path.join(chosenDir, 'storefront-db.json');
+    }
   }
 
   private ensureLoaded(): DatabaseState {
@@ -1148,6 +1156,97 @@ class PersistenceEngine {
       activeSkusCount: skusCount,
       teamSeatsUsed: seatsCount,
     };
+  }
+
+  // -------------------------------------------------------------
+  // Live Supabase PostgreSQL Persistence Methods
+  // -------------------------------------------------------------
+  public getPostgresClient(): typeof PostgresClient {
+    return PostgresClient;
+  }
+
+  public isPostgresConfigured(): boolean {
+    return PostgresClient.isConfigured();
+  }
+
+  public async testPostgresConnection(): Promise<{ connected: boolean; latencyMs?: number; error?: string }> {
+    return PostgresClient.testConnection();
+  }
+
+  public async queryPostgres<T = any>(sql: string, params: any[] = []): Promise<T[]> {
+    return PostgresClient.query<T>(sql, params);
+  }
+
+  public async getOrdersAsync(organizationId: string, limit = 50): Promise<Order[]> {
+    if (this.isPostgresConfigured()) {
+      try {
+        const rows = await PostgresClient.query<any>(
+          `SELECT id, organization_id, customer_id, order_number, status, currency,
+                  subtotal_minor, discount_minor, shipping_minor, tax_minor, total_minor,
+                  payment_status, fulfillment_status, risk_level, shipping_address, billing_address,
+                  tags, placed_at, created_at, updated_at
+           FROM orders
+           WHERE organization_id = $1
+           ORDER BY placed_at DESC
+           LIMIT $2`,
+          [organizationId, limit]
+        );
+        if (rows && rows.length > 0) {
+          return rows as Order[];
+        }
+      } catch (err) {
+        console.warn('⚠️ [PersistenceEngine] Failed to query PostgreSQL orders, falling back to local store:', (err as Error).message);
+      }
+    }
+    return this.getOrders(organizationId, limit);
+  }
+
+  public async createOrderAsync(organizationId: string, orderData: Partial<Order>): Promise<Order> {
+    const order = this.createOrder(organizationId, orderData);
+
+    if (this.isPostgresConfigured()) {
+      try {
+        await PostgresClient.query(
+          `INSERT INTO orders (
+            id, organization_id, customer_id, order_number, status, currency,
+            subtotal_minor, discount_minor, shipping_minor, tax_minor, total_minor,
+            payment_status, fulfillment_status, risk_level, shipping_address, billing_address,
+            tags, placed_at, created_at, updated_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)
+          ON CONFLICT (id) DO UPDATE SET
+            status = EXCLUDED.status,
+            payment_status = EXCLUDED.payment_status,
+            fulfillment_status = EXCLUDED.fulfillment_status,
+            updated_at = EXCLUDED.updated_at`,
+          [
+            order.id,
+            order.organization_id,
+            order.customer_id,
+            order.order_number,
+            order.status,
+            order.currency,
+            order.subtotal_minor,
+            order.discount_minor,
+            order.shipping_minor,
+            order.tax_minor,
+            order.total_minor,
+            order.payment_status,
+            order.fulfillment_status,
+            order.risk_level,
+            JSON.stringify(order.shipping_address),
+            JSON.stringify(order.billing_address),
+            order.tags,
+            order.placed_at,
+            order.created_at,
+            order.updated_at,
+          ]
+        );
+      } catch (err) {
+        console.warn('⚠️ [PersistenceEngine] Failed to persist order to PostgreSQL:', (err as Error).message);
+      }
+    }
+
+    return order;
   }
 }
 

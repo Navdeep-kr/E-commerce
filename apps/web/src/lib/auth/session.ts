@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 import type { UserRole } from '@storefront-ops/db';
 
 export interface UserSession {

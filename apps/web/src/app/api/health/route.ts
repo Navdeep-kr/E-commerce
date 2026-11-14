@@ -6,8 +6,10 @@ export async function GET() {
     const memory = process.memoryUsage();
     const uptimeSec = Math.floor(process.uptime());
 
-    // Basic database connectivity probe
+    // Database connectivity probe
     const defaultOrg = db.getOrganizationBySlug('acme-commerce');
+    const pgConfigured = db.isPostgresConfigured();
+    const pgCheck = pgConfigured ? await db.testPostgresConnection() : null;
 
     return NextResponse.json(
       {
@@ -18,6 +20,17 @@ export async function GET() {
         database: {
           status: defaultOrg ? 'connected' : 'degraded',
           primaryOrg: defaultOrg?.name,
+          engine: pgConfigured ? 'supabase_postgresql' : 'file_persistent_store',
+          postgres: pgConfigured
+            ? {
+                connected: pgCheck?.connected ?? false,
+                latencyMs: pgCheck?.latencyMs,
+                error: pgCheck?.error,
+              }
+            : {
+                configured: false,
+                mode: 'offline_local_store',
+              },
         },
         memory: {
           heapUsedMb: Math.round(memory.heapUsed / 1024 / 1024),
