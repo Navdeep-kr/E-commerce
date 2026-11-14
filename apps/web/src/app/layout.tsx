@@ -34,8 +34,15 @@ export const metadata: Metadata = {
     description: 'Mission-critical retail back-office engine for modern multi-channel commerce.',
   },
   icons: {
-    icon: '/icon',
-    apple: '/apple-icon',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon', sizes: '32x32', type: 'image/png' },
+    ],
+    shortcut: '/favicon.svg',
+    apple: [
+      { url: '/apple-icon', sizes: '180x180', type: 'image/png' },
+    ],
   },
 };
 
@@ -53,6 +60,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light bg-white" suppressHydrationWarning>
       <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-icon" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
