@@ -49,8 +49,8 @@ export async function POST(request: Request) {
       };
     }
 
-    // 2. Fallback to demo users & quick role switchers
-    if (!session) {
+    // 2. Fallback to demo users & quick role switchers (Non-production development/staging only)
+    if (!session && process.env.NODE_ENV !== 'production') {
       if (role && DEMO_USERS[role]) {
         session = DEMO_USERS[role];
       } else {

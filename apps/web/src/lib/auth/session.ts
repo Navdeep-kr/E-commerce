@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import type { UserRole } from '@storefront-ops/db';
 
 export interface UserSession {
@@ -87,27 +88,53 @@ export const DEMO_USERS: Record<string, UserSession> = {
 
 export const SESSION_COOKIE_NAME = 'storefront_session';
 
+const AUTH_SECRET = process.env.AUTH_SECRET || process.env.SESSION_SECRET || 'storefront-ops-secure-salt-key-928173618471';
+
 /**
- * Decode session token / cookie payload
+ * Encode session token with cryptographic HMAC-SHA256 signature
+ */
+export function encodeSessionToken(session: UserSession): string {
+  const payloadBase64 = Buffer.from(JSON.stringify(session), 'utf8').toString('base64url');
+  const signature = createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+  return `${payloadBase64}.${signature}`;
+}
+
+/**
+ * Decode session token and verify cryptographic HMAC-SHA256 signature
  */
 export function parseSessionToken(token: string | undefined): UserSession | null {
   if (!token) return null;
   try {
-    // If token matches a demo user key (e.g. 'admin', 'support')
-    if (DEMO_USERS[token]) {
+    // Demo shortcut key allowed ONLY in non-production environments
+    if (process.env.NODE_ENV !== 'production' && DEMO_USERS[token]) {
       return DEMO_USERS[token];
     }
-    // Otherwise parse JSON / JWT string
-    const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
-    return decoded as UserSession;
+
+    // Signed format: payloadBase64.signature
+    const parts = token.split('.');
+    if (parts.length === 2) {
+      const [payloadBase64, signature] = parts;
+      const expectedSignature = createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+
+      const sigBuffer = Buffer.from(signature);
+      const expectedBuffer = Buffer.from(expectedSignature);
+
+      if (sigBuffer.length !== expectedBuffer.length || !timingSafeEqual(sigBuffer, expectedBuffer)) {
+        return null;
+      }
+
+      const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64url').toString('utf8'));
+      return decoded as UserSession;
+    }
+
+    // Graceful fallback for unsigned legacy tokens in non-production development
+    if (process.env.NODE_ENV !== 'production') {
+      const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
+      return decoded as UserSession;
+    }
+
+    return null;
   } catch {
     return null;
   }
-}
-
-/**
- * Encode session token for cookie storage
- */
-export function encodeSessionToken(session: UserSession): string {
-  return Buffer.from(JSON.stringify(session)).toString('base64');
 }

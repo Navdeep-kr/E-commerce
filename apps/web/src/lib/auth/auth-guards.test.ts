@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { requireUser, requireOrg, requirePermission, checkPermission, AuthorizationError } from './guards.ts';
-import { DEMO_USERS } from './session.ts';
+import { DEMO_USERS, encodeSessionToken, parseSessionToken, type UserSession } from './session.ts';
 import { RateLimiter } from './rate-limiter.ts';
 
 describe('Auth Guards & Server RBAC Matrix (Step 4)', () => {
@@ -100,5 +100,34 @@ describe('Auth Guards & Server RBAC Matrix (Step 4)', () => {
     // Reset unlocks
     RateLimiter.reset(testKey);
     assert.equal(RateLimiter.isLocked(testKey).locked, false);
+  });
+
+  it('proves Exit Check: Cryptographic Session Token Signing & Tamper Resistance', () => {
+    const viewerSession: UserSession = DEMO_USERS.viewer;
+
+    // 1. Generate authentic signed token
+    const signedToken = encodeSessionToken(viewerSession);
+    assert.ok(signedToken.includes('.'), 'Signed token must contain a signature separator dot');
+
+    // 2. Verified decoding
+    const decoded = parseSessionToken(signedToken);
+    assert.ok(decoded);
+    assert.equal(decoded.userId, viewerSession.userId);
+    assert.equal(decoded.role, 'viewer');
+
+    // 3. Reject tampered payload (privilege escalation attempt)
+    const [payloadBase64, signature] = signedToken.split('.');
+    const rawPayload = JSON.parse(Buffer.from(payloadBase64, 'base64url').toString('utf8'));
+    rawPayload.role = 'owner_admin'; // Hostile escalation attempt
+    const tamperedPayloadBase64 = Buffer.from(JSON.stringify(rawPayload)).toString('base64url');
+    const tamperedToken = `${tamperedPayloadBase64}.${signature}`;
+
+    const rejected = parseSessionToken(tamperedToken);
+    assert.equal(rejected, null, 'Tampered token must be rejected immediately');
+
+    // 4. Reject corrupted or forged signature
+    const badSigToken = `${payloadBase64}.invalid_forged_signature_hex_12345`;
+    const rejectedSig = parseSessionToken(badSigToken);
+    assert.equal(rejectedSig, null, 'Forged signature must be rejected immediately');
   });
 });

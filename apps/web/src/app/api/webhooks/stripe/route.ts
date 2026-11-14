@@ -12,7 +12,11 @@ export async function POST(request: Request) {
     const rawBody = await request.text();
     const sigHeader = request.headers.get('stripe-signature') || '';
 
-    if (sigHeader) {
+    // Verify Stripe webhook signature (strictly required in production or when header is provided)
+    if (process.env.NODE_ENV === 'production' || sigHeader) {
+      if (!sigHeader) {
+        return NextResponse.json({ error: 'Missing mandatory stripe-signature header' }, { status: 401 });
+      }
       const isValid = stripe.verifyWebhookSignature(rawBody, sigHeader);
       if (!isValid) {
         return NextResponse.json({ error: 'Invalid Stripe signature' }, { status: 401 });

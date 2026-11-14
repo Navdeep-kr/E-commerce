@@ -13,8 +13,11 @@ export async function POST(request: Request) {
     const shopDomain = request.headers.get('x-shopify-shop-domain') || '';
     const eventIdHeader = request.headers.get('x-shopify-webhook-id') || `shp_${Date.now()}`;
 
-    // Verify cryptographic signature if header provided
-    if (hmacHeader) {
+    // Verify cryptographic signature (strictly required in production or when header is provided)
+    if (process.env.NODE_ENV === 'production' || hmacHeader) {
+      if (!hmacHeader) {
+        return NextResponse.json({ error: 'Missing mandatory x-shopify-hmac-sha256 signature header' }, { status: 401 });
+      }
       const isValid = shopify.verifyHmac(rawBody, hmacHeader);
       if (!isValid) {
         return NextResponse.json({ error: 'Invalid HMAC signature' }, { status: 401 });
