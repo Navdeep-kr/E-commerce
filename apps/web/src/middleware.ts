@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { SESSION_COOKIE_NAME, parseSessionToken } from './lib/auth/session';
+import { SESSION_COOKIE_NAME, verifySessionToken } from './lib/auth/session';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Allow public landing page, auth endpoints, webhooks, public APIs, legal pages, return portal, and static assets
@@ -20,7 +20,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/login') ||
     pathname.startsWith('/signup') ||
     pathname.startsWith('/_next') ||
-    pathname === '/favicon.ico'
+    pathname === '/favicon.ico' ||
+    pathname === '/favicon.svg'
   ) {
     const response = NextResponse.next();
 
@@ -38,9 +39,9 @@ export function middleware(request: NextRequest) {
   return response;
   }
 
-  // 2. Validate session cookie
+  // 2. Validate session cookie using Web Crypto Edge-compatible signature verification
   const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value;
-  const session = parseSessionToken(sessionCookie);
+  const session = await verifySessionToken(sessionCookie);
 
   // If unauthenticated, redirect to login with callbackUrl
   if (!session) {

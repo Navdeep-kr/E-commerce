@@ -1,4 +1,4 @@
-import { createHmac, timingSafeEqual } from 'crypto';
+import nodeCrypto from 'crypto';
 import type { UserRole } from '@storefront-ops/db';
 
 export interface UserSession {
@@ -91,16 +91,69 @@ export const SESSION_COOKIE_NAME = 'storefront_session';
 const AUTH_SECRET = process.env.AUTH_SECRET || process.env.SESSION_SECRET || 'storefront-ops-secure-salt-key-928173618471';
 
 /**
+ * Sign payload using Web Crypto API (supported natively in Next.js Edge Runtime, Node.js, and modern runtimes)
+ */
+async function computeWebCryptoHmac(payload: string, secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+  return Buffer.from(signature).toString('base64url');
+}
+
+/**
+ * Universal async verification compatible with Next.js Edge Runtime (middleware)
+ */
+export async function verifySessionToken(token: string | undefined): Promise<UserSession | null> {
+  if (!token) return null;
+  try {
+    if (process.env.NODE_ENV !== 'production' && DEMO_USERS[token]) {
+      return DEMO_USERS[token];
+    }
+
+    const parts = token.split('.');
+    if (parts.length === 2) {
+      const [payloadBase64, signature] = parts;
+      const expectedSignature = await computeWebCryptoHmac(payloadBase64, AUTH_SECRET);
+
+      if (signature !== expectedSignature) {
+        return null;
+      }
+
+      const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64url').toString('utf8'));
+      return decoded as UserSession;
+    }
+
+    if (process.env.NODE_ENV !== 'production') {
+      const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
+      return decoded as UserSession;
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Encode session token with cryptographic HMAC-SHA256 signature
  */
 export function encodeSessionToken(session: UserSession): string {
   const payloadBase64 = Buffer.from(JSON.stringify(session), 'utf8').toString('base64url');
-  const signature = createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+  let signature = '';
+  if (nodeCrypto && typeof nodeCrypto.createHmac === 'function') {
+    signature = nodeCrypto.createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+  }
   return `${payloadBase64}.${signature}`;
 }
 
 /**
- * Decode session token and verify cryptographic HMAC-SHA256 signature
+ * Decode session token and verify cryptographic HMAC-SHA256 signature (synchronous for Node.js runtime)
  */
 export function parseSessionToken(token: string | undefined): UserSession | null {
   if (!token) return null;
@@ -114,12 +167,12 @@ export function parseSessionToken(token: string | undefined): UserSession | null
     const parts = token.split('.');
     if (parts.length === 2) {
       const [payloadBase64, signature] = parts;
-      const expectedSignature = createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+      let expectedSignature = '';
+      if (nodeCrypto && typeof nodeCrypto.createHmac === 'function') {
+        expectedSignature = nodeCrypto.createHmac('sha256', AUTH_SECRET).update(payloadBase64).digest('base64url');
+      }
 
-      const sigBuffer = Buffer.from(signature);
-      const expectedBuffer = Buffer.from(expectedSignature);
-
-      if (sigBuffer.length !== expectedBuffer.length || !timingSafeEqual(sigBuffer, expectedBuffer)) {
+      if (!expectedSignature || signature !== expectedSignature) {
         return null;
       }
 
