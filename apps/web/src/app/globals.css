@@ -106,7 +106,13 @@ table, thead, tbody, tr, th, td,
 /* Subtle clean hover for table rows */
 tr:hover,
 tr[class*="hover:bg-"]:hover {
-  background-color: #fbfbfb !important;
+  background-color: #fafafa !important;
+}
+
+/* Subtle button tactile press feedback */
+button:active:not(:disabled) {
+  transform: scale(0.985);
+  transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 2. Crisp, elegant borders */

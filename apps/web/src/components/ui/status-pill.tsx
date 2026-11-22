@@ -24,6 +24,7 @@ interface StatusPillProps {
   status: string;
   type?: 'order' | 'stock';
   className?: string;
+  showIcon?: boolean;
 }
 
 const ICON_MAP: Record<string, React.ElementType> = {
@@ -45,14 +46,22 @@ const ICON_MAP: Record<string, React.ElementType> = {
 };
 
 const VARIANT_STYLES: Record<StatusVariant, string> = {
-  success: 'bg-emerald-50 text-emerald-700 border-emerald-300 font-semibold', // Green
-  warning: 'bg-orange-50 text-orange-700 border-orange-300 font-semibold',   // Orange
-  danger: 'bg-rose-50 text-rose-700 border-rose-300 font-semibold',          // Red
-  info: 'bg-orange-50 text-orange-700 border-orange-300 font-semibold',       // Orange / in-progress
-  neutral: 'bg-zinc-50 text-black border-zinc-300 font-medium',              // Black
+  success: 'bg-emerald-50 text-emerald-800 border-emerald-200/80 font-semibold',
+  warning: 'bg-amber-50 text-amber-800 border-amber-200/80 font-semibold',
+  danger: 'bg-rose-50 text-rose-800 border-rose-200/80 font-semibold',
+  info: 'bg-zinc-100 text-zinc-900 border-zinc-200 font-semibold',
+  neutral: 'bg-zinc-50 text-zinc-700 border-zinc-200 font-medium',
 };
 
-export function StatusPill({ status, type = 'order', className = '' }: StatusPillProps) {
+const DOT_STYLES: Record<StatusVariant, string> = {
+  success: 'bg-emerald-500',
+  warning: 'bg-amber-500',
+  danger: 'bg-rose-500',
+  info: 'bg-zinc-900',
+  neutral: 'bg-zinc-400',
+};
+
+export function StatusPill({ status, type = 'order', className = '', showIcon = false }: StatusPillProps) {
   const configs = type === 'order' ? ORDER_STATUS_CONFIGS : STOCK_STATUS_CONFIGS;
   const config = configs[status] || {
     label: status.replace(/_/g, ' '),
@@ -62,18 +71,22 @@ export function StatusPill({ status, type = 'order', className = '' }: StatusPil
 
   const IconComponent = ICON_MAP[config.iconName] || Clock;
   const variantClass = VARIANT_STYLES[config.variant] || VARIANT_STYLES.neutral;
+  const dotClass = DOT_STYLES[config.variant] || DOT_STYLES.neutral;
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium border ${variantClass} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border ${variantClass} shadow-2xs whitespace-nowrap ${className}`}
       role="status"
       aria-label={`${type} status: ${config.label}`}
     >
-      <IconComponent className="h-3 w-3 shrink-0" aria-hidden="true" />
+      {showIcon ? (
+        <IconComponent className="h-3 w-3 shrink-0" aria-hidden="true" />
+      ) : (
+        <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${dotClass}`} />
+      )}
       <span>{config.label}</span>
     </span>
   );
 }
 
 export default StatusPill;
-
