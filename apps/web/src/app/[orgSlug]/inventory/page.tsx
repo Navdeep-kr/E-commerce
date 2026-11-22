@@ -6,18 +6,14 @@ import { useParams } from 'next/navigation';
 import {
   Boxes,
   SlidersHorizontal,
-  Barcode,
-  AlertTriangle,
-  RotateCcw,
-  Check,
-  X,
-  History,
   ScanBarcode,
 } from 'lucide-react';
 import { DataTable, type Column } from '@/components/ui/data-table';
 import { StatusPill } from '@/components/ui/status-pill';
 import { BarcodeScannerModal } from '@/components/ui/barcode-scanner-modal';
 import { EmptyState } from '@/components/ui/empty-state';
+import { InventoryDetailDrawer } from '@/components/inventory/inventory-drawer';
+import { toast } from '@/components/ui/toast';
 
 interface StockItem {
   id: string;
@@ -40,11 +36,7 @@ export default function InventoryPage() {
 
   const [items, setItems] = useState<StockItem[]>([]);
   const [selectedItemForAdjust, setSelectedItemForAdjust] = useState<StockItem | null>(null);
-  const [adjustDelta, setAdjustDelta] = useState<number>(0);
-  const [adjustReason, setAdjustReason] = useState<string>('correction');
-  const [adjustNotes, setAdjustNotes] = useState<string>('');
   const [scannerOpen, setScannerOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchInventory();
@@ -62,47 +54,47 @@ export default function InventoryPage() {
     }
   }
 
-  async function handleAdjustSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!selectedItemForAdjust || adjustDelta === 0) return;
+  async function handleAdjustStock(sku: string, delta: number, reason: string) {
+    const res = await fetch('/api/inventory/adjust', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sku,
+        quantityDelta: delta,
+        reason,
+        notes: 'Calibrated via Inventory Inspector Drawer',
+      }),
+    });
 
-    try {
-      const res = await fetch('/api/inventory/adjust', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sku: selectedItemForAdjust.sku,
-          quantityDelta: adjustDelta,
-          reason: adjustReason,
-          notes: adjustNotes,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok) {
-        // Update local state atomically
-        setItems((prev) =>
-          prev.map((it) => {
-            if (it.sku === selectedItemForAdjust.sku) {
-              const newOnHand = Math.max(0, it.onHand + adjustDelta);
-              return {
-                ...it,
-                onHand: newOnHand,
-                available: Math.max(0, newOnHand - it.committed),
-              };
-            }
-            return it;
-          })
-        );
-        setToastMessage(`✅ ${data.message}`);
-        setTimeout(() => setToastMessage(null), 3000);
-        setSelectedItemForAdjust(null);
-        setAdjustDelta(0);
-        setAdjustNotes('');
-      }
-    } catch {
-      alert('Failed to submit stock adjustment');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to adjust stock');
     }
+
+    // Update local state atomically
+    setItems((prev) =>
+      prev.map((it) => {
+        if (it.sku === sku) {
+          const newOnHand = Math.max(0, it.onHand + delta);
+          return {
+            ...it,
+            onHand: newOnHand,
+            available: Math.max(0, newOnHand - it.committed),
+          };
+        }
+        return it;
+      })
+    );
+
+    setSelectedItemForAdjust((prev) => {
+      if (!prev || prev.sku !== sku) return prev;
+      const newOnHand = Math.max(0, prev.onHand + delta);
+      return {
+        ...prev,
+        onHand: newOnHand,
+        available: Math.max(0, newOnHand - prev.committed),
+      };
+    });
   }
 
   const columns: Column<StockItem>[] = [
@@ -183,14 +175,14 @@ export default function InventoryPage() {
       header: 'Action',
       render: (row) => (
         <button
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             setSelectedItemForAdjust(row);
-            setAdjustDelta(0);
           }}
-          className="inline-flex items-center gap-1 rounded border border-border bg-card px-2 py-1 text-xs font-medium hover:bg-muted hover:border-primary/50 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-black/10 bg-white px-2.5 py-1 text-xs font-semibold text-black hover:bg-zinc-50 transition-colors shadow-2xs"
         >
-          <SlidersHorizontal className="h-3 w-3 text-primary" />
-          <span>Adjust</span>
+          <SlidersHorizontal className="h-3 w-3 text-zinc-500" />
+          <span>Inspect</span>
         </button>
       ),
     },
@@ -198,13 +190,6 @@ export default function InventoryPage() {
 
   return (
     <div className="space-y-6">
-      {/* Toast Feedback */}
-      {toastMessage && (
-        <div className="fixed top-16 right-6 z-50 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-xs font-medium text-emerald-500 shadow-lg animate-in slide-in-from-top-2">
-          {toastMessage}
-        </div>
-      )}
-
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-200 pb-4 gap-4 bg-white text-black">
         <div>
@@ -245,6 +230,7 @@ export default function InventoryPage() {
         columns={columns}
         searchPlaceholder="Filter by SKU or variant title..."
         searchKey="sku"
+        onRowClick={(row) => setSelectedItemForAdjust(row)}
         emptyState={
           <EmptyState
             icon={Boxes}
@@ -275,103 +261,13 @@ export default function InventoryPage() {
         }}
       />
 
-      {/* Quick Adjust Slide-Over Drawer */}
-      {selectedItemForAdjust && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/50 backdrop-blur-xs">
-          <div className="flex h-full w-full max-w-md flex-col border-l border-border bg-card p-6 shadow-2xl animate-in slide-in-from-right duration-200">
-            <div className="flex items-center justify-between border-b border-border pb-4">
-              <div>
-                <h2 className="text-sm font-semibold text-foreground">Adjust Stock Count</h2>
-                <span className="text-xs font-mono text-muted-foreground">{selectedItemForAdjust.sku}</span>
-              </div>
-              <button
-                onClick={() => setSelectedItemForAdjust(null)}
-                className="rounded p-1 text-muted-foreground hover:bg-muted"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleAdjustSubmit} className="flex-1 space-y-4 pt-4">
-              <div className="rounded-lg bg-muted/40 p-3 text-xs space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Current On Hand:</span>
-                  <span className="font-mono font-bold">{selectedItemForAdjust.onHand}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Committed:</span>
-                  <span className="font-mono text-amber-500 font-bold">{selectedItemForAdjust.committed}</span>
-                </div>
-                <div className="flex justify-between border-t border-border/50 pt-1">
-                  <span className="text-muted-foreground">Available to Promise:</span>
-                  <span className="font-mono text-emerald-500 font-bold">{selectedItemForAdjust.available}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">
-                  Quantity Delta (+ to add, - to deduct)
-                </label>
-                <input
-                  type="number"
-                  value={adjustDelta || ''}
-                  onChange={(e) => setAdjustDelta(parseInt(e.target.value, 10) || 0)}
-                  placeholder="e.g. +10 or -3"
-                  required
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm font-mono text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <span className="text-[11px] text-muted-foreground">
-                  Resulting on hand: <strong>{selectedItemForAdjust.onHand + adjustDelta}</strong>
-                </span>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">Mandatory Reason Code</label>
-                <select
-                  value={adjustReason}
-                  onChange={(e) => setAdjustReason(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                >
-                  <option value="correction">Count Correction / Discrepancy</option>
-                  <option value="damage">Damaged in Warehouse</option>
-                  <option value="loss">Lost / Theft</option>
-                  <option value="found">Found / Restocked</option>
-                  <option value="return">Customer Return Restock</option>
-                  <option value="po_receipt">Supplier PO Receipt</option>
-                </select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-foreground">Internal Audit Notes</label>
-                <textarea
-                  rows={3}
-                  value={adjustNotes}
-                  onChange={(e) => setAdjustNotes(e.target.value)}
-                  placeholder="Explain why this adjustment is being made..."
-                  className="w-full rounded-md border border-input bg-background p-2.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-4 border-t border-border">
-                <button
-                  type="button"
-                  onClick={() => setSelectedItemForAdjust(null)}
-                  className="rounded px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={adjustDelta === 0}
-                  className="rounded bg-primary px-4 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
-                >
-                  Record Movement
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {/* Slide-Over Inventory Detail & Calibration Drawer */}
+      <InventoryDetailDrawer
+        item={selectedItemForAdjust}
+        isOpen={Boolean(selectedItemForAdjust)}
+        onClose={() => setSelectedItemForAdjust(null)}
+        onAdjustStock={handleAdjustStock}
+      />
     </div>
   );
 }

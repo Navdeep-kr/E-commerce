@@ -30,6 +30,7 @@ interface DataTableProps<T> {
     destructive?: boolean;
   }>;
   onExportCsv?: () => void;
+  onRowClick?: (row: T) => void;
   pageSize?: number;
   emptyState?: React.ReactNode;
 }
@@ -41,6 +42,7 @@ export function DataTable<T extends { id: string | number }>({
   searchKey,
   bulkActions = [],
   onExportCsv,
+  onRowClick,
   pageSize = 10,
   emptyState,
 }: DataTableProps<T>) {
@@ -252,11 +254,17 @@ export function DataTable<T extends { id: string | number }>({
                   return (
                     <tr
                       key={row.id}
-                      className={`transition-colors hover:bg-muted/30 ${
+                      onClick={() => onRowClick && onRowClick(row)}
+                      className={`transition-colors ${
+                        onRowClick ? 'cursor-pointer hover:bg-zinc-50/90' : 'hover:bg-muted/30'
+                      } ${
                         isChecked ? 'bg-primary/5' : ''
                       }`}
                     >
-                      <td className="px-4 py-3">
+                      <td
+                        className="px-4 py-3"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <button
                           onClick={() => toggleRow(row.id)}
                           className="flex items-center justify-center text-muted-foreground hover:text-foreground"

@@ -18,6 +18,8 @@ import {
 import { DataTable, type Column } from '@/components/ui/data-table';
 import { StatusPill } from '@/components/ui/status-pill';
 import { EmptyState } from '@/components/ui/empty-state';
+import { OrderDetailDrawer } from '@/components/orders/order-drawer';
+import { toast } from '@/components/ui/toast';
 import { MoneyMath } from '@storefront-ops/core';
 
 interface OrderRow {
@@ -44,6 +46,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [activeTab, setActiveTab] = useState<'all' | 'unfulfilled' | 'on_hold' | 'shipped'>('all');
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<OrderRow | null>(null);
 
   useEffect(() => {
     fetchOrders();
@@ -222,6 +225,7 @@ export default function OrdersPage() {
         columns={columns}
         searchPlaceholder="Search by order #, customer, or email..."
         searchKey="orderNumber"
+        onRowClick={(row) => setSelectedOrder(row)}
         emptyState={
           <EmptyState
             icon={ShoppingCart}
@@ -240,18 +244,25 @@ export default function OrdersPage() {
         bulkActions={[
           {
             label: 'Print Packing Slips',
-            action: (rows) => alert(`Printing packing slips for ${rows.length} orders`),
+            action: (rows) => toast.success('Print Job Dispatched', `Generating thermal packing slips for ${rows.length} orders`),
           },
           {
             label: 'Mark Packed',
-            action: (rows) => alert(`Marked ${rows.length} orders packed`),
+            action: (rows) => toast.success('Orders Updated', `Marked ${rows.length} orders as packed`),
           },
           {
             label: 'Cancel Orders',
-            action: (rows) => alert(`Cancelled ${rows.length} orders and released stock`),
+            action: (rows) => toast.error('Orders Cancelled', `Cancelled ${rows.length} orders and restored inventory`),
             destructive: true,
           },
         ]}
+      />
+
+      {/* Slide-Over Order Detail Drawer */}
+      <OrderDetailDrawer
+        order={selectedOrder}
+        isOpen={Boolean(selectedOrder)}
+        onClose={() => setSelectedOrder(null)}
       />
     </div>
   );

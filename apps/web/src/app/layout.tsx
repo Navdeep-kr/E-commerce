@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { ToastContainer } from '@/components/ui/toast';
 import './globals.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://e-commerce-dun-seven-24.vercel.app';
@@ -91,6 +92,7 @@ export default function RootLayout({
         data-enable-grammarly="false"
       >
         {children}
+        <ToastContainer />
       </body>
     </html>
   );
